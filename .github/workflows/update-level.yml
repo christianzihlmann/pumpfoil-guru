@@ -1,0 +1,35 @@
+name: Pegel aktualisieren
+
+on:
+  schedule:
+    - cron: "7 * * * *"     # stündlich, Minute 7
+  workflow_dispatch:         # Knopf zum manuellen Auslösen
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pegel
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - run: pip install requests
+
+      - run: python scripts/fetch_level.py
+
+      - name: Commit, falls sich etwas geändert hat
+        run: |
+          git config user.name  "pegel-bot"
+          git config user.email "actions@github.com"
+          git add data/
+          git diff --staged --quiet || git commit -m "Pegel $(date -u +%Y-%m-%dT%H:%MZ)"
+          git push
