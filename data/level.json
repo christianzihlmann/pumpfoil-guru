@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-23T11:29:57+00:00",
+  "fetched": "2026-08-23T12:57:08+00:00",
   "forecast": [
     {
       "date": "23.08.2026",
@@ -12,7 +12,7 @@
     {
       "date": "24.08.2026",
       "min": 531.16,
-      "max": 531.43
+      "max": 531.42
     },
     {
       "date": "25.08.2026",
@@ -22,7 +22,7 @@
     {
       "date": "26.08.2026",
       "min": 530.78,
-      "max": 531.11
+      "max": 531.1
     }
   ],
   "manual": {
@@ -34,26 +34,26 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 8.05,
-    "time": "2026-08-23T11:20:00+00:00",
+    "flow": 8.02,
+    "time": "2026-08-23T12:40:00+00:00",
     "stats": {
-      "n": 6,
+      "n": 7,
       "days": 0.9,
       "enough": false,
-      "min": 8.05,
-      "p10": 8.07,
-      "p25": 8.12,
-      "median": 8.44,
-      "p75": 9.03,
-      "p90": 9.52,
+      "min": 8.02,
+      "p10": 8.04,
+      "p25": 8.07,
+      "median": 8.23,
+      "p75": 8.9,
+      "p90": 9.45,
       "max": 9.88
     }
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 531.95,
-    "flow": 5.1,
+    "height": 531.96,
+    "flow": 5.13,
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   }
 }
