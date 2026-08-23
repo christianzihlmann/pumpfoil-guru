@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-23T10:33:56+00:00",
+  "fetched": "2026-08-23T11:29:57+00:00",
   "forecast": [
     {
       "date": "23.08.2026",
@@ -16,8 +16,8 @@
     },
     {
       "date": "25.08.2026",
-      "min": 531.01,
-      "max": 531.5
+      "min": 531.0,
+      "max": 531.49
     },
     {
       "date": "26.08.2026",
@@ -34,18 +34,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 8.08,
-    "time": "2026-08-23T10:20:00+00:00",
+    "flow": 8.05,
+    "time": "2026-08-23T11:20:00+00:00",
     "stats": {
-      "n": 5,
-      "days": 0.8,
+      "n": 6,
+      "days": 0.9,
       "enough": false,
-      "min": 8.08,
-      "p10": 8.14,
-      "p25": 8.23,
-      "median": 8.64,
-      "p75": 9.16,
-      "p90": 9.59,
+      "min": 8.05,
+      "p10": 8.07,
+      "p25": 8.12,
+      "median": 8.44,
+      "p75": 9.03,
+      "p90": 9.52,
       "max": 9.88
     }
   },
