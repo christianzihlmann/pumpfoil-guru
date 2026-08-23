@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-23T20:34:13+00:00",
+  "fetched": "2026-08-23T21:30:30+00:00",
   "forecast": [
     {
       "date": "23.08.2026",
@@ -17,7 +17,7 @@
     {
       "date": "25.08.2026",
       "min": 531.2,
-      "max": 531.68
+      "max": 531.69
     },
     {
       "date": "26.08.2026",
@@ -34,47 +34,47 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 109.31,
-    "time": "2026-08-23T20:20:00+00:00",
+    "flow": 99.87,
+    "time": "2026-08-23T21:20:00+00:00",
     "stats": {
-      "n": 18,
-      "days": 1.2,
+      "n": 19,
+      "days": 1.3,
       "enough": false,
       "min": 7.92,
       "p10": 7.92,
       "p25": 7.96,
-      "median": 8.16,
-      "p75": 26.58,
-      "p90": 109.4,
+      "median": 8.23,
+      "p75": 66.01,
+      "p90": 109.37,
       "max": 109.6
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
-    "european_aqi": 24.0,
-    "wind_model": 3.1,
-    "gust_model": 7.2,
-    "wind_dir_model": 54.0,
-    "wind_measured": 3.2,
-    "gust_measured": 5.0,
-    "wind_dir_measured": 50.0,
-    "temp_measured": 17.6,
+    "european_aqi": 22.0,
+    "wind_model": 1.9,
+    "gust_model": 4.7,
+    "wind_dir_model": 112.0,
+    "wind_measured": 0.7,
+    "gust_measured": 2.5,
+    "wind_dir_measured": 12.0,
+    "temp_measured": 16.0,
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-08-23T20:34:16+00:00"
+    "time": "2026-08-23T21:30:31+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
     "temperature": 17.15,
-    "height": 471.51,
+    "height": 471.52,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
     "height": 532.61,
-    "flow": 65.72,
+    "flow": 65.59,
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   }
 }
