@@ -38,16 +38,34 @@ import requests
 URL = "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen"
 LAKE_OUT = "2215"          # Saane – Laupen, unterhalb der Staumauer
 LAKE_IN = "2119"           # Sarine – Fribourg, oberhalb des Sees
+WARM = "2467"              # Saane – Guemmenen, einzige Station der Kette mit Temperatur
 HYDRO = ("https://api.existenz.ch/apiv1/hydro/latest"
-         f"?locations={LAKE_IN},{LAKE_OUT}&parameters=height,flow"
+         f"?locations={LAKE_IN},{LAKE_OUT},{WARM}&parameters=height,flow,temperature"
          "&app=pumpfoil.guru&version=1.0")
 
 DATA = os.path.join(os.path.dirname(__file__), "..", "data")
 OUT = os.path.join(DATA, "level.json")
 CSV = os.path.join(DATA, "hydro.csv")
-HEAD = "timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215\n"
+HEAD = ("timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215,h2467,t2467,uv,aqi,"
+        "wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt\n")
 
 UA = {"User-Agent": "pumpfoil-guru/1.0 (hobby project; contact via GitHub)"}
+
+# Pensier. Open-Meteo braucht keinen Schluessel.
+LAT, LON = 46.8261, 7.1256
+METEO = (f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}"
+         "&current=uv_index,wind_speed_10m,wind_gusts_10m,wind_direction_10m"
+         "&timezone=Europe/Zurich&forecast_days=1")
+
+# MeteoSchweiz-Station Grangeneuve, 8.7 km vom Steg. Anders als Open-Meteo ist
+# das eine ECHTE Messung, alle 10 Minuten. Wird mitgeschrieben, damit sich in
+# ein paar Wochen sagen laesst, wie weit das Modell danebenliegt.
+SMN_STATION = "GRA"
+SMN = ("https://api.existenz.ch/apiv1/smn/latest"
+       f"?locations={SMN_STATION}&parameters=ff,fx,dd,tt"
+       "&app=pumpfoil.guru&version=1.0")
+AIR = (f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={LAT}"
+       f"&longitude={LON}&current=european_aqi&timezone=Europe/Zurich")
 
 # Ab so vielen Messwerten gilt die Abflussstatistik als aussagekraeftig.
 # Die Seite zeigt das Wort erst dann — vorher steht nur die Zahl da.
@@ -92,20 +110,48 @@ def fetch_hydro() -> dict:
     out = {}
     for row in r.json().get("payload", []):
         loc, par = str(row.get("loc")), row.get("par")
-        if par in ("height", "flow"):
+        if par in ("height", "flow", "temperature"):
             out.setdefault(loc, {})[par] = float(row["val"])
             out[loc]["timestamp"] = int(row["timestamp"])
     return out
 
 
+def fetch_current(url: str, *keys):
+    """Momentanwerte aus einer Open-Meteo-Adresse. Leeres dict statt Ausnahme —
+    Wetter ist Beiwerk und darf den Lauf nie kippen."""
+    try:
+        r = requests.get(url, timeout=30, headers=UA)
+        r.raise_for_status()
+        cur = r.json().get("current") or {}
+        return {k: (None if cur.get(k) is None else float(cur[k])) for k in keys}
+    except Exception as e:                                  # noqa: BLE001
+        print(f"Open-Meteo nicht geholt ({e})", file=sys.stderr)
+        return {k: None for k in keys}
+
+
+def fetch_smn():
+    """Echte Messwerte der MeteoSchweiz-Station. ff/fx in km/h, dd in Grad."""
+    try:
+        r = requests.get(SMN, timeout=30, headers=UA)
+        r.raise_for_status()
+        out = {}
+        for row in r.json().get("payload", []):
+            out[row["par"]] = float(row["val"])
+        return out
+    except Exception as e:                                  # noqa: BLE001
+        print(f"SMN nicht geholt ({e})", file=sys.stderr)
+        return {}
+
+
 def read_archive() -> list:
-    """Alle Zeilen als dicts. Leere Felder bleiben None."""
+    """Alle Zeilen als dicts, gelesen nach der Kopfzeile der DATEI — nicht nach
+    HEAD. So bleiben aeltere Archive lesbar, wenn Spalten dazukommen."""
     if not os.path.exists(CSV):
         return []
-    cols = HEAD.strip().split(",")
-    rows = []
     with open(CSV) as f:
-        next(f, None)
+        first = f.readline().strip()
+        cols = first.split(",") if first else HEAD.strip().split(",")
+        rows = []
         for line in f:
             parts = line.rstrip("\n").split(",")
             if len(parts) != len(cols):
@@ -119,9 +165,25 @@ def read_archive() -> list:
                         row[c] = int(v) if c == "timestamp" else float(v)
                     except ValueError:
                         row[c] = None
-            if row["timestamp"] is not None:
+            if row.get("timestamp") is not None:
                 rows.append(row)
     return rows
+
+
+def migrate(rows: list) -> None:
+    """Schreibt die Datei mit der aktuellen Kopfzeile neu, falls Spalten
+    dazugekommen sind. Fehlende alte Werte bleiben leer."""
+    if not os.path.exists(CSV):
+        return
+    with open(CSV) as f:
+        if f.readline().strip() == HEAD.strip():
+            return
+    cols = HEAD.strip().split(",")
+    with open(CSV, "w") as f:
+        f.write(HEAD)
+        for r in rows:
+            f.write(",".join("" if r.get(c) is None else str(r[c]) for c in cols) + "\n")
+    print(f"hydro.csv auf neues Spaltenschema gebracht ({len(rows)} Zeilen)")
 
 
 def append_archive(ts: int, vals: dict, rows: list) -> list:
@@ -195,14 +257,28 @@ def main() -> int:
         if "flow" not in out_s and "height" not in in_s:
             raise ValueError("weder 2215 noch 2119 lieferten Werte")
 
+        warm_s = h.get(WARM, {})
+        om = fetch_current(METEO, "uv_index", "wind_speed_10m",
+                           "wind_gusts_10m", "wind_direction_10m")
+        uv = om.get("uv_index")
+        aqi = fetch_current(AIR, "european_aqi").get("european_aqi")
+        smn = fetch_smn()
         ts = out_s.get("timestamp") or in_s.get("timestamp")
         today = forecast[0]
+        archive = read_archive()
+        migrate(archive)
         rows = append_archive(ts, {
             "timestamp": ts,
             "gE_min": today["min"], "gE_max": today["max"],
             "h2119": in_s.get("height"), "q2119": in_s.get("flow"),
             "h2215": out_s.get("height"), "q2215": out_s.get("flow"),
-        }, read_archive())
+            "h2467": warm_s.get("height"), "t2467": warm_s.get("temperature"),
+            "uv": uv, "aqi": aqi,
+            "wind": om.get("wind_speed_10m"), "gust": om.get("wind_gusts_10m"),
+            "wdir": om.get("wind_direction_10m"),
+            "smn_ff": smn.get("ff"), "smn_fx": smn.get("fx"),
+            "smn_dd": smn.get("dd"), "smn_tt": smn.get("tt"),
+        }, archive)
 
         payload["hydro"] = {
             "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
@@ -212,6 +288,32 @@ def main() -> int:
             "flow": out_s.get("flow"),
             "time": datetime.fromtimestamp(ts, timezone.utc).isoformat(timespec="seconds"),
             "stats": flow_stats(rows),
+        }
+        # Saane bei Guemmenen, unterhalb von Laupen. Einzige Station der Kette
+        # mit Wassertemperatur. Der Wert ist NICHT die Seetemperatur — es ist
+        # Tiefenwasser aus der Staumauer plus Erwaermung auf dem Weg. Wird
+        # gesammelt, um ihn spaeter gegen eine echte Oberflaechenmessung zu
+        # halten und den Zusammenhang zu bestimmen.
+        payload["air"] = {
+            "source": "Open-Meteo (Modell) + MeteoSchweiz " + SMN_STATION + " (Messung)",
+            "uv_index": uv,
+            "european_aqi": aqi,
+            "wind_model": om.get("wind_speed_10m"),
+            "gust_model": om.get("wind_gusts_10m"),
+            "wind_dir_model": om.get("wind_direction_10m"),
+            "wind_measured": smn.get("ff"),
+            "gust_measured": smn.get("fx"),
+            "wind_dir_measured": smn.get("dd"),
+            "temp_measured": smn.get("tt"),
+            "measured_station": SMN_STATION + " Fribourg/Grangeneuve, 8.7 km",
+            "time": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        }
+        payload["water"] = {
+            "station": WARM,
+            "name": "Saane – Gümmenen",
+            "temperature": warm_s.get("temperature"),
+            "height": warm_s.get("height"),
+            "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur",
         }
         # Oberhalb des Sees. Noch nichts fuer die Anzeige — wird gesammelt, um
         # den Zusammenhang zum Groupe-E-Band zu pruefen.
@@ -225,7 +327,9 @@ def main() -> int:
 
         st = payload["hydro"]["stats"]
         bal = (in_s.get("flow") or 0) - (out_s.get("flow") or 0)
-        print(f"Laupen {out_s.get('flow')} m³/s · Fribourg {in_s.get('height')} m ü. M. "
+        print(f"Wind Modell {om.get('wind_speed_10m')} / gemessen {smn.get('ff')} km/h · "
+              f"UV {uv} · Luft {aqi} · Gümmenen {warm_s.get('temperature')} °C · "
+              f"Laupen {out_s.get('flow')} m³/s · Fribourg {in_s.get('height')} m ü. M. "
               f"/ {in_s.get('flow')} m³/s · Bilanz {bal:+.2f} m³/s "
               f"({'steigend' if bal > 0 else 'sinkend'})")
         if st:
@@ -233,7 +337,7 @@ def main() -> int:
                   + ("" if st["enough"] else f", Wortangabe ab {MIN_SAMPLES}"))
     except Exception as e:                                  # noqa: BLE001
         print(f"BAFU nicht geholt ({e}) — alter Stand bleibt", file=sys.stderr)
-        for k in ("hydro", "sarine"):
+        for k in ("hydro", "sarine", "water", "air"):
             if k in old:
                 payload[k] = old[k]
 

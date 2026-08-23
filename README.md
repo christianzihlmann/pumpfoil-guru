@@ -156,13 +156,36 @@ Der stündliche Job schreibt eine Zeile nach `data/hydro.csv` — append-only,
 nie gekürzt:
 
 ```
-timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215
+timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215,h2467,t2467,uv,aqi,
+wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt
 ```
 
 - `gE_min` / `gE_max` — Groupe-E-Band des Tages
 - `h2119` / `q2119` — BAFU Sarine – Fribourg, oberhalb des Sees: **gemessener
   Pegel** in m ü. M. und Zufluss
 - `h2215` / `q2215` — BAFU Saane – Laupen, unterhalb der Staumauer
+- `h2467` / `t2467` — BAFU Saane – Gümmenen, weiter unterhalb: Pegel und
+  **Wassertemperatur**. Die einzige Station der Kette, die Temperatur misst.
+  Das ist *nicht* die Seetemperatur — es ist Tiefenwasser aus der Staumauer
+  plus Erwärmung auf dem Weg, also systematisch zu kalt. Wird gesammelt, um sie
+  später gegen eine echte Oberflächenmessung zu halten und den Zusammenhang zu
+  bestimmen.
+
+- `uv` / `aqi` — UV-Index und European Air Quality Index von Open-Meteo,
+  jeweils der Momentanwert zur vollen Stunde. Stündlich ergibt das die
+  Tageskurve, die eine einzelne Abfrage nicht liefern kann.
+- `wind` / `gust` / `wdir` — Open-Meteo, **Modellwerte**, keine Messung.
+- `smn_ff` / `smn_fx` / `smn_dd` / `smn_tt` — MeteoSchweiz-Station **GRA
+  (Fribourg/Grangeneuve)**, 8.7 km vom Steg: Wind, Böe, Richtung, Temperatur.
+  Das sind **echte Messungen**, alle 10 Minuten.
+
+Beide Windquellen werden bewusst nebeneinander geschrieben. Erst über Wochen
+zeigt sich, wie weit das Modell von der Messung abweicht — und ob es sich lohnt,
+die Anzeige auf die Messung umzustellen.
+
+Kommen Spalten dazu, schreibt `fetch_level.py` die Datei einmalig mit der neuen
+Kopfzeile um und füllt alte Zeilen mit leeren Feldern auf — das Archiv bleibt
+dabei erhalten.
 
 Alles in einer Zeile, damit sich später ohne Zusammenführen ausrechnen lässt,
 wie `h2119` mit dem Groupe-E-Band zusammenhängt. Wenn dieser Zusammenhang stabil
@@ -182,4 +205,6 @@ schaltet sich von selbst frei.
 - **Wassertemperatur gibt es bei BAFU nicht** — weder 2215 noch 2119 liefern
   `temperature`. Kommt erst mit dem eigenen Sensor.
   BAFU muss genannt und verlinkt werden.
-- Wetter: Open-Meteo.
+- Wetter, UV-Index: Open-Meteo.
+- Luftqualität: Open-Meteo Air-Quality-API (European AQI), eigene Adresse,
+  ebenfalls ohne Schlüssel.
