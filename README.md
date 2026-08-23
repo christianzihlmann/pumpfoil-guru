@@ -116,6 +116,23 @@ Pegel in m ü. M. = Höhe der Sensormembran über Meer + gemessene Wassersäule.
 Die Membranhöhe einmal einmessen, indem die Messung mit der Groupe-E-Prognose
 zu einer ruhigen Nachtstunde verglichen wird.
 
+## Pegeltrend
+
+Unten stehen drei Kacheln nebeneinander: **Zufluss** (Sarine bei Fribourg, BAFU
+2119), **Abfluss** (Saane bei Laupen, BAFU 2215) und ein Pfeil mit *Pegel steigt
+/ sinkt / konstant*. Der Pfeil ist schlicht die Differenz der beiden.
+
+Das ist die einzige Live-Aussage über die Richtung, die es ohne eigenen Sensor
+gibt — das Groupe-E-Band sagt nichts darüber, wo im Band der See gerade steht
+oder wohin er unterwegs ist.
+
+**Vorbehalt:** 2119 misst nur die Sarine. Der See hat weitere Zuflüsse, die
+niemand misst. Die Bilanz ist deshalb **systematisch zu negativ** — es kann
+„sinkt" stehen, während der See in Wirklichkeit hält. Das Totband
+(`CONFIG.trendDeadband`, aktuell 1.0 m³/s) ist geraten und gehört nachjustiert,
+sobald `hydro.csv` genug Zeilen hat: dann lässt sich die Bilanz gegen die
+tatsächliche Bewegung der Groupe-E-Bänder halten und der Versatz herausrechnen.
+
 ## Manuelle Schalter
 
 In `data/level.json`:

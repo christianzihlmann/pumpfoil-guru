@@ -158,6 +158,11 @@ h2{
 .metric .v{font-family:var(--mono);font-size:1.34rem;font-weight:700;letter-spacing:-.02em}
 .metric .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
 .metric .v small{font-size:.62rem;font-weight:400;color:var(--muted);letter-spacing:0}
+.metric .v.trend{display:flex;align-items:center;height:1.34rem}
+.metric .v.trend svg{width:1.25rem;height:1.25rem;display:block}
+.metric .v.trend.up{color:var(--go)}
+.metric .v.trend.down{color:var(--warn)}
+.metric .v.trend.flat{color:var(--muted)}
 .sky{display:flex;align-items:center;gap:.6rem;min-width:150px}
 .sky svg{width:38px;height:38px;flex:none}
 .sky .desc{font-family:var(--display);font-size:1.02rem;font-weight:500;line-height:1.15}
@@ -338,7 +343,13 @@ const CONFIG = {
   // Im Betrieb wird dieser Block in data/level.json direkt auf GitHub umgeschaltet.
   manual: { rowing_competition:false, dock4_installed:false },
   weather: { lat:46.8261, lon:7.1256, place:'Pensier' },
-  hydro:   { station:'2215' },
+  hydro:   { station:'2215', inflow:'2119' },   // Laupen unten, Fribourg oben
+
+  // Zufluss minus Abfluss. Darunter gilt der Pegel als konstant.
+  // Vorläufig grob: 2119 misst nur die Sarine, der See hat weitere Zuflüsse —
+  // die Bilanz ist deshalb systematisch zu negativ. Sobald genug Archiv da ist,
+  // gegen die Groupe-E-Bänder nachjustieren.
+  trendDeadband: 1.0,
   app: 'pumpfoil.guru'
 };
 
@@ -595,6 +606,7 @@ async function loadLevel(){
       flowStats = d.hydro.stats || null;
       if (flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;
     }
+    if (d.sarine && flowIn == null && d.sarine.flow != null) flowIn = d.sarine.flow;
     renderFlow();
     renderFC(forecast);
   }catch(e){
@@ -660,7 +672,9 @@ function renderWeather(){
     <div class="metric" title="${windWord(wind)[2]}"><div class="v">${Math.round(wind)}<small> km/h</small></div><div class="k">${i ? 'Wind max' : 'Wind'} · ${windWord(wind)[1]}</div></div>
     <div class="metric" title="Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)"><div class="v">${dirWord(dir)}</div><div class="k">${i ? 'Windrichtung ⌀' : 'Wind aus'}</div></div>
     <div class="metric" title="${windWord(gust)[2]}"><div class="v">${Math.round(gust)}<small> km/h</small></div><div class="k">${i ? 'Böen max' : 'Böen'} · ${windWord(gust)[1]}</div></div>
-    ${i === 0 ? '<div class="metric" id="flow"><div class="v">–</div><div class="k">Abfluss</div></div>' : ''}
+    ${i === 0 ? '<div class="metric" id="flowin"><div class="v">–</div><div class="k">Zufluss</div></div>'
+              + '<div class="metric" id="flow"><div class="v">–</div><div class="k">Abfluss</div></div>'
+              + '<div class="metric" id="trend"><div class="v">–</div><div class="k">Pegel</div></div>' : ''}
     <div class="metric"><div class="v">${sr}<small> / ${ss}</small></div><div class="k">Tag · ${mins}</div></div>`;
 
   if (i === 0) renderFlow();   // Abfluss gibt es nur für heute — keine Prognose dafür
@@ -669,7 +683,23 @@ function renderWeather(){
 /* Der Abfluss bekommt sein Wort aus dem eigenen Archiv (data/flow.csv, von der
    stündlichen Action gefüllt). Solange zu wenig Verlauf da ist, steht nur die
    Zahl — die Statistik kommt als hydro.stats in level.json mit. */
-let flowVal = null, flowStats = null;
+let flowVal = null, flowIn = null, flowStats = null;
+
+const ARROW = {
+  up:   '<path d="M12 19V5M12 5l-6 6M12 5l6 6"/>',
+  down: '<path d="M12 5v14M12 19l-6-6M12 19l6-6"/>',
+  flat: '<path d="M5 12h14M19 12l-6-5M19 12l-6 5"/>'
+};
+const svgArrow = k => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"`
+  + ` stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${ARROW[k]}</svg>`;
+
+/* Zufluss minus Abfluss. Positiv heisst: es kommt mehr an, als abfliesst. */
+function trendOf(qin, qout){
+  if (qin == null || qout == null) return null;
+  const d = qin - qout;
+  if (Math.abs(d) < CONFIG.trendDeadband) return { k:'flat', word:'konstant', d };
+  return d > 0 ? { k:'up', word:'steigt', d } : { k:'down', word:'sinkt', d };
+}
 
 function flowWord(v, s){
   if (!s || !s.enough || v == null) return null;
@@ -681,25 +711,43 @@ function flowWord(v, s){
 }
 
 function renderFlow(){
-  const el = $('#flow');
-  if (!el || flowVal == null) return;
-  const w = flowWord(flowVal, flowStats);
-  const tip = flowStats
-    ? `Vergleich mit ${flowStats.n} Messwerten aus ${flowStats.days} Tagen`
-      + (flowStats.enough ? '' : ' — noch zu wenig für eine Einordnung')
-    : 'Archiv fängt gerade erst an';
-  el.title = tip;
-  el.innerHTML = `<div class="v">${Math.round(flowVal)}<small> m³/s</small></div>`
-    + `<div class="k">Abfluss${w ? ' · ' + w : ' Laupen'}</div>`;
+  const inEl = $('#flowin'), outEl = $('#flow'), trEl = $('#trend');
+
+  if (inEl && flowIn != null){
+    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees';
+    inEl.innerHTML = `<div class="v">${Math.round(flowIn)}<small> m³/s</small></div>`
+      + `<div class="k">Zufluss</div>`;
+  }
+
+  if (outEl && flowVal != null){
+    const w = flowWord(flowVal, flowStats);
+    outEl.title = flowStats
+      ? `Vergleich mit ${flowStats.n} Messwerten aus ${flowStats.days} Tagen`
+        + (flowStats.enough ? '' : ' — noch zu wenig für eine Einordnung')
+      : 'Archiv fängt gerade erst an';
+    outEl.innerHTML = `<div class="v">${Math.round(flowVal)}<small> m³/s</small></div>`
+      + `<div class="k">Abfluss${w ? ' · ' + w : ' Laupen'}</div>`;
+  }
+
+  const t = trendOf(flowIn, flowVal);
+  if (trEl && t){
+    trEl.title = `Zufluss ${flowIn} − Abfluss ${flowVal} = ${t.d.toFixed(1)} m³/s.`
+      + ' Grobe Bilanz — 2119 misst nur die Sarine, nicht alle Zuflüsse.';
+    trEl.innerHTML = `<div class="v trend ${t.k}">${svgArrow(t.k)}</div>`
+      + `<div class="k">Pegel ${t.word}</div>`;
+  }
 }
 
 async function loadHydro(){
-  const u = `https://api.existenz.ch/apiv1/hydro/latest?locations=${CONFIG.hydro.station}`
+  const u = `https://api.existenz.ch/apiv1/hydro/latest`
+    + `?locations=${CONFIG.hydro.inflow},${CONFIG.hydro.station}`
     + `&parameters=flow&app=${CONFIG.app}&version=1.0`;
   try{
     const d = await (await fetch(u)).json();
-    const f = (d.payload||[]).find(x => x.par === 'flow');
-    if (f) flowVal = f.val;          // live schlägt den stündlichen Stand
+    const pick = loc => (d.payload||[]).find(x => x.par === 'flow' && String(x.loc) === loc);
+    const out = pick(CONFIG.hydro.station), inn = pick(CONFIG.hydro.inflow);
+    if (out) flowVal = out.val;      // live schlägt den stündlichen Stand
+    if (inn) flowIn  = inn.val;
   }catch(e){}
   renderFlow();
 }
