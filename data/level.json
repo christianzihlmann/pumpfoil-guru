@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-24T23:28:59+00:00",
+  "fetched": "2026-08-24T23:49:54+00:00",
   "forecast": [
     {
       "date": "25.08.2026",
@@ -35,18 +35,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 44.16,
-    "time": "2026-08-24T23:10:00+00:00",
+    "flow": 44.36,
+    "time": "2026-08-24T23:40:00+00:00",
     "stats": {
-      "n": 42,
-      "days": 2.3,
+      "n": 43,
+      "days": 2.4,
       "enough": false,
       "min": 7.63,
-      "p10": 7.84,
-      "p25": 7.99,
-      "median": 14.86,
-      "p75": 101.03,
-      "p90": 109.16,
+      "p10": 7.85,
+      "p25": 8.0,
+      "median": 16.76,
+      "p75": 100.64,
+      "p90": 109.14,
       "max": 110.6
     }
   },
@@ -54,28 +54,28 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 22.0,
-    "wind_model": 1.5,
-    "gust_model": 15.1,
-    "wind_dir_model": 225.0,
-    "wind_measured": 7.6,
-    "gust_measured": 13.3,
-    "wind_dir_measured": 194.0,
-    "temp_measured": 16.6,
+    "wind_model": 6.0,
+    "gust_model": 13.0,
+    "wind_dir_model": 205.0,
+    "wind_measured": 7.9,
+    "gust_measured": 11.5,
+    "wind_dir_measured": 227.0,
+    "temp_measured": 16.7,
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-08-24T23:29:21+00:00"
+    "time": "2026-08-24T23:49:56+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 17.24,
+    "temperature": 17.19,
     "height": 470.97,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.27,
-    "flow": 25.71,
+    "height": 532.15,
+    "flow": 13.66,
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   }
 }
