@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  issues: write     # für die Kalibrier-Meldung
 
 concurrency:
   group: pegel
@@ -24,7 +25,39 @@ jobs:
 
       - run: pip install requests
 
-      - run: python scripts/fetch_level.py
+      - id: fetch
+        run: python scripts/fetch_level.py
+
+      - name: Kalibrierfenster melden
+        if: steps.fetch.outputs.narrow == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BAND: ${{ steps.fetch.outputs.band_cm }}
+          LO: ${{ steps.fetch.outputs.lo }}
+          HI: ${{ steps.fetch.outputs.hi }}
+        run: |
+          HEUTE=$(date -u +%Y-%m-%d)
+          # Der Job laeuft stuendlich — nur eine Meldung pro Tag
+          if gh issue list --state all --limit 50 --json title --jq '.[].title' \
+             | grep -q "^$HEUTE "; then
+            echo "Fuer $HEUTE bereits gemeldet."
+            exit 0
+          fi
+          {
+            printf 'Groupe E gibt fuer heute **%s - %s m ue. M.** an.\n\n' "$LO" "$HI"
+            printf 'Das sind nur **%s cm** Spanne. An solchen Tagen laesst sich eine\n' "$BAND"
+            printf 'Messung am Steg fast eindeutig einem Pegel zuordnen.\n\n'
+            printf '**Was tun:**\n\n'
+            printf '1. Wassertiefe an der kritischen Stelle messen, an Dock 1 *und* Dock 2 am selben Tag.\n'
+            printf '2. **Uhrzeit auf 15 min genau notieren.**\n'
+            printf '3. Notieren, ob es geht: gruen / orange / rot.\n\n'
+            printf 'Die Differenz zwischen den Docks ist unabhaengig vom Seepegel und macht\n'
+            printf 'sie untereinander vergleichbar. Einzelheiten im CODEBOOK.\n\n'
+            printf '_Gemeldet von scripts/fetch_level.py, Schwelle NARROW_BAND_CM._\n'
+          } > /tmp/issue.md
+          gh issue create \
+            --title "$HEUTE - Kalibrieren: Pegelspanne nur $BAND cm" \
+            --body-file /tmp/issue.md
 
       - name: Commit, falls sich etwas geändert hat
         run: |

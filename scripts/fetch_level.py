@@ -79,6 +79,12 @@ AIR = (f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={LAT}"
 # Die Seite zeigt das Wort erst dann — vorher steht nur die Zahl da.
 MIN_SAMPLES = 300
 
+# Ist das Tagesband schmaler als das, laesst sich eine Messung am Steg fast
+# eindeutig einem Pegel zuordnen — der ideale Kalibriertag. Der Job meldet ihn
+# dann als GitHub-Issue. Bisher gesehen: 24 und 44 cm. Feuert das nie, hier
+# hochsetzen; die Verteilung steht in hydro.csv (gE_max minus gE_min).
+NARROW_BAND_CM = 10
+
 # Manuelle Schalter. Werden in data/level.json direkt auf GitHub umgelegt und
 # hier nie ueberschrieben — nur angelegt, falls sie fehlen.
 MANUAL_DEFAULTS = {"rowing_competition": False, "dock4_installed": False}
@@ -422,8 +428,22 @@ def main() -> int:
         json.dump(payload, f, indent=2, ensure_ascii=False)
         f.write("\n")
 
+    today = forecast[0]
+    band_cm = round((today["max"] - today["min"]) * 100)
     print(f"{len(forecast)} Tage geschrieben, heute "
-          f"{forecast[0]['min']:.2f}–{forecast[0]['max']:.2f} m ü. M.")
+          f"{today['min']:.2f}–{today['max']:.2f} m ü. M. (Spanne {band_cm} cm)")
+
+    # An GitHub Actions weiterreichen; ausserhalb davon passiert nichts.
+    out = os.environ.get("GITHUB_OUTPUT")
+    if out:
+        with open(out, "a") as f:
+            f.write(f"band_cm={band_cm}\n")
+            f.write(f"narrow={'true' if band_cm <= NARROW_BAND_CM else 'false'}\n")
+            f.write(f"lo={today['min']:.2f}\n")
+            f.write(f"hi={today['max']:.2f}\n")
+    if band_cm <= NARROW_BAND_CM:
+        print(f"KALIBRIERFENSTER: nur {band_cm} cm Spanne heute")
+
     return 0
 
 

@@ -133,6 +133,24 @@ niemand misst. Die Bilanz ist deshalb **systematisch zu negativ** — es kann
 sobald `hydro.csv` genug Zeilen hat: dann lässt sich die Bilanz gegen die
 tatsächliche Bewegung der Groupe-E-Bänder halten und der Versatz herausrechnen.
 
+## Meldung bei schmaler Pegelspanne
+
+Je schmaler das Groupe-E-Tagesband, desto genauer lässt sich eine Messung am
+Steg einem Pegel zuordnen. Bei 45 cm Spanne ist eine Messung fast wertlos, bei
+10 cm ist sie eindeutig.
+
+Unterschreitet die Spanne `NARROW_BAND_CM` (10 cm, in `scripts/fetch_level.py`),
+legt der stündliche Job ein **GitHub-Issue** an — das schickt eine Mail an den
+Repo-Besitzer und bleibt als Merkposten stehen. Kein zusätzlicher Dienst nötig,
+der Workflow braucht dafür nur `issues: write`.
+
+Höchstens eine Meldung pro Tag; der Job prüft vorher, ob für das Datum schon
+eine existiert.
+
+Bisher beobachtete Spannweiten: 24 cm (23.08.2026), 44 cm (24.08.2026). Feuert
+die Meldung über Monate nie, gehört die Schwelle hochgesetzt — die Verteilung
+lässt sich aus `hydro.csv` ablesen (`gE_max` minus `gE_min`).
+
 ## Gewitterwarnungen
 
 Der stündliche Job holt die Warnungen von **MeteoAlarm**, der europäischen
