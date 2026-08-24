@@ -310,5 +310,12 @@ schaltet sich von selbst frei.
   `temperature`. Kommt erst mit dem eigenen Sensor.
   BAFU muss genannt und verlinkt werden.
 - Wetter, UV-Index: Open-Meteo.
+- Pollen: Open-Meteo Air-Quality-API (CAMS). Körner pro m³ für Gräser, Birke,
+  Erle, Beifuss, Ambrosia, Olive. Die Einstufung in *keine / gering / mässig /
+  hoch / sehr hoch* ist **artspezifisch** — Ambrosia gilt schon ab 6 Körnern als
+  mässig, Gräser erst ab 20. Die Schwellen stehen in `CONFIG`-Nähe als Tabelle
+  `POLLEN` in `index.html`. Sie folgen einer in Europa verbreiteten Einteilung,
+  sind aber **keine amtliche Schweizer Norm** — verschiedene Quellen setzen sie
+  leicht unterschiedlich. Angezeigt wird die stärkste Art.
 - Luftqualität: Open-Meteo Air-Quality-API (European AQI), eigene Adresse,
   ebenfalls ohne Schlüssel.

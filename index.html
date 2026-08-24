@@ -41,7 +41,12 @@ body{
 .eyebrow{
   font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;
   text-transform:uppercase;color:var(--molasse-dim);
+  display:flex;justify-content:space-between;align-items:center;
+  gap:1rem;flex-wrap:wrap;
 }
+.suntimes{display:inline-flex;align-items:center;gap:.75rem;letter-spacing:.08em}
+.suntimes span{display:inline-flex;align-items:center;gap:.3rem}
+.suntimes svg{width:13px;height:13px;flex:none}
 
 /* ── masthead ─────────────────────────────────────── */
 header{padding:2.2rem 0 1.4rem}
@@ -239,7 +244,10 @@ footer a{color:var(--molasse-dim)}
 <div class="wrap">
 
 <header>
-  <div class="eyebrow">Pensier · Kanton Freiburg</div>
+  <div class="eyebrow">
+    <span>Pensier · Kanton Freiburg</span>
+    <span class="suntimes" id="suntimes"></span>
+  </div>
   <h1>Pumpfoil<br><em>Guru</em></h1>
   <p class="verdict" id="verdict">Lade Pegeldaten…</p>
   <p class="stamp" id="stamp">—</p>
@@ -403,6 +411,21 @@ const AQI_W = [[20,'sehr gut'],[40,'gut'],[60,'mittel'],
                [80,'schlecht'],[100,'sehr schlecht'],[1e9,'extrem schlecht']];
 const aqiWord = v => AQI_W.find(([m]) => v < m)[1];
 
+/* Pollen. Die Schwellen sind artspezifisch — Ambrosia ist schon bei wenigen
+   Körnern relevant, Gräser erst deutlich später. Werte in Körnern pro m³.
+   Die Grenzen unterscheiden sich je nach Quelle; das hier ist eine gängige,
+   in Europa verbreitete Einteilung, keine amtliche Schweizer Norm. */
+const POLLEN = [
+  { key:'grass_pollen',   name:'Gräser',   steps:[1, 20, 50, 150] },
+  { key:'birch_pollen',   name:'Birke',    steps:[1, 10, 50, 200] },
+  { key:'alder_pollen',   name:'Erle',     steps:[1, 10, 50, 200] },
+  { key:'mugwort_pollen', name:'Beifuss',  steps:[1, 10, 30,  50] },
+  { key:'ragweed_pollen', name:'Ambrosia', steps:[1,  6, 11,  50] },
+  { key:'olive_pollen',   name:'Olive',    steps:[1, 20, 50, 200] }
+];
+const POLLEN_WORDS = ['keine', 'gering', 'mässig', 'hoch', 'sehr hoch'];
+const pollenLevel = (v, steps) => steps.filter(t => v >= t).length;
+
 const DIRS = ['N','NNO','NO','ONO','O','OSO','SO','SSO',
               'S','SSW','SW','WSW','W','WNW','NW','NNW'];
 const dirWord = deg => DIRS[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
@@ -498,6 +521,19 @@ const WARNSIGN = `<svg viewBox="0 0 24 24" aria-hidden="true">
         stroke-width="1.7" stroke-linejoin="round"/>
   <path d="M12 9.2v5.1" stroke="#071A1E" stroke-width="2.2" stroke-linecap="round"/>
   <circle cx="12" cy="17.7" r="1.2" fill="#071A1E"/></svg>`;
+
+// Sonnenauf- und -untergang. Bewusst in der Farbe der Kopfzeile, nicht gelb —
+// das sind Zeitangaben, keine Warnung.
+const SUN_UP = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 19h18M7.5 14.5a4.5 4.5 0 0 1 9 0"/>
+  <path d="M12 3v3.5M5.6 6.6l1.6 1.6M18.4 6.6l-1.6 1.6"/>
+  <path d="M9.5 10.5 12 8l2.5 2.5"/></svg>`;
+const SUN_DOWN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+  stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M3 19h18M7.5 14.5a4.5 4.5 0 0 1 9 0"/>
+  <path d="M12 8.5V5M5.6 6.6l1.6 1.6M18.4 6.6l-1.6 1.6"/>
+  <path d="M9.5 6 12 8.5 14.5 6"/></svg>`;
 
 const PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -716,9 +752,14 @@ function renderWeather(){
     ${i === 0 ? '<div class="metric" id="flowin"><div class="v">–</div><div class="k">Zufluss</div></div>'
               + '<div class="metric" id="flow"><div class="v">–</div><div class="k">Abfluss</div></div>'
               + '<div class="metric" id="trend"><div class="v">–</div><div class="k">Pegel</div></div>' : ''}
-    <div class="metric"><div class="v"><small>${sr} /</small> ${ss}</div><div class="k">Tag · ${mins}</div></div>`;
+    <div class="metric" id="pollen"><div class="v">–</div><div class="k">Pollen</div></div>`;
 
-  if (i === 0){ renderFlow(); renderAir(); }   // nur für heute — keine Prognose dafür
+  $('#suntimes').innerHTML =
+      `<span title="Sonnenaufgang">${SUN_UP}${sr}</span>`
+    + `<span title="Sonnenuntergang">${SUN_DOWN}${ss}</span>`
+    + `<span title="Tageslänge">${mins}</span>`;
+
+  if (i === 0){ renderFlow(); renderAir(); renderPollen(); }   // nur für heute — keine Prognose dafür
 }
 
 /* Der Abfluss bekommt sein Wort aus dem eigenen Archiv (data/flow.csv, von der
@@ -786,17 +827,21 @@ function renderFlow(){
 
 /* Luftqualität kommt von einer eigenen Open-Meteo-Adresse, ebenfalls ohne
    Schlüssel. Nur für heute — für Folgetage liefert sie keinen Tageswert. */
-let aqi = null;
+let aqi = null, pollen = null;
 
 async function loadAir(){
   const { lat, lon } = CONFIG.weather;
   try{
     const d = await (await fetch(
       `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}`
-      + `&current=european_aqi&timezone=Europe/Zurich`)).json();
-    if (d.current && d.current.european_aqi != null) aqi = d.current.european_aqi;
+      + `&current=european_aqi,${POLLEN.map(p => p.key).join(',')}`
+      + `&timezone=Europe/Zurich`)).json();
+    if (d.current){
+      if (d.current.european_aqi != null) aqi = d.current.european_aqi;
+      pollen = d.current;
+    }
   }catch(e){}
-  renderAir();
+  renderAir(); renderPollen();
 }
 
 function renderAir(){
@@ -805,6 +850,28 @@ function renderAir(){
   el.title = 'European Air Quality Index (EAQI) — kleiner ist besser';
   el.innerHTML = `<div class="v">${Math.round(aqi)}</div>`
     + `<div class="k">Luftqualität · ${aqiWord(aqi)}</div>`;
+}
+
+function renderPollen(){
+  const el = $('#pollen');
+  if (!el || !pollen) return;
+
+  // Stärkste Art gewinnt: erst nach Stufe, bei Gleichstand nach Konzentration
+  let best = null;
+  const alle = [];
+  for (const p of POLLEN){
+    const v = pollen[p.key];
+    if (v == null) continue;
+    const lvl = pollenLevel(v, p.steps);
+    alle.push(`${p.name} ${v.toFixed(1)}`);
+    if (!best || lvl > best.lvl || (lvl === best.lvl && v > best.v))
+      best = { lvl, v, name:p.name };
+  }
+  if (!best) return;
+
+  el.title = 'Körner pro m³ — ' + alle.join(' · ');
+  el.innerHTML = `<div class="v">${POLLEN_WORDS[best.lvl]}</div>`
+    + `<div class="k">Pollen${best.lvl ? ' · ' + best.name : ''}</div>`;
 }
 
 async function loadHydro(){
