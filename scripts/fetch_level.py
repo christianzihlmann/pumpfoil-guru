@@ -167,16 +167,37 @@ def fetch_actuals() -> dict:
         return {}
 
 
-def append_actuals(vals: dict) -> int:
-    """Neue Tageswerte anhaengen. Bestehende Tage werden nie ueberschrieben."""
-    seen = {}
+ACTUAL_HEAD = "date,level,gE_min,gE_max,band_pos\n"
+
+
+def band_of_day(rows: list, ddmmyyyy: str):
+    """Das Prognoseband, das an diesem Tag zuletzt galt — aus unserem eigenen
+    Archiv. Zuletzt, weil das die am besten informierte Fassung des Tages ist.
+    Vor Archivbeginn gibt es keines, dann bleiben die Felder leer."""
+    d, mth, y = ddmmyyyy[:2], ddmmyyyy[3:5], ddmmyyyy[6:]
+    lo = hi = None
+    for r in rows:                      # Archiv ist chronologisch
+        ts = r.get("timestamp")
+        if ts is None:
+            continue
+        t = datetime.fromtimestamp(ts, timezone.utc)
+        if (t.strftime("%d"), t.strftime("%m"), t.strftime("%Y")) == (d, mth, y):
+            if r.get("gE_min") is not None:
+                lo, hi = r["gE_min"], r["gE_max"]
+    return lo, hi
+
+
+def append_actuals(vals: dict, archive: list) -> int:
+    """Neue Tageswerte anhaengen, mit dem Band jenes Tages daneben.
+    Bestehende Tage werden nie ueberschrieben."""
+    seen = set()
     if os.path.exists(ACTUAL):
         with open(ACTUAL) as f:
             next(f, None)
             for line in f:
                 p_ = line.strip().split(",")
-                if len(p_) == 2:
-                    seen[p_[0]] = p_[1]
+                if p_ and p_[0]:
+                    seen.add(p_[0])
     neu = {d: v for d, v in vals.items() if d not in seen}
     if not neu:
         return 0
@@ -184,9 +205,16 @@ def append_actuals(vals: dict) -> int:
     new_file = not os.path.exists(ACTUAL)
     with open(ACTUAL, "a") as f:
         if new_file:
-            f.write("date,level\n")
+            f.write(ACTUAL_HEAD)
         for d in sorted(neu, key=lambda x: (x[6:], x[3:5], x[:2])):
-            f.write(f"{d},{neu[d]}\n")
+            lvl = neu[d]
+            lo, hi = band_of_day(archive, d)
+            # Wo im Band lag der Tageswert? 0 = am Minimum, 1 = am Maximum.
+            pos = ""
+            if lo is not None and hi is not None and hi > lo:
+                pos = f"{(lvl - lo) / (hi - lo):.3f}"
+            f.write(f"{d},{lvl},{lo if lo is not None else ''},"
+                    f"{hi if hi is not None else ''},{pos}\n")
     return len(neu)
 
 
@@ -524,7 +552,7 @@ def main() -> int:
     actuals = fetch_actuals()
     if actuals:
         payload["actual_daily"] = actuals
-        n = append_actuals(actuals)
+        n = append_actuals(actuals, read_archive())
         print(f"Tageswerte: {actuals}" + (f"  ({n} neu ins Archiv)" if n else ""))
 
     os.makedirs(DATA, exist_ok=True)

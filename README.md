@@ -221,10 +221,19 @@ letzten zwei abgeschlossenen Tage **einen Wert pro See und Tag** — kein Band.
 Von der Schiffenen-Detailseite aus ist sie nicht verlinkt.
 
 ```
-date,level
-22.08.2026,531.52
-23.08.2026,531.52
+date,level,gE_min,gE_max,band_pos
+22.08.2026,531.52,,,
+23.08.2026,531.52,531.32,531.56,0.833
 ```
+
+`band_pos` ist die Lage im Band: **0 = am Tagesminimum, 1 = am Tagesmaximum.**
+Genau die Zahl, um die es geht.
+
+**Welches Band?** Das Band verschiebt sich im Tagesverlauf — für den 23.08.
+stand morgens 531.22–531.69, abends 531.32–531.56. Gespeichert wird das
+**letzte des Tages**, die am besten informierte Fassung. Jede stündliche
+Zwischenfassung bleibt in `hydro.csv` erhalten, falls man es später anders
+rechnen will. Für Tage vor Archivbeginn bleiben die Bandfelder leer.
 
 **Warum das wichtig ist:** Bisher gab es für den Seepegel nur das Prognoseband.
 Diese Tageswerte sind die einzige Zahl, die Groupe E als tatsächlichen Stand
