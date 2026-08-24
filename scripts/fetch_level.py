@@ -60,6 +60,14 @@ METEO = (f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}
 # MeteoSchweiz-Station Grangeneuve, 8.7 km vom Steg. Anders als Open-Meteo ist
 # das eine ECHTE Messung, alle 10 Minuten. Wird mitgeschrieben, damit sich in
 # ein paar Wochen sagen laesst, wie weit das Modell danebenliegt.
+# Unwetterwarnungen. MeteoAlarm ist die europaeische Warnzentrale von EUMETNET;
+# fuer die Schweiz sendet MeteoSchweiz selbst (meteoalarm.cap@meteoswiss.ch) im
+# CAP-Standard. Offiziell und dokumentiert, im Gegensatz zur App-Schnittstelle.
+# Die Antwort ist ~8 MB, davon 82 % Polygone in fuenf Sprachkopien — das laedt
+# nur dieser Job, nie der Browser. Uebrig bleiben drei Zeilen in level.json.
+WARN = "https://feeds.meteoalarm.org/api/v1/warnings/feeds-switzerland"
+DOCK_LAT, DOCK_LON = 46.8473, 7.1414      # Dock 2, mitten in der Steggruppe
+
 SMN_STATION = "GRA"
 SMN = ("https://api.existenz.ch/apiv1/smn/latest"
        f"?locations={SMN_STATION}&parameters=ff,fx,dd,tt"
@@ -127,6 +135,66 @@ def fetch_current(url: str, *keys):
     except Exception as e:                                  # noqa: BLE001
         print(f"Open-Meteo nicht geholt ({e})", file=sys.stderr)
         return {k: None for k in keys}
+
+
+def _in_polygon(lat, lon, pts) -> bool:
+    """Strahlenverfahren. pts sind (lat, lon)-Paare."""
+    inside = False
+    n = len(pts)
+    j = n - 1
+    for i in range(n):
+        yi, xi = pts[i]
+        yj, xj = pts[j]
+        if (yi > lat) != (yj > lat) and lon < (xj - xi) * (lat - yi) / (yj - yi) + xi:
+            inside = not inside
+        j = i
+    return inside
+
+
+def fetch_thunderstorm():
+    """Aktive oder bevorstehende GEWITTERwarnung fuer den Steg, sonst None.
+
+    Nur Gewitter — Hitze, Regen, Waldbrand werden bewusst verworfen. Gefiltert
+    wird ueber den deutschen Ereignisnamen, nicht ueber die Zahlencodes: die
+    Namen ("Heftiges Gewitter", "Sehr heftiges Gewitter", "Verbreitet heftige
+    Gewitter moeglich") sind sprechend und ueberleben eine Code-Aenderung.
+    """
+    try:
+        r = requests.get(WARN, timeout=90, headers=UA)
+        r.raise_for_status()
+        now = datetime.now(timezone.utc)
+        best = None
+        for w in r.json().get("warnings", []):
+            de = next((i for i in w.get("alert", {}).get("info", [])
+                       if i.get("language") == "de"), None)
+            if not de or "gewitter" not in (de.get("event") or "").lower():
+                continue
+            expires = de.get("expires")
+            if expires and datetime.fromisoformat(expires) < now:
+                continue                       # abgelaufen
+            for area in de.get("area", []):
+                for poly in area.get("polygon", []):
+                    pts = [tuple(map(float, q.split(","))) for q in poly.split()]
+                    if not _in_polygon(DOCK_LAT, DOCK_LON, pts):
+                        continue
+                    onset = de.get("onset")
+                    cand = {
+                        "event": de.get("event"),
+                        "severity": de.get("severity"),
+                        "area": area.get("areaDesc"),
+                        "onset": onset,
+                        "expires": expires,
+                        "source": "MeteoSchweiz via MeteoAlarm (EUMETNET)",
+                    }
+                    # Die schwerste gewinnt, bei Gleichstand die frueheste
+                    rank = {"Minor": 1, "Moderate": 2, "Severe": 3, "Extreme": 4}
+                    if best is None or rank.get(cand["severity"], 0) > rank.get(best["severity"], 0):
+                        best = cand
+                    break
+        return best
+    except Exception as e:                                  # noqa: BLE001
+        print(f"Warnungen nicht geholt ({e})", file=sys.stderr)
+        return None
 
 
 def fetch_smn():
@@ -263,6 +331,7 @@ def main() -> int:
         uv = om.get("uv_index")
         aqi = fetch_current(AIR, "european_aqi").get("european_aqi")
         smn = fetch_smn()
+        storm = fetch_thunderstorm()
         ts = out_s.get("timestamp") or in_s.get("timestamp")
         today = forecast[0]
         archive = read_archive()
@@ -294,6 +363,13 @@ def main() -> int:
         # Tiefenwasser aus der Staumauer plus Erwaermung auf dem Weg. Wird
         # gesammelt, um ihn spaeter gegen eine echte Oberflaechenmessung zu
         # halten und den Zusammenhang zu bestimmen.
+        # Nur setzen, wenn es wirklich eine Gewitterwarnung gibt. Fehlt der
+        # Block, zeigt die Seite gar nichts an — kein "keine Warnung".
+        if storm:
+            payload["warning"] = storm
+            print(f"GEWITTERWARNUNG: {storm['event']} ({storm['severity']}) "
+                  f"bis {storm['expires']}")
+
         payload["air"] = {
             "source": "Open-Meteo (Modell) + MeteoSchweiz " + SMN_STATION + " (Messung)",
             "uv_index": uv,

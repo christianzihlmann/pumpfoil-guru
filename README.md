@@ -133,6 +133,34 @@ niemand misst. Die Bilanz ist deshalb **systematisch zu negativ** — es kann
 sobald `hydro.csv` genug Zeilen hat: dann lässt sich die Bilanz gegen die
 tatsächliche Bewegung der Groupe-E-Bänder halten und der Versatz herausrechnen.
 
+## Gewitterwarnungen
+
+Der stündliche Job holt die Warnungen von **MeteoAlarm**, der europäischen
+Warnzentrale von EUMETNET. Für die Schweiz sendet MeteoSchweiz dort selbst
+(`meteoalarm.cap@meteoswiss.ch`) im CAP-Standard — offiziell und dokumentiert.
+
+Nur **Gewitter** werden angezeigt. Hitze, Regen und Waldbrand werden verworfen.
+Gefiltert wird über den deutschen Ereignisnamen, nicht über Zahlencodes: die
+Namen sind sprechend und überleben eine Code-Änderung.
+
+Liegt eine gültige Warnung über dem Steg, hängt die Seite ein Warndreieck und
+„Gewitterwarnung aktiv." an die Zeile zuoberst. Beginnt sie erst später, steht
+„Gewitterwarnung ab 20:30." **Gibt es keine, steht dort nichts** — es wird nie
+„keine Warnung" angezeigt.
+
+Zwei Fallstricke, die beim Bauen aufgefallen sind:
+
+- **Die Antwort ist ~8 MB**, davon 82 % Polygone in fünf Sprachkopien. Deshalb
+  holt sie nur der Job auf GitHubs Servern, nie der Browser. Übrig bleibt ein
+  `warning`-Block von drei Zeilen in `level.json`. Fehlt der Block, gibt es
+  keine Warnung.
+- **Der Feed enthält abgelaufene Warnungen.** Am 24.08.2026 waren alle 84
+  Gewitterwarnungen darin bereits verfallen, die älteste seit vier Tagen. Ohne
+  Prüfung auf `expires` würde die Seite tagealte Gewitter melden.
+
+Der Steg wird per Punkt-in-Polygon-Test geprüft, nicht über eine Region — bei
+mehreren zutreffenden Warnungen gewinnt die schwerste.
+
 ## Manuelle Schalter
 
 In `data/level.json`:

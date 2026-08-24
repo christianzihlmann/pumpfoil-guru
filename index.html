@@ -208,6 +208,12 @@ footer{
   font-size:.72rem;color:var(--muted);line-height:1.7;
 }
 footer a{color:var(--molasse-dim)}
+.verdict .storm{
+  display:inline-flex;align-items:baseline;gap:.3em;
+  color:var(--warn);white-space:nowrap;
+}
+.verdict .storm svg{width:.85em;height:.85em;align-self:center;flex:none}
+
 .warnbox{
   position:relative;padding:.55rem 0 .55rem .95rem;
   font-size:.78rem;color:var(--muted);margin-top:.9rem;
@@ -355,7 +361,7 @@ let levelMin = null, levelMax = null, measured = null, levelStamp = null;
 /* Groupe E liefert mehrere Tage. dayIdx wählt, welcher gezeigt wird —
    Pegel, Ampeln und Wetter hängen alle daran. Abfluss gibt es nur für heute. */
 const DAYS = ['Heute','Morgen','Übermorgen'];
-let forecast = [], dayIdx = 0, measuredRaw = null, wx = null;
+let forecast = [], dayIdx = 0, measuredRaw = null, wx = null, storm = null;
 let manual = {...CONFIG.manual};
 
 const $ = s => document.querySelector(s);
@@ -478,6 +484,13 @@ function renderGauge(){
   });
 }
 
+// Warndreieck nach ISO 7010 W001: gelbes Dreieck, schwarzer Rand, Ausrufezeichen
+const WARNSIGN = `<svg viewBox="0 0 24 24" aria-hidden="true">
+  <path d="M12 2.4 22.6 21.2H1.4z" fill="#E6B245" stroke="#071A1E"
+        stroke-width="1.7" stroke-linejoin="round"/>
+  <path d="M12 9.2v5.1" stroke="#071A1E" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="12" cy="17.7" r="1.2" fill="#071A1E"/></svg>`;
+
 const PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
   <path d="M12 21.5s6.8-6.1 6.8-10.8a6.8 6.8 0 1 0-13.6 0C5.2 15.4 12 21.5 12 21.5z"/>
@@ -530,7 +543,19 @@ function renderVerdict(){
   else if (iffy.length)                 txt = `${list(iffy)} am Limit.`;
   else                                  txt = 'Es geht nichts. Pegel ausserhalb aller Fenster.';
   if (blocked.length) txt += ` ${list(blocked.map(x => x.d.name))} gesperrt.`;
-  v.textContent = txt;
+
+  // Gewitterwarnung nur heute und nur, wenn es eine gibt — sonst gar nichts
+  let extra = '';
+  if (storm && dayIdx === 0){
+    const t = s => s ? new Date(s).toLocaleTimeString('de-CH',
+      { hour:'2-digit', minute:'2-digit' }) : '';
+    const kommt = storm.onset && new Date(storm.onset) > new Date();
+    const wort = kommt ? `Gewitterwarnung ab ${t(storm.onset)}` : 'Gewitterwarnung aktiv';
+    const tip = [storm.event, storm.severity, storm.area,
+                 storm.expires ? `bis ${t(storm.expires)}` : ''].filter(Boolean).join(' · ');
+    extra = ` <span class="storm" title="${tip}">${WARNSIGN}${wort}.</span>`;
+  }
+  v.innerHTML = txt.replace(/&/g,'&amp;').replace(/</g,'&lt;') + extra;
 
   const s = $('#stamp');
   if (measured != null) s.textContent = `Gemessen ${fmt(measured)} m ü. M. · ${levelStamp||''}`;
@@ -605,6 +630,7 @@ async function loadLevel(){
       levelStamp = new Date(d.measured.time).toLocaleString('de-CH',{hour:'2-digit',minute:'2-digit'});
     }
     if (d.manual) manual = {...manual, ...d.manual};   // Sperren aus data/level.json
+    storm = d.warning || null;   // fehlt, wenn keine Gewitterwarnung gilt
     if (d.hydro){
       flowStats = d.hydro.stats || null;
       if (flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;
