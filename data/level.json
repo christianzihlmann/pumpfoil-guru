@@ -2,27 +2,27 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-24T10:47:44+00:00",
+  "fetched": "2026-08-24T11:37:54+00:00",
   "forecast": [
     {
       "date": "24.08.2026",
       "min": 531.12,
-      "max": 531.52
+      "max": 531.51
     },
     {
       "date": "25.08.2026",
-      "min": 531.09,
-      "max": 531.45
+      "min": 531.05,
+      "max": 531.41
     },
     {
       "date": "26.08.2026",
-      "min": 530.99,
-      "max": 531.38
+      "min": 530.95,
+      "max": 531.34
     },
     {
       "date": "27.08.2026",
-      "min": 531.0,
-      "max": 531.39
+      "min": 530.96,
+      "max": 531.35
     }
   ],
   "manual": {
@@ -34,47 +34,47 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 8.23,
-    "time": "2026-08-24T10:30:00+00:00",
+    "flow": 7.83,
+    "time": "2026-08-24T11:20:00+00:00",
     "stats": {
-      "n": 30,
-      "days": 1.8,
+      "n": 31,
+      "days": 1.9,
       "enough": false,
       "min": 7.63,
       "p10": 7.92,
-      "p25": 7.99,
-      "median": 9.52,
-      "p75": 78.05,
-      "p90": 109.34,
+      "p25": 7.96,
+      "median": 9.16,
+      "p75": 62.75,
+      "p90": 109.31,
       "max": 110.6
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 5.7,
-    "european_aqi": 28.0,
-    "wind_model": 5.4,
-    "gust_model": 11.9,
-    "wind_dir_model": 37.0,
+    "uv_index": 5.65,
+    "european_aqi": 36.0,
+    "wind_model": 7.1,
+    "gust_model": 14.0,
+    "wind_dir_model": 24.0,
     "wind_measured": 6.1,
     "gust_measured": 10.1,
     "wind_dir_measured": 18.0,
     "temp_measured": 19.4,
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-08-24T10:48:00+00:00"
+    "time": "2026-08-24T11:38:09+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 18.42,
-    "height": 470.44,
+    "temperature": 18.74,
+    "height": 470.38,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 531.96,
-    "flow": 5.16,
+    "height": 531.95,
+    "flow": 5.1,
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   }
 }
