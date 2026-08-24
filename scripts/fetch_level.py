@@ -68,6 +68,13 @@ METEO = (f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={LON}
 WARN = "https://feeds.meteoalarm.org/api/v1/warnings/feeds-switzerland"
 DOCK_LAT, DOCK_LON = 46.8473, 7.1414      # Dock 2, mitten in der Steggruppe
 
+# Die Antwort ist 8 MB, der Server komprimiert nicht und schickt weder ETag noch
+# Last-Modified — bedingte Abfragen gehen also nicht. Bei halbstuendlichem Takt
+# waeren das 11.5 GB pro Monat auf MeteoAlarms Kosten, fuer einen einzigen Steg.
+# Deshalb hoechstens einmal pro Stunde. Gewitterwarnungen gelten ohnehin ueber
+# Stunden, 30 Minuten Frische bringen nichts.
+WARN_MAX_AGE_MIN = 50
+
 SMN_STATION = "GRA"
 SMN = ("https://api.existenz.ch/apiv1/smn/latest"
        f"?locations={SMN_STATION}&parameters=ff,fx,dd,tt"
@@ -337,7 +344,31 @@ def main() -> int:
         uv = om.get("uv_index")
         aqi = fetch_current(AIR, "european_aqi").get("european_aqi")
         smn = fetch_smn()
-        storm = fetch_thunderstorm()
+
+        # Warnung nur holen, wenn der letzte Stand alt genug ist. Das ist
+        # robuster als am Zeitplan zu haengen — GitHubs Cron ist unpuenktlich.
+        now = datetime.now(timezone.utc)
+        last = old.get("warning_checked")
+        stale = True
+        if last:
+            try:
+                stale = (now - datetime.fromisoformat(last)).total_seconds() > WARN_MAX_AGE_MIN * 60
+            except ValueError:
+                stale = True
+
+        if stale:
+            storm = fetch_thunderstorm()
+            payload["warning_checked"] = now.isoformat(timespec="seconds")
+        else:
+            storm = old.get("warning")          # letzten Stand weiterreichen
+            payload["warning_checked"] = last
+            # Der uebernommene Stand kann inzwischen abgelaufen sein
+            if storm and storm.get("expires"):
+                try:
+                    if datetime.fromisoformat(storm["expires"]) < now:
+                        storm = None
+                except ValueError:
+                    storm = None
         ts = out_s.get("timestamp") or in_s.get("timestamp")
         today = forecast[0]
         archive = read_archive()

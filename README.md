@@ -180,7 +180,15 @@ Zwei Fallstricke, die beim Bauen aufgefallen sind:
 - **Die Antwort ist ~8 MB**, davon 82 % Polygone in fünf Sprachkopien. Deshalb
   holt sie nur der Job auf GitHubs Servern, nie der Browser. Übrig bleibt ein
   `warning`-Block von drei Zeilen in `level.json`. Fehlt der Block, gibt es
-  keine Warnung.
+  keine Warnung. Nichts davon braucht Speicherplatz — die 8 MB leben im
+  Arbeitsspeicher einer Wegwerf-Maschine und sind nach dem Lauf weg.
+- **Höchstens einmal pro Stunde**, obwohl der Job halbstündlich läuft. Der
+  Server komprimiert nicht und schickt weder `ETag` noch `Last-Modified`,
+  bedingte Abfragen gehen also nicht. Halbstündlich wären es 11.5 GB im Monat
+  auf MeteoAlarms Kosten — für einen Steg unangemessen. Gesteuert wird über
+  `warning_checked` in `level.json`, nicht über den Zeitplan: das ist robust
+  gegen GitHubs unpünktlichen Cron. Ein übernommener Stand wird auf Ablauf
+  geprüft, bevor er weiterverwendet wird.
 - **Der Feed enthält abgelaufene Warnungen.** Am 24.08.2026 waren alle 84
   Gewitterwarnungen darin bereits verfallen, die älteste seit vier Tagen. Ohne
   Prüfung auf `expires` würde die Seite tagealte Gewitter melden.
