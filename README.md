@@ -126,6 +126,10 @@ Das ist die einzige Live-Aussage über die Richtung, die es ohne eigenen Sensor
 gibt — das Groupe-E-Band sagt nichts darüber, wo im Band der See gerade steht
 oder wohin er unterwegs ist.
 
+Das Totband steht in **cm pro Tag**, nicht in m³/s — bei 4.25 km² Seefläche
+bewegt ein Kubikmeter pro Sekunde den Pegel nur um 2 cm am Tag. Unter 10 cm/Tag
+(rund 4.9 m³/s) gilt er als konstant; das ist etwa ein halbes Dock-Fenster.
+
 **Vorbehalt:** 2119 misst nur die Sarine. Der See hat weitere Zuflüsse, die
 niemand misst. Die Bilanz ist deshalb **systematisch zu negativ** — es kann
 „sinkt" stehen, während der See in Wirklichkeit hält. Das Totband

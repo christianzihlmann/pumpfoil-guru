@@ -346,11 +346,19 @@ const CONFIG = {
   weather: { lat:46.8261, lon:7.1256, place:'Pensier' },
   hydro:   { station:'2215', inflow:'2119' },   // Laupen unten, Fribourg oben
 
-  // Zufluss minus Abfluss. Darunter gilt der Pegel als konstant.
-  // Vorläufig grob: 2119 misst nur die Sarine, der See hat weitere Zuflüsse —
-  // die Bilanz ist deshalb systematisch zu negativ. Sobald genug Archiv da ist,
-  // gegen die Groupe-E-Bänder nachjustieren.
-  trendDeadband: 1.0,
+  // Seefläche bei Stauziel. Damit wird aus der Bilanz in m³/s eine Aussage
+  // darüber, wie schnell der Pegel wirklich steigt oder fällt:
+  //   1 m³/s  ≈  0.85 mm/h  ≈   2 cm/Tag
+  //   5 m³/s  ≈  4.2  mm/h  ≈  10 cm/Tag
+  //  10 m³/s  ≈  8.5  mm/h  ≈  20 cm/Tag
+  lakeArea: 4.25e6,
+
+  // Unterhalb dieser Tagesänderung gilt der Pegel als konstant. 10 cm/Tag ist
+  // rund ein halbes Dock-Fenster — darunter ändert sich für die Ampel nichts.
+  // Entspricht ~4.9 m³/s. Absorbiert nebenbei einen Teil der systematischen
+  // Verzerrung: 2119 misst nur die Sarine, der See hat ungemessene Zuflüsse,
+  // die Bilanz ist deshalb zu negativ.
+  trendDeadbandCmPerDay: 10,
   app: 'pumpfoil.guru'
 };
 
@@ -722,12 +730,19 @@ let flowVal = null, flowIn = null, flowStats = null;
 // die Zahlen daneben und dieselbe Farbe hat.
 const ARROW = { up:'↑', down:'↓', flat:'→' };
 
-/* Zufluss minus Abfluss. Positiv heisst: es kommt mehr an, als abfliesst. */
+/* Zufluss minus Abfluss. Positiv heisst: es kommt mehr an, als abfliesst.
+   Gewertet wird nicht die Bilanz selbst, sondern was sie am Pegel bewirkt —
+   ein Kubikmeter pro Sekunde bewegt diesen See um ganze 2 cm pro Tag. */
+const cmPerDay = q => q * 86400 / CONFIG.lakeArea * 100;
+
 function trendOf(qin, qout){
   if (qin == null || qout == null) return null;
   const d = qin - qout;
-  if (Math.abs(d) < CONFIG.trendDeadband) return { k:'flat', word:'konstant', d };
-  return d > 0 ? { k:'up', word:'steigt', d } : { k:'down', word:'sinkt', d };
+  const rate = cmPerDay(d);
+  if (Math.abs(rate) < CONFIG.trendDeadbandCmPerDay)
+    return { k:'flat', word:'konstant', d, rate };
+  return d > 0 ? { k:'up', word:'steigt', d, rate }
+               : { k:'down', word:'sinkt', d, rate };
 }
 
 function flowWord(v, s){
@@ -760,7 +775,9 @@ function renderFlow(){
 
   const t = trendOf(flowIn, flowVal);
   if (trEl && t){
-    trEl.title = `Zufluss ${flowIn} − Abfluss ${flowVal} = ${t.d.toFixed(1)} m³/s.`
+    const vz = t.rate >= 0 ? '+' : '−';
+    trEl.title = `Zufluss ${flowIn} − Abfluss ${flowVal} = ${t.d.toFixed(1)} m³/s`
+      + `, das sind ${vz}${Math.abs(t.rate).toFixed(1)} cm pro Tag auf 4.25 km² Seefläche.`
       + ' Grobe Bilanz — 2119 misst nur die Sarine, nicht alle Zuflüsse.';
     trEl.innerHTML = `<div class="v">${ARROW[t.k]}</div>`
       + `<div class="k">Pegel ${t.word}</div>`;
