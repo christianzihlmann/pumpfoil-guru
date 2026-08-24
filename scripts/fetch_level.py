@@ -36,6 +36,13 @@ from datetime import datetime, timezone
 import requests
 
 URL = "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen"
+
+# Die Uebersichtsseite aller Groupe-E-Seen. Anders als die Detailseite zeigt sie
+# fuer die letzten zwei abgeschlossenen Tage EINEN Wert pro Tag statt eines
+# Prognosebands — offenbar der tatsaechliche Tagesstand. Gefunden am 24.08.2026
+# ueber die sitemap.xml; von der Detailseite aus ist sie nicht verlinkt.
+OVERVIEW = "https://www.groupe-e.ch/de/groupe-e-entdecken/wasserstand-seen"
+ACTUAL_CSV = None      # wird unten gesetzt, sobald DATA bekannt ist
 LAKE_OUT = "2215"          # Saane – Laupen, unterhalb der Staumauer
 LAKE_IN = "2119"           # Sarine – Fribourg, oberhalb des Sees
 WARM = "2467"              # Saane – Guemmenen, einzige Station der Kette mit Temperatur
@@ -46,6 +53,7 @@ HYDRO = ("https://api.existenz.ch/apiv1/hydro/latest"
 DATA = os.path.join(os.path.dirname(__file__), "..", "data")
 OUT = os.path.join(DATA, "level.json")
 CSV = os.path.join(DATA, "hydro.csv")
+ACTUAL = os.path.join(DATA, "level_daily.csv")     # Datum,Pegel — ein Wert pro Tag
 HEAD = ("timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215,h2467,t2467,uv,aqi,"
         "wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt\n")
 
@@ -122,6 +130,64 @@ def fetch_forecast() -> list:
         lo, hi = float(lo.replace(",", ".")), float(hi.replace(",", "."))
         forecast.append({"date": date, "min": min(lo, hi), "max": max(lo, hi)})
     return forecast
+
+
+def fetch_actuals() -> dict:
+    """Tageswerte fuer Schiffenen von der Uebersichtsseite: {"24.08.2026": 531.52}.
+
+    Aufbau der Tabelle:
+      See | Maximales Level | <Datum1> | <Datum2> | Prognosen
+    Die Kopfzeile liefert die Daten, die Schiffenen-Zeile die Werte.
+    """
+    try:
+        r = requests.get(OVERVIEW, timeout=30, headers=UA)
+        r.raise_for_status()
+        tbl = re.search(r"<table.*?</table>", r.text, re.S)
+        if not tbl:
+            raise ValueError("keine Tabelle gefunden")
+        # Zuerst alle Umbrueche weg, sonst zerlegt der Zeilensplit die Zellen
+        t = re.sub(r"\s+", " ", tbl.group(0))
+        t = re.sub(r"</t[dh]>", "|", t, flags=re.I)
+        t = re.sub(r"</tr>", "\n", t, flags=re.I)
+        t = re.sub(r"<[^>]+>", "", t).replace("&nbsp;", " ")
+        rows = [[c.strip() for c in line.split("|") if c.strip()]
+                for line in t.split("\n")]
+        rows = [r_ for r_ in rows if r_]
+        header = rows[0] if rows else []
+        dates = [c for c in header if re.fullmatch(r"\d{2}\.\d{2}\.\d{4}", c)]
+        row = next((r_ for r_ in rows if r_ and r_[0].startswith("Schiffenen")), None)
+        if not row or not dates:
+            raise ValueError("Schiffenen-Zeile oder Datumsspalten fehlen")
+        vals = re.findall(r"(\d{3}[.,]\d{1,2})\s*m", " ".join(row))
+        # Erster Wert ist das maximale Level (Stauziel), danach die Tageswerte
+        vals = [float(v.replace(",", ".")) for v in vals][1:]
+        return dict(zip(dates, vals))
+    except Exception as e:                                  # noqa: BLE001
+        print(f"Tageswerte nicht geholt ({e})", file=sys.stderr)
+        return {}
+
+
+def append_actuals(vals: dict) -> int:
+    """Neue Tageswerte anhaengen. Bestehende Tage werden nie ueberschrieben."""
+    seen = {}
+    if os.path.exists(ACTUAL):
+        with open(ACTUAL) as f:
+            next(f, None)
+            for line in f:
+                p_ = line.strip().split(",")
+                if len(p_) == 2:
+                    seen[p_[0]] = p_[1]
+    neu = {d: v for d, v in vals.items() if d not in seen}
+    if not neu:
+        return 0
+    os.makedirs(DATA, exist_ok=True)
+    new_file = not os.path.exists(ACTUAL)
+    with open(ACTUAL, "a") as f:
+        if new_file:
+            f.write("date,level\n")
+        for d in sorted(neu, key=lambda x: (x[6:], x[3:5], x[:2])):
+            f.write(f"{d},{neu[d]}\n")
+    return len(neu)
 
 
 def fetch_hydro() -> dict:
@@ -453,6 +519,13 @@ def main() -> int:
         for k in ("hydro", "sarine", "water", "air"):
             if k in old:
                 payload[k] = old[k]
+
+    # Tatsaechliche Tageswerte — die einzige echte Pegelmessung, die wir kennen
+    actuals = fetch_actuals()
+    if actuals:
+        payload["actual_daily"] = actuals
+        n = append_actuals(actuals)
+        print(f"Tageswerte: {actuals}" + (f"  ({n} neu ins Archiv)" if n else ""))
 
     os.makedirs(DATA, exist_ok=True)
     with open(OUT, "w") as f:

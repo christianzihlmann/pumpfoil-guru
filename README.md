@@ -213,6 +213,38 @@ Umlegen direkt auf GitHub: Datei öffnen, Stift, Wert auf `true`, committen.
 Nach ein bis zwei Minuten steht es auf der Seite. Der stündliche Job
 überschreibt den Block nie.
 
+## Tatsächliche Tageswerte — `data/level_daily.csv`
+
+Am 24.08.2026 über die `sitemap.xml` gefunden: die **Übersichtsseite aller
+Groupe-E-Seen** unter `/de/groupe-e-entdecken/wasserstand-seen` zeigt für die
+letzten zwei abgeschlossenen Tage **einen Wert pro See und Tag** — kein Band.
+Von der Schiffenen-Detailseite aus ist sie nicht verlinkt.
+
+```
+date,level
+22.08.2026,531.52
+23.08.2026,531.52
+```
+
+**Warum das wichtig ist:** Bisher gab es für den Seepegel nur das Prognoseband.
+Diese Tageswerte sind die einzige Zahl, die Groupe E als tatsächlichen Stand
+publiziert. Damit lässt sich endlich prüfen:
+
+- **Wo im Band steht der See wirklich?** Erste zwei Tage: bei 88 % und 64 % der
+  Bandbreite, also **deutlich über der Mitte**. Hält das an, unterschätzt eine
+  Eichung gegen das Tages-*Minimum* systematisch — die echten Dock-Grenzen
+  lägen höher als die eingetragenen.
+- **Wie gross ist der Versatz zu BAFU 2119?** Gegen die Bandmitte waren es
+  +0.49 m, gegen den Tageswert **+0.43 m**. Echte Zahl gegen echte Zahl statt
+  gegen eine Prognosemitte — das ist der belastbarere Vergleich.
+
+Zwei Tage beweisen nichts. Deshalb wird ab sofort gesammelt: eine Zeile pro Tag,
+bestehende Tage werden nie überschrieben.
+
+**Vorbehalt:** Was der Wert genau ist — Tagesmittel, Stand zu einer festen
+Uhrzeit, Tagesmaximum — steht nirgends. Die Spalte trägt nur das Datum als
+Überschrift. Das klärt sich mit ein paar Wochen Daten im Vergleich zu `h2119`.
+
 ## Messarchiv
 
 Der stündliche Job schreibt eine Zeile nach `data/hydro.csv` — append-only,
