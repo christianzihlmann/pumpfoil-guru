@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-24T21:36:35+00:00",
+  "fetched": "2026-08-24T21:57:14+00:00",
   "forecast": [
     {
       "date": "24.08.2026",
@@ -29,7 +29,6 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-08-24T21:36:36+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
@@ -50,6 +49,20 @@
       "max": 110.6
     }
   },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 532.63,
+    "flow": 68.78,
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 17.28,
+    "height": 471.38,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
@@ -63,19 +76,5 @@
     "temp_measured": 17.6,
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
     "time": "2026-08-24T21:36:52+00:00"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 17.28,
-    "height": 471.38,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 532.63,
-    "flow": 68.78,
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   }
 }
