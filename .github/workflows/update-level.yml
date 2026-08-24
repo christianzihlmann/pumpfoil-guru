@@ -2,7 +2,10 @@ name: Pegel aktualisieren
 
 on:
   schedule:
-    - cron: "7 * * * *"     # stündlich, Minute 7
+    # Halbstündlich. Minute 7 und 37 statt 0 und 30, weil GitHubs Planer zur
+    # vollen und halben Stunde am stärksten ausgelastet ist und Läufe dann
+    # besonders spät kommen oder ganz ausfallen.
+    - cron: "7,37 * * * *"
   workflow_dispatch:         # Knopf zum manuellen Auslösen
 
 permissions:

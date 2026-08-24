@@ -11,7 +11,12 @@ kein Server, keine Kosten.
    Ohne das kann der Bot `data/level.json` nicht zurückschreiben.
 4. **Actions → Pegel aktualisieren → Run workflow**, einmal von Hand, zum Testen.
 
-Danach läuft es stündlich von selbst.
+Danach läuft es **halbstündlich** von selbst (Minute 7 und 37).
+
+Warum nicht öfter: BAFU misst zwar im 10-Minuten-Takt, aber api.existenz.ch
+bietet nur `latest` — keinen Verlauf. Feinere Auflösung ginge also nur über
+noch häufigere Läufe, und GitHubs Planer ist ohnehin auf 10–20 Minuten
+unpünktlich. Halbstündlich ist der Punkt, an dem mehr Takt nichts mehr bringt.
 
 ## Docks kalibrieren
 
