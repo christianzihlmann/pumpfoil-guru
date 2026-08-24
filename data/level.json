@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-24T19:36:11+00:00",
+  "fetched": "2026-08-24T19:58:34+00:00",
   "forecast": [
     {
       "date": "24.08.2026",
@@ -29,24 +29,24 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-08-24T18:51:46+00:00",
+  "warning_checked": "2026-08-24T19:58:36+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 107.32,
-    "time": "2026-08-24T19:20:00+00:00",
+    "flow": 105.63,
+    "time": "2026-08-24T19:50:00+00:00",
     "stats": {
-      "n": 36,
+      "n": 37,
       "days": 2.2,
       "enough": false,
       "min": 7.63,
-      "p10": 7.81,
-      "p25": 7.94,
-      "median": 9.52,
-      "p75": 101.24,
-      "p90": 109.24,
+      "p10": 7.82,
+      "p25": 7.95,
+      "median": 9.88,
+      "p75": 105.34,
+      "p90": 109.23,
       "max": 110.6
     }
   },
@@ -54,28 +54,28 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 29.0,
-    "wind_model": 12.8,
-    "gust_model": 26.3,
-    "wind_dir_model": 80.0,
+    "wind_model": 11.6,
+    "gust_model": 27.0,
+    "wind_dir_model": 68.0,
     "wind_measured": 13.0,
     "gust_measured": 18.7,
     "wind_dir_measured": 27.0,
-    "temp_measured": 20.6,
+    "temp_measured": 18.5,
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-08-24T19:36:13+00:00"
+    "time": "2026-08-24T19:58:51+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 17.27,
-    "height": 471.51,
+    "temperature": 17.29,
+    "height": 471.5,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.76,
-    "flow": 87.38,
+    "height": 532.63,
+    "flow": 69.18,
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   }
 }
