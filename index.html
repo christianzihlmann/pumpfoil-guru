@@ -312,41 +312,40 @@ footer a{color:var(--molasse-dim)}
    ══════════════════════════════════════════════════════ */
 const CONFIG = {
   scale: { min: 527.5, max: 532.5 },        // Skala der Pegellatte
-  // Referenz ist das TAGESMINIMUM der Groupe-E-Prognose, nicht der Mittelwert.
-  // stopLow  darunter rot   ·  goLow   ab hier grün
-  // goHigh   bis hier grün  ·  stopHigh darüber rot   ·  dazwischen orange
-  // Referenz ist das TAGESMINIMUM der Groupe-E-Prognose, nicht der Mittelwert.
-  // stopLow  darunter rot   ·  goLow   ab hier grün
-  // goHigh   bis hier grün  ·  stopHigh darüber rot   ·  dazwischen orange
+  // ── Eichung ──────────────────────────────────────────────────────────
+  // Am 25.08.2026 um 17:30 wurde an allen drei Docks die Wassertiefe gemessen
+  // (Seegrund bis Oberfläche): Dock 1 = 107 cm, Dock 2 = 191 cm, Dock 3 = 415 cm.
+  // Daraus stehen die Docks UNTEREINANDER exakt fest — Grund bei Dock 2 liegt
+  // 84 cm tiefer als bei Dock 1, bei Dock 3 308 cm tiefer.
   //
-  // rowing:true  → bei Ruderwettkampf gesperrt
-  // manual:true  → nur da, wenn manuell eingeschaltet (Dock 4 wird ein- und ausgebaut)
-  docks: [
-    // 22.08.2026, 10:00: ging. 20 cm tiefer geht es nicht mehr. Unklar, wo im
-    // Tagesband 531.29–531.55 der See um 10:00 stand — daher Orange über die
-    // ganze Unsicherheit: sicher rot ab 531.09, sicher grün erst ab 531.35.
-    { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:false,
-      stopLow:531.09, goLow:531.35, goHigh:532.50, stopHigh:532.50 },
+  // Die Schwellen unten sind deshalb RELATIV zu refLevel angegeben, dem Seepegel
+  // jener Messung. Diese Abstände sind gemessen und ändern sich nicht mehr.
+  //
+  // refLevel selbst ist die letzte offene Zahl. NOCH GESCHÄTZT: oberes Ende des
+  // Tagesbands 531.23–531.49 vom 25.08.2026. Sobald an einem Tag mit schmalem
+  // Band (< 10 cm, siehe Kalibriermeldung) einmal gemessen wird, hier eintragen —
+  // damit sind alle drei Docks auf einen Schlag geeicht.
+  refLevel: 531.47,
+  refLevelCalibrated: false,
 
-    // 22.08.2026: ab 530.09 rot · 530.10–530.30 orange · danach grün.
-    // ACHTUNG: 530.10 ist die Groupe-E-MIN-Angabe des Tages, keine Messung —
-    // der See stand beim Befahren irgendwo im Band, also eher höher. Die echte
-    // Grenze liegt damit tendenziell ÜBER 530.10. Ungeeicht bis zur Messung.
+  // rowing:true  → bei Ruderwettkampf gesperrt
+  // manual:true  → nur da, wenn manuell eingeschaltet
+  // floating:true → Schwimmsteg, hat gar keine Pegelgrenzen
+  //
+  // stopLowRel / goLowRel : Meter relativ zu refLevel, aus dem Messband
+  // goHigh / stopHigh     : absolut, hängen am Stauziel 532.00, nicht an der Messung
+  docks: [
+    { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:false,
+      stopLowRel:-0.20, goLowRel:-0.10, goHigh:532.50, stopHigh:532.50 },
+
     { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:false, rowing:true,
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
-      stopLow:530.10, goLow:530.31, goHigh:532.50, stopHigh:532.50 },
+      stopLowRel:-1.11, goLowRel:-0.91, goHigh:532.50, stopHigh:532.50 },
 
-    // Stauziel 532.00 — mehr darf Groupe E nicht einstauen. Obergrenzen daher
-    // auf 532.50 (Skalenende) = praktisch keine.
-    // "geht fast immer, unter 528 nicht mehr" — Schätzung des Besitzers, ungemessen
     { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:false, rowing:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
-      stopLow:528.00, goLow:528.00, goHigh:532.50, stopHigh:532.50 },
+      stopLowRel:-3.35, goLowRel:-3.15, goHigh:532.50, stopHigh:532.50 },
 
-    // Schwimmsteg, wird saisonal ein- und ausgebaut. Pegelgrenzen unbekannt —
-    // solange eingebaut, gilt vorläufig dasselbe Fenster wie Dock 3.
-    // summary:false — Schwimmsteg ist meist ausgebaut, das gehoert nicht in
-    // jeden Satz oben. Karte und Ampel unten bleiben unveraendert.
     { id:'d4', short:'D4', name:'Dock 4', place:'Floating', manual:true, summary:false, floating:true,
       map:'https://maps.app.goo.gl/fDbZoVYaNq99WqA36' }   // 46.847556, 7.142008
   ],
@@ -374,7 +373,13 @@ const CONFIG = {
 };
 
 /* ── Zustand ───────────────────────────────────────── */
-let docks = CONFIG.docks.map(d => ({...d}));
+/* Aus den gemessenen Abständen werden hier einmalig absolute Pegel. Ändert sich
+   refLevel, verschieben sich alle Docks gemeinsam — ihre Abstände bleiben. */
+let docks = CONFIG.docks.map(d => ({
+  ...d,
+  stopLow: d.stopLowRel == null ? undefined : +(CONFIG.refLevel + d.stopLowRel).toFixed(2),
+  goLow:   d.goLowRel   == null ? undefined : +(CONFIG.refLevel + d.goLowRel).toFixed(2)
+}));
 let levelMin = null, levelMax = null, measured = null, levelStamp = null;
 
 /* Groupe E liefert mehrere Tage. dayIdx wählt, welcher gezeigt wird —
@@ -939,7 +944,9 @@ $('#copy').onclick = () => {
     + (d.stopLow == null && !d.map ? ' }' : ',\n')
     + (d.map ? `      map:'${d.map}'${d.stopLow == null ? ' }' : ',\n'}` : '')
     + (d.stopLow == null ? '' :
-       `      stopLow:${d.stopLow.toFixed(2)}, goLow:${d.goLow.toFixed(2)}, goHigh:${d.goHigh.toFixed(2)}, stopHigh:${d.stopHigh.toFixed(2)} }`)
+       // Wieder relativ zu refLevel zurückrechnen — sonst geht beim
+       // Zurückkopieren verloren, dass diese Abstände gemessen sind
+       `      stopLowRel:${(d.stopLow - CONFIG.refLevel).toFixed(2)}, goLowRel:${(d.goLow - CONFIG.refLevel).toFixed(2)}, goHigh:${d.goHigh.toFixed(2)}, stopHigh:${d.stopHigh.toFixed(2)} }`)
   ).join(',\n') + '\n  ],';
   $('#out').textContent = s;
   navigator.clipboard && navigator.clipboard.writeText(s);

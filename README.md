@@ -42,12 +42,34 @@ einsetzen, pushen.
 
 ### Stand
 
-| Dock | rot unter | orange | grün ab | Grundlage |
-|---|---|---|---|---|
-| Dock 1 (Clubhouse) | 531.09 | 531.09–531.34 | 531.35 | 22.08.2026, unsicher (s.u.) |
-| Dock 2 (Main Rowing) | 530.10 | 530.10–530.30 | 530.31 | 22.08.2026, Groupe-E-Min |
-| Dock 3 (Rowing South) | 528.00 | – | 528.00 | Schätzung, ungemessen |
-| Dock 4 (Floating) | – | – | – | Schwimmsteg, keine Pegelgrenzen |
+Am **25.08.2026 um 17:30** wurde an allen drei Docks die Wassertiefe gemessen,
+Seegrund bis Oberfläche: Dock 1 = 107 cm, Dock 2 = 191 cm, Dock 3 = 415 cm.
+
+Daraus stehen die Docks **untereinander exakt** fest — der Grund liegt bei
+Dock 2 84 cm tiefer als bei Dock 1, bei Dock 3 308 cm tiefer. Deshalb sind die
+Schwellen in `CONFIG.docks` **relativ** zu `refLevel` angegeben:
+
+| Dock | rot unter | grün ab |
+|---|---|---|
+| Dock 1 (Clubhouse) | refLevel − 0.20 | refLevel − 0.10 |
+| Dock 2 (Main Rowing) | refLevel − 1.11 | refLevel − 0.91 |
+| Dock 3 (Rowing South) | refLevel − 3.35 | refLevel − 3.15 |
+| Dock 4 (Floating) | – | – |
+
+**`refLevel` ist die letzte offene Zahl** — der Seepegel um 17:30 jenes Tages.
+Aktuell **geschätzt auf 531.47** (oberes Ende des Tagesbands 531.23–531.49),
+markiert durch `refLevelCalibrated: false`.
+
+Sobald an einem Tag mit schmalem Band gemessen wird, ändert **eine einzige
+Zahl** die Eichung aller drei Docks. Genau dafür meldet der Job ein Issue,
+wenn die Tagesspanne unter 10 cm fällt.
+
+Dock 1 braucht am meisten Wasser, Dock 3 am wenigsten.
+
+**Dock 4 ist ein Schwimmsteg und hat gar keine Pegelgrenzen** (`floating:true`).
+Er hebt und senkt sich mit dem Wasser. Seine Ampel hängt nur an
+`dock4_installed`: eingebaut → grün, ausgebaut → rot („Out of order."). Er trägt
+zusätzlich `summary:false` und erscheint deshalb nicht im Satz zuoberst.
 
 Standorte (Klick auf eine Dock-Karte öffnet Google Maps):
 
