@@ -165,21 +165,13 @@ h2{
 .metric .v small{font-size:.62rem;font-weight:400;color:var(--muted);letter-spacing:0}
 .metric .q{
   font-family:var(--mono);font-size:.62rem;letter-spacing:.04em;
-  color:var(--molasse-dim);margin-top:.05rem;
+  color:var(--muted);margin-top:.05rem;      /* gleiche Farbe wie die Bezeichnung */
 }
 .sky{display:flex;align-items:center;gap:.6rem;min-width:150px}
 .sky svg{width:38px;height:38px;flex:none}
 .sky .desc{font-family:var(--display);font-size:1.02rem;font-weight:500;line-height:1.15}
 .sky .sub{font-size:.72rem;color:var(--muted)}
 
-.days{display:grid;grid-template-columns:repeat(4,1fr);gap:.45rem}
-.day{border:1px solid var(--rule);border-radius:3px;padding:.6rem .45rem;text-align:center}
-.day .d{font-family:var(--mono);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.day svg{width:26px;height:26px;margin:.35rem 0}
-.day .t{font-family:var(--mono);font-size:.76rem}
-.day .t b{font-weight:700}
-.day .t i{font-style:normal;color:var(--muted)}
-.day .w{font-family:var(--mono);font-size:.6rem;color:var(--molasse-dim);margin-top:.2rem}
 
 .fc{display:flex;flex-direction:column;gap:.4rem}
 .fcrow{display:grid;grid-template-columns:60px 1fr auto;gap:.7rem;align-items:center;font-family:var(--mono);font-size:.72rem}
@@ -240,7 +232,6 @@ footer a{color:var(--molasse-dim)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 @media (max-width:430px){
   .reading{grid-template-columns:60px 1fr;gap:.8rem}
-  .days{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
