@@ -65,6 +65,7 @@ h1 em{font-style:normal;color:var(--water-lit)}
   font-family:var(--mono);font-size:.7rem;color:var(--muted);
   margin-top:.7rem;
 }
+.stamp:empty{margin-top:0}
 
 /* ── the gauge (signature) ────────────────────────── */
 .reading{
@@ -129,7 +130,9 @@ h1 em{font-style:normal;color:var(--water-lit)}
 .lamp.off{background:#2A4046}
 .dock h3{font-family:var(--display);font-weight:500;font-size:1.02rem;letter-spacing:-.01em}
 .dock p{font-size:.76rem;color:var(--muted);margin-top:.1rem}
-.dock p .blocked{color:var(--stop)}
+/* Sperrgrund in derselben Farbe wie die übrigen Hinweise — die rote Lampe
+   daneben sagt schon deutlich genug, dass es nicht geht. */
+.dock p .blocked{color:inherit}
 a.dock{text-decoration:none;color:inherit}
 a.dock:hover{
   border-color:rgba(201,160,99,.45);
@@ -140,7 +143,7 @@ a.dock:hover{
 a.dock:hover .pin{color:var(--molasse)}
 
 /* ── Tagesreiter ──────────────────────────────────── */
-.tabs{display:flex;gap:.4rem;margin-top:.9rem;flex-wrap:wrap}
+.tabs{display:flex;gap:.4rem;margin-top:1.1rem;flex-wrap:wrap}
 .tabs button{
   font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
   padding:.42rem .8rem;border-radius:99px;border:1px solid var(--rule);
@@ -161,16 +164,21 @@ h2{
 .now{display:flex;gap:1.4rem;flex-wrap:wrap;align-items:flex-start}
 .metric{min-width:74px}
 .metric .v{font-family:var(--mono);font-size:1.34rem;font-weight:700;letter-spacing:-.02em}
-.metric .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
-.metric .v small{font-size:.62rem;font-weight:400;color:var(--muted);letter-spacing:0}
-.metric .q{
-  font-family:var(--mono);font-size:.62rem;letter-spacing:.04em;
-  color:var(--muted);margin-top:.05rem;      /* gleiche Farbe wie die Bezeichnung */
+.metric .k{
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--muted);margin-top:.15rem;line-height:1.5;
 }
-.sky{display:flex;align-items:center;gap:.6rem;min-width:150px}
+.metric .v small{font-size:.62rem;font-weight:400;color:var(--muted);letter-spacing:0}
+/* Gleiche Schriftgrösse und Zeilenhöhe wie die Bezeichnung, kein Zusatzabstand.
+   Nur so ist der Umbruch in "Wind-/richtung" gleich gross wie der Abstand
+   zwischen Bezeichnung und Einstufung. */
+.metric .q{
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.04em;
+  color:var(--muted);line-height:1.5;
+}
+.sky{display:flex;flex-direction:column;align-items:center;gap:.1rem}
 .sky svg{width:38px;height:38px;flex:none}
-.sky .desc{font-family:var(--display);font-size:1.02rem;font-weight:500;line-height:1.15}
-.sky .sub{font-size:.72rem;color:var(--muted)}
+.sky .desc{font-family:var(--display);font-size:.92rem;font-weight:500;line-height:1.2;text-align:center}
 
 
 .fc{display:flex;flex-direction:column;gap:.4rem}
@@ -244,9 +252,9 @@ footer a{color:var(--molasse-dim)}
     <span class="suntimes" id="suntimes"></span>
   </div>
   <h1>Pumpfoil<br><em>Guru</em></h1>
-  <p class="verdict" id="verdict">Lade Pegeldaten…</p>
-  <p class="stamp" id="stamp">—</p>
   <div class="tabs" id="tabs" role="tablist"></div>
+  <p class="verdict" id="verdict">Lade Pegeldaten…</p>
+  <p class="stamp" id="stamp"></p>
 </header>
 
 <div class="reading">
@@ -596,15 +604,17 @@ function renderVerdict(){
   }
   v.innerHTML = txt.replace(/&/g,'&amp;').replace(/</g,'&lt;') + extra;
 
+  // Die Prognosezeile ist bewusst weg — dieselbe Spanne steht unten bei
+  // "Seepegel-Prognose Groupe E". Sobald der eigene Sensor misst, erscheint
+  // hier die echte Messung; das ist etwas anderes als eine Prognose.
   const s = $('#stamp');
-  if (measured != null) s.textContent = `Gemessen ${fmt(measured)} m ü. M. · ${levelStamp||''}`;
-  else if (levelMin != null) s.textContent = (dayIdx ? DAYS[dayIdx] + ': ' : '')
-    + `Prognose ${fmt(levelMin)} – ${fmt(levelMax)} m ü. M. · Pegelspanne ${Math.round((levelMax-levelMin)*100)} cm`;
+  s.textContent = measured != null
+    ? `Gemessen ${fmt(measured)} m ü. M. · ${levelStamp||''}` : '';
 
   const note = $('#bandnote');
   if (measured == null && levelMin != null && (levelMax-levelMin) > 0.15){
     note.hidden = false;
-    note.innerHTML = `Das ist eine Pegelspanne von ${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft von Sonnenuntergang bis Mitternacht. Der Abfluss unten zeigt, ob gerade turbiniert wird.`;
+    note.innerHTML = `Das ist eine Pegelspanne von ${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft von Sonnenuntergang bis Mitternacht und morgens bis zum Sonnenaufgang. Der Abfluss unten zeigt, ob gerade turbiniert wird.`;
   } else note.hidden = true;
 }
 
@@ -735,10 +745,6 @@ function renderWeather(){
   $('#nowhead').textContent = i === 0 ? 'Jetzt in Pensier' : `${DAYS[i]} in Pensier`;
 
   const sr = dy.sunrise[i].slice(11), ss = dy.sunset[i].slice(11);
-  const mins = (() => {
-    const a = new Date(dy.sunrise[i]), b = new Date(dy.sunset[i]);
-    const t = (b - a) / 60000; return `${Math.floor(t/60)}h ${Math.round(t%60)}min`;
-  })();
 
   // Heute: Momentanwerte. Morgen/Übermorgen: Tageswerte aus der Prognose.
   const code = i === 0 ? c.weather_code    : dy.weather_code[i];
@@ -751,10 +757,7 @@ function renderWeather(){
 
   const heute = i === 0;
   $('#now').innerHTML = `
-    <div class="sky">${icon(code)}
-      <div><div class="desc">${SKY[code]||'—'}</div>
-      <div class="sub">${CONFIG.weather.place}</div></div>
-    </div>`
+    <div class="sky">${icon(code)}<div class="desc">${SKY[code]||'—'}</div></div>`
     + tile(temp, heute ? 'Luft' : 'Luft max/min', '')
     + tile(uv.toFixed(1), heute ? 'UV' : 'UV max', uvWord(uv),
            { title:'UV-Index nach WHO-Skala' })
@@ -772,8 +775,7 @@ function renderWeather(){
 
   $('#suntimes').innerHTML =
       `<span title="Sonnenaufgang">${SUN_UP}${sr}</span>`
-    + `<span title="Sonnenuntergang">${SUN_DOWN}${ss}</span>`
-    + `<span title="Tageslänge">${mins}</span>`;
+    + `<span title="Sonnenuntergang">${SUN_DOWN}${ss}</span>`;
 
   if (i === 0){ renderFlow(); renderAir(); renderPollen(); }   // nur für heute — keine Prognose dafür
 }
