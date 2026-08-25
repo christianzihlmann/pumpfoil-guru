@@ -36,9 +36,10 @@ Dazwischen orange. `calibrated: false` heisst: geraten, die Seite schreibt
 Mittelwert und nicht das Maximum. Beim Notieren immer dieselbe Grösse nehmen,
 sonst sind die Zahlen untereinander nicht vergleichbar.
 
-Auf der Seite unten „Stege kalibrieren" öffnen, Regler schieben bis die Ampeln
-stimmen, „Config kopieren" drücken, den Block in `index.html` bei `CONFIG.docks`
-einsetzen, pushen.
+Kalibriert wird **im Code**, nicht auf der Seite. Der frühere Regler-Bereich
+„Stege kalibrieren" ist am 25.08.2026 entfernt worden — Besucher sollen die
+Schwellen nicht verstellen können, und seit die Abstände gemessen sind, gibt es
+ohnehin nur noch **eine** Zahl zu ändern: `refLevel`.
 
 ### Stand
 

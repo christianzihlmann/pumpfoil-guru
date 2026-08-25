@@ -196,22 +196,6 @@ summary{
 summary::-webkit-details-marker{display:none}
 summary::after{content:" ▸";}
 details[open] summary::after{content:" ▾"}
-.cal{margin-top:1rem}
-.cal .row{margin-bottom:1.1rem}
-.cal label{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;margin-bottom:.3rem}
-.cal label b{color:var(--water-lit);font-weight:700}
-.cal input[type=range]{width:100%;accent-color:var(--water-lit)}
-button{
-  font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
-  background:none;color:var(--molasse);border:1px solid var(--rule);
-  border-radius:3px;padding:.55rem .9rem;cursor:pointer;
-}
-button:hover{background:rgba(201,160,99,.09)}
-pre{
-  font-family:var(--mono);font-size:.62rem;background:var(--deep);
-  border:1px solid var(--rule);border-radius:3px;padding:.7rem;
-  overflow-x:auto;margin-top:.8rem;color:var(--muted);white-space:pre;
-}
 footer{
   margin-top:3rem;padding-top:1.1rem;border-top:1px solid var(--rule);
   font-size:.72rem;color:var(--muted);line-height:1.7;
@@ -277,20 +261,6 @@ footer a{color:var(--molasse-dim)}
 <section>
   <h2>Seepegel-Prognose Groupe E</h2>
   <div class="fc" id="fc"><span class="stamp">Lade Prognose…</span></div>
-</section>
-
-<section>
-  <details>
-    <summary>Stege kalibrieren</summary>
-    <p style="font-size:.78rem;color:var(--muted);margin-top:.8rem">
-      Verschiebe die Grenzen, bis die Ampeln stimmen. Danach den Block kopieren
-      und in <code>index.html</code> unter <code>CONFIG.docks</code> einsetzen —
-      dann gilt es dauerhaft für alle.
-    </p>
-    <div class="cal" id="cal"></div>
-    <button id="copy">Config kopieren</button>
-    <pre id="out"></pre>
-  </details>
 </section>
 
 <footer>
@@ -914,46 +884,7 @@ async function loadHydro(){
   renderFlow();
 }
 
-/* ── Kalibrierung ──────────────────────────────────── */
-const CAL_KEYS = [
-  ['stopLow',  'rot → orange'],
-  ['goLow',    'orange → grün'],
-  ['goHigh',   'grün → orange'],
-  ['stopHigh', 'orange → rot']
-];
-function buildCal(){
-  const c = $('#cal');
-  c.innerHTML = docks.map((d,i) => d.stopLow == null ? '' : `
-    <div class="row">${CAL_KEYS.map(([k,lbl],j) => `
-      <label${j ? ' style="margin-top:.5rem"' : ''}><span>${d.name} — ${lbl}</span><b id="cv-${k}-${i}">${fmt(d[k])}</b></label>
-      <input type="range" data-i="${i}" data-k="${k}" min="${CONFIG.scale.min}" max="${CONFIG.scale.max}" step="0.01" value="${d[k]}">`
-    ).join('')}
-    </div>`).join('');
-  c.oninput = e => {
-    const i = +e.target.dataset.i, k = e.target.dataset.k;
-    docks[i][k] = +e.target.value;
-    $(`#cv-${k}-${i}`).textContent = fmt(docks[i][k]);
-    renderAll();
-  };
-}
-$('#copy').onclick = () => {
-  const s = 'docks: [\n' + docks.map(d =>
-    `    { id:'${d.id}', short:'${d.short}', name:'${d.name}', place:'${d.place}', calibrated:${!!d.calibrated}`
-    + (d.rowing ? ', rowing:true' : '') + (d.manual ? ', manual:true' : '')
-    + (d.summary === false ? ', summary:false' : '') + (d.floating ? ', floating:true' : '')
-    + (d.stopLow == null && !d.map ? ' }' : ',\n')
-    + (d.map ? `      map:'${d.map}'${d.stopLow == null ? ' }' : ',\n'}` : '')
-    + (d.stopLow == null ? '' :
-       // Wieder relativ zu refLevel zurückrechnen — sonst geht beim
-       // Zurückkopieren verloren, dass diese Abstände gemessen sind
-       `      stopLowRel:${(d.stopLow - CONFIG.refLevel).toFixed(2)}, goLowRel:${(d.goLow - CONFIG.refLevel).toFixed(2)}, goHigh:${d.goHigh.toFixed(2)}, stopHigh:${d.stopHigh.toFixed(2)} }`)
-  ).join(',\n') + '\n  ],';
-  $('#out').textContent = s;
-  navigator.clipboard && navigator.clipboard.writeText(s);
-};
-
-/* ── los ───────────────────────────────────────────── */
-renderTicks(); buildCal(); renderTabs(); renderAll(); loadLevel(); loadWeather();
+renderTicks(); renderTabs(); renderAll(); loadLevel(); loadWeather();
 setInterval(loadLevel, 300000);
 setInterval(loadWeather, 600000);
 </script>
