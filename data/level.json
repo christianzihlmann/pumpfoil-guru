@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-25T21:36:19+00:00",
+  "fetched": "2026-08-25T21:56:17+00:00",
   "forecast": [
     {
       "date": "25.08.2026",
@@ -35,17 +35,17 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 96.81,
-    "time": "2026-08-25T21:20:00+00:00",
+    "flow": 70.01,
+    "time": "2026-08-25T21:40:00+00:00",
     "stats": {
-      "n": 65,
+      "n": 66,
       "days": 3.3,
       "enough": false,
       "min": 7.63,
       "p10": 7.92,
-      "p25": 8.64,
-      "median": 23.72,
-      "p75": 100.29,
+      "p25": 8.77,
+      "median": 26.27,
+      "p75": 100.22,
       "p90": 109.6,
       "max": 153.11
     }
@@ -54,21 +54,21 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 19.0,
-    "wind_model": 2.9,
-    "gust_model": 5.8,
-    "wind_dir_model": 187.0,
-    "wind_measured": 2.5,
-    "gust_measured": 4.0,
-    "wind_dir_measured": 242.0,
-    "temp_measured": 19.2,
+    "wind_model": 3.0,
+    "gust_model": 5.4,
+    "wind_dir_model": 194.0,
+    "wind_measured": 3.2,
+    "gust_measured": 5.0,
+    "wind_dir_measured": 241.0,
+    "temp_measured": 18.6,
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-08-25T21:36:36+00:00"
+    "time": "2026-08-25T21:56:19+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 17.41,
-    "height": 471.58,
+    "temperature": 17.4,
+    "height": 471.45,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "sarine": {
@@ -77,15 +77,15 @@
     "height": 532.63,
     "flow": 68.65,
     "stats": {
-      "n": 64,
+      "n": 65,
       "days": 2.6,
       "enough": false,
       "min": 5.04,
       "p10": 5.1,
       "p25": 5.13,
-      "median": 14.85,
-      "p75": 67.31,
-      "p90": 69.1,
+      "median": 16.03,
+      "p75": 68.51,
+      "p90": 69.07,
       "max": 87.38
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
