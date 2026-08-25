@@ -683,7 +683,10 @@ async function loadLevel(){
       flowStats = d.hydro.stats || null;
       if (flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;
     }
-    if (d.sarine && flowIn == null && d.sarine.flow != null) flowIn = d.sarine.flow;
+    if (d.sarine){
+      inStats = d.sarine.stats || null;
+      if (flowIn == null && d.sarine.flow != null) flowIn = d.sarine.flow;
+    }
     renderFlow();
     renderFC(forecast);
   }catch(e){
@@ -768,7 +771,7 @@ function renderWeather(){
            windWord(wind)[1], { title:windWord(wind)[2] })
     + tile(`${Math.round(gust)}<small> km/h</small>`, heute ? 'Böen' : 'Böen max',
            windWord(gust)[1], { title:windWord(gust)[2] })
-    + tile(dirWord(dir), 'Windrichtung', '',
+    + tile(dirWord(dir), 'Wind-<br>richtung', '',
            { title:`Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)` })
     + (heute ? tile('–', 'Luftqualität', '', { id:'aqi' })
              + tile('–', 'Zufluss', '', { id:'flowin' })
@@ -787,7 +790,7 @@ function renderWeather(){
 /* Der Abfluss bekommt sein Wort aus dem eigenen Archiv (data/flow.csv, von der
    stündlichen Action gefüllt). Solange zu wenig Verlauf da ist, steht nur die
    Zahl — die Statistik kommt als hydro.stats in level.json mit. */
-let flowVal = null, flowIn = null, flowStats = null;
+let flowVal = null, flowIn = null, flowStats = null, inStats = null;
 
 // Pfeil als Schriftzeichen, damit er exakt auf derselben Grundlinie sitzt wie
 // die Zahlen daneben und dieselbe Farbe hat.
@@ -821,9 +824,11 @@ function renderFlow(){
   const inEl = $('#flowin'), outEl = $('#flow'), trEl = $('#trend');
 
   if (inEl && flowIn != null){
-    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees';
+    const wi = flowWord(flowIn, inStats);
+    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees'
+      + (inStats ? ` — Vergleich mit ${inStats.n} Messwerten aus ${inStats.days} Tagen` : '');
     inEl.innerHTML = `<div class="v">${Math.round(flowIn)}<small> m³/s</small></div>`
-      + `<div class="k">Zufluss</div>`;
+      + `<div class="k">Zufluss</div>` + (wi ? `<div class="q">${wi}</div>` : '');
   }
 
   if (outEl && flowVal != null){

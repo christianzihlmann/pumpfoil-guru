@@ -378,9 +378,10 @@ def append_archive(ts: int, vals: dict, rows: list) -> list:
     return rows + [{c: vals.get(c) for c in cols}]
 
 
-def flow_stats(rows: list):
-    """Perzentile des Abflusses bei Laupen. None, solange zu duenn."""
-    vals = sorted(r["q2215"] for r in rows if r.get("q2215") is not None)
+def flow_stats(rows: list, col: str = "q2215"):
+    """Perzentile einer Abflussspalte ueber das ganze Archiv.
+    None, solange zu duenn. col: q2215 = Abfluss Laupen, q2119 = Zufluss Fribourg."""
+    vals = sorted(r[col] for r in rows if r.get(col) is not None)
     if len(vals) < 2:
         return None
 
@@ -390,7 +391,7 @@ def flow_stats(rows: list):
         hi = min(lo + 1, len(vals) - 1)
         return round(vals[lo] + (vals[hi] - vals[lo]) * (i - lo), 2)
 
-    ts = [r["timestamp"] for r in rows]
+    ts = [r["timestamp"] for r in rows if r.get(col) is not None]
     return {
         "n": len(vals),
         "days": round((max(ts) - min(ts)) / 86400, 1),
@@ -487,7 +488,7 @@ def main() -> int:
             "unit": "m3/s",
             "flow": out_s.get("flow"),
             "time": datetime.fromtimestamp(ts, timezone.utc).isoformat(timespec="seconds"),
-            "stats": flow_stats(rows),
+            "stats": flow_stats(rows, "q2215"),
         }
         # Saane bei Guemmenen, unterhalb von Laupen. Einzige Station der Kette
         # mit Wassertemperatur. Der Wert ist NICHT die Seetemperatur — es ist
@@ -529,6 +530,7 @@ def main() -> int:
             "name": "Sarine – Fribourg",
             "height": in_s.get("height"),
             "flow": in_s.get("flow"),
+            "stats": flow_stats(rows, "q2119"),
             "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert",
         }
 
