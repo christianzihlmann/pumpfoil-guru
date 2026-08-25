@@ -163,6 +163,10 @@ h2{
 .metric .v{font-family:var(--mono);font-size:1.34rem;font-weight:700;letter-spacing:-.02em}
 .metric .k{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:.15rem}
 .metric .v small{font-size:.62rem;font-weight:400;color:var(--muted);letter-spacing:0}
+.metric .q{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.04em;
+  color:var(--molasse-dim);margin-top:.05rem;
+}
 .sky{display:flex;align-items:center;gap:.6rem;min-width:150px}
 .sky svg{width:38px;height:38px;flex:none}
 .sky .desc{font-family:var(--display);font-size:1.02rem;font-weight:500;line-height:1.15}
@@ -717,6 +721,19 @@ async function loadWeather(){
   }catch(e){ $('#now').innerHTML = '<span class="stamp">Wetter nicht verfügbar.</span>'; }
 }
 
+/* Eine Kachel: Wert gross, darunter die Bezeichnung, darunter die Einordnung.
+   Die Einordnung auf eigener Zeile — sonst wird "Luftqualität · sehr gut"
+   so breit, dass wenige Kacheln pro Zeile passen. */
+function tile(value, label, qual, opts){
+  const o = opts || {};
+  return `<div class="metric"${o.id ? ` id="${o.id}"` : ''}`
+    + `${o.title ? ` title="${o.title}"` : ''}>`
+    + `<div class="v${o.cls ? ' ' + o.cls : ''}">${value}</div>`
+    + `<div class="k">${label}</div>`
+    + (qual ? `<div class="q">${qual}</div>` : '')
+    + `</div>`;
+}
+
 function renderWeather(){
   if (!wx) return;
   const i = dayIdx, c = wx.current, dy = wx.daily;
@@ -738,21 +755,26 @@ function renderWeather(){
   const temp = i === 0 ? `${Math.round(c.temperature_2m)}°`
     : `${Math.round(dy.temperature_2m_max[i])}°<small> / ${Math.round(dy.temperature_2m_min[i])}°</small>`;
 
+  const heute = i === 0;
   $('#now').innerHTML = `
     <div class="sky">${icon(code)}
       <div><div class="desc">${SKY[code]||'—'}</div>
       <div class="sub">${CONFIG.weather.place}</div></div>
-    </div>
-    <div class="metric"><div class="v">${temp}</div><div class="k">${i ? 'Luft max / min' : 'Luft'}</div></div>
-    <div class="metric" title="UV-Index nach WHO-Skala"><div class="v">${uv.toFixed(1)}</div><div class="k">${i ? 'UV max' : 'UV'} · ${uvWord(uv)}</div></div>
-    <div class="metric" title="${windWord(wind)[2]}"><div class="v">${Math.round(wind)}<small> km/h</small></div><div class="k">${i ? 'Wind max' : 'Wind'} · ${windWord(wind)[1]}</div></div>
-    <div class="metric" title="${windWord(gust)[2]}"><div class="v">${Math.round(gust)}<small> km/h</small></div><div class="k">${i ? 'Böen max' : 'Böen'} · ${windWord(gust)[1]}</div></div>
-    <div class="metric" title="Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)"><div class="v">${dirWord(dir)}</div><div class="k">Windrichtung</div></div>
-    ${i === 0 ? '<div class="metric" id="aqi"><div class="v">–</div><div class="k">Luftqualität</div></div>' : ''}
-    ${i === 0 ? '<div class="metric" id="flowin"><div class="v">–</div><div class="k">Zufluss</div></div>'
-              + '<div class="metric" id="flow"><div class="v">–</div><div class="k">Abfluss</div></div>'
-              + '<div class="metric" id="trend"><div class="v">–</div><div class="k">Pegel</div></div>' : ''}
-    <div class="metric" id="pollen"><div class="v">–</div><div class="k">Pollen</div></div>`;
+    </div>`
+    + tile(temp, heute ? 'Luft' : 'Luft max/min', '')
+    + tile(uv.toFixed(1), heute ? 'UV' : 'UV max', uvWord(uv),
+           { title:'UV-Index nach WHO-Skala' })
+    + tile(`${Math.round(wind)}<small> km/h</small>`, heute ? 'Wind' : 'Wind max',
+           windWord(wind)[1], { title:windWord(wind)[2] })
+    + tile(`${Math.round(gust)}<small> km/h</small>`, heute ? 'Böen' : 'Böen max',
+           windWord(gust)[1], { title:windWord(gust)[2] })
+    + tile(dirWord(dir), 'Windrichtung', '',
+           { title:`Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)` })
+    + (heute ? tile('–', 'Luftqualität', '', { id:'aqi' })
+             + tile('–', 'Zufluss', '', { id:'flowin' })
+             + tile('–', 'Abfluss', '', { id:'flow' })
+             + tile('–', 'Pegel', '', { id:'trend' }) : '')
+    + tile('–', 'Pollen', '', { id:'pollen' });
 
   $('#suntimes').innerHTML =
       `<span title="Sonnenaufgang">${SUN_UP}${sr}</span>`
@@ -811,7 +833,7 @@ function renderFlow(){
         + (flowStats.enough ? '' : ' — noch zu wenig für eine Einordnung')
       : 'Archiv fängt gerade erst an';
     outEl.innerHTML = `<div class="v">${Math.round(flowVal)}<small> m³/s</small></div>`
-      + `<div class="k">Abfluss${w ? ' · ' + w : ''}</div>`;
+      + `<div class="k">Abfluss</div>` + (w ? `<div class="q">${w}</div>` : '');
   }
 
   const t = trendOf(flowIn, flowVal);
@@ -821,7 +843,7 @@ function renderFlow(){
       + `, das sind ${vz}${Math.abs(t.rate).toFixed(1)} cm pro Tag auf 4.25 km² Seefläche.`
       + ' Grobe Bilanz — 2119 misst nur die Sarine, nicht alle Zuflüsse.';
     trEl.innerHTML = `<div class="v">${ARROW[t.k]}</div>`
-      + `<div class="k">Pegel ${t.word}</div>`;
+      + `<div class="k">Pegel</div><div class="q">${t.word}</div>`;
   }
 }
 
@@ -849,7 +871,7 @@ function renderAir(){
   if (!el || aqi == null) return;
   el.title = 'European Air Quality Index (EAQI) — kleiner ist besser';
   el.innerHTML = `<div class="v">${Math.round(aqi)}</div>`
-    + `<div class="k">Luftqualität · ${aqiWord(aqi)}</div>`;
+    + `<div class="k">Luftqualität</div><div class="q">${aqiWord(aqi)}</div>`;
 }
 
 function renderPollen(){
@@ -871,7 +893,8 @@ function renderPollen(){
 
   el.title = 'Körner pro m³ — ' + alle.join(' · ');
   el.innerHTML = `<div class="v">${POLLEN_WORDS[best.lvl]}</div>`
-    + `<div class="k">Pollen${best.lvl ? ' · ' + best.name : ''}</div>`;
+    + `<div class="k">Pollen</div>`
+    + (best.lvl ? `<div class="q">${best.name}</div>` : '');
 }
 
 async function loadHydro(){
