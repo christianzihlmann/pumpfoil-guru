@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-08-25T22:35:28+00:00",
+  "fetched": "2026-08-25T22:58:35+00:00",
   "forecast": [
     {
       "date": "26.08.2026",
@@ -29,7 +29,6 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-08-25T22:35:30+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
@@ -50,27 +49,6 @@
       "max": 153.11
     }
   },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.0,
-    "european_aqi": 17.0,
-    "wind_model": 0.5,
-    "gust_model": 4.0,
-    "wind_dir_model": 315.0,
-    "wind_measured": 1.1,
-    "gust_measured": 2.5,
-    "wind_dir_measured": 6.0,
-    "temp_measured": 18.3,
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-08-25T22:35:45+00:00"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 17.4,
-    "height": 471.11,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
@@ -89,6 +67,27 @@
       "max": 87.38
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 17.4,
+    "height": 471.11,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 0.0,
+    "european_aqi": 17.0,
+    "wind_model": 0.5,
+    "gust_model": 4.0,
+    "wind_dir_model": 315.0,
+    "wind_measured": 1.1,
+    "gust_measured": 2.5,
+    "wind_dir_measured": 6.0,
+    "temp_measured": 18.3,
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-08-25T22:35:45+00:00"
   },
   "actual_daily": {
     "24.08.2026": 531.42,
