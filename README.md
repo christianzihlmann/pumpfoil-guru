@@ -378,12 +378,24 @@ schaltet sich von selbst frei.
   `temperature`. Kommt erst mit dem eigenen Sensor.
   BAFU muss genannt und verlinkt werden.
 - Wetter, UV-Index: Open-Meteo.
-- Pollen: Open-Meteo Air-Quality-API (CAMS). Körner pro m³ für Gräser, Birke,
-  Erle, Beifuss, Ambrosia, Olive. Die Einstufung in *keine / gering / mässig /
-  hoch / sehr hoch* ist **artspezifisch** — Ambrosia gilt schon ab 6 Körnern als
-  mässig, Gräser erst ab 20. Die Schwellen stehen in `CONFIG`-Nähe als Tabelle
-  `POLLEN` in `index.html`. Sie folgen einer in Europa verbreiteten Einteilung,
-  sind aber **keine amtliche Schweizer Norm** — verschiedene Quellen setzen sie
-  leicht unterschiedlich. Angezeigt wird die stärkste Art.
+- Pollen: Messwerte von Open-Meteo (CAMS), Körner pro m³ für Gräser, Birke,
+  Erle, Beifuss und Ambrosia. Die Einstufung folgt der **amtlichen Tabelle von
+  MeteoSchweiz**, „Belastungsklassen der allergenen Pollenarten":
+
+  | Art | schwach | mässig | stark | sehr stark |
+  |---|---|---|---|---|
+  | Gräser | 1–19 | 20–49 | 50–149 | ≥ 150 |
+  | Birke | 1–10 | 11–69 | 70–299 | ≥ 300 |
+  | Erle | 1–10 | 11–69 | 70–249 | ≥ 250 |
+  | Beifuss | 1–5 | 6–14 | 15–49 | ≥ 50 |
+  | Ambrosia | 1–5 | 6–10 | 11–39 | ≥ 40 |
+
+  Die Schwellen sind **artspezifisch**, und das ist keine Feinheit: bei
+  Ambrosia 12 und Gräsern 30 gewinnt Ambrosia, weil 12 dort schon „stark" ist,
+  30 bei Gräsern aber nur „mässig". Angezeigt wird deshalb die Art mit der
+  höchsten Klasse, nicht die mit der grössten Zahl.
+
+  Olive liefert Open-Meteo mit, sie fehlt aber in der Schweizer Tabelle und
+  fliegt hier praktisch nie — deshalb nicht ausgewertet.
 - Luftqualität: Open-Meteo Air-Quality-API (European AQI), eigene Adresse,
   ebenfalls ohne Schlüssel.

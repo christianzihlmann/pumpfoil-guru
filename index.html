@@ -400,19 +400,25 @@ const AQI_W = [[20,'sehr gut'],[40,'gut'],[60,'mittel'],
                [80,'schlecht'],[100,'sehr schlecht'],[1e9,'extrem schlecht']];
 const aqiWord = v => AQI_W.find(([m]) => v < m)[1];
 
-/* Pollen. Die Schwellen sind artspezifisch — Ambrosia ist schon bei wenigen
-   Körnern relevant, Gräser erst deutlich später. Werte in Körnern pro m³.
-   Die Grenzen unterscheiden sich je nach Quelle; das hier ist eine gängige,
-   in Europa verbreitete Einteilung, keine amtliche Schweizer Norm. */
+/* Pollen. Werte in Körnern pro m³, Klassen nach der amtlichen Tabelle von
+   MeteoSchweiz, "Belastungsklassen der allergenen Pollenarten":
+     Gräser    1–19 schwach · 20–49 mässig ·  50–149 stark · ≥150 sehr stark
+     Birke     1–10 schwach · 11–69 mässig ·  70–299 stark · ≥300 sehr stark
+     Erle      1–10 schwach · 11–69 mässig ·  70–249 stark · ≥250 sehr stark
+     Beifuss   1–5  schwach ·  6–14 mässig ·  15–49  stark · ≥50  sehr stark
+     Ambrosia  1–5  schwach ·  6–10 mässig ·  11–39  stark · ≥40  sehr stark
+   Die Schwellen sind artspezifisch: Ambrosia ist schon bei wenigen Körnern
+   relevant, Gräser erst deutlich später. */
 const POLLEN = [
-  { key:'grass_pollen',   name:'Gräser',   steps:[1, 20, 50, 150] },
-  { key:'birch_pollen',   name:'Birke',    steps:[1, 10, 50, 200] },
-  { key:'alder_pollen',   name:'Erle',     steps:[1, 10, 50, 200] },
-  { key:'mugwort_pollen', name:'Beifuss',  steps:[1, 10, 30,  50] },
-  { key:'ragweed_pollen', name:'Ambrosia', steps:[1,  6, 11,  50] },
-  { key:'olive_pollen',   name:'Olive',    steps:[1, 20, 50, 200] }
+  { key:'grass_pollen',   name:'Gräser',   steps:[1, 20,  50, 150] },
+  { key:'birch_pollen',   name:'Birke',    steps:[1, 11,  70, 300] },
+  { key:'alder_pollen',   name:'Erle',     steps:[1, 11,  70, 250] },
+  { key:'mugwort_pollen', name:'Beifuss',  steps:[1,  6,  15,  50] },
+  { key:'ragweed_pollen', name:'Ambrosia', steps:[1,  6,  11,  40] }
+  // Olive liefert Open-Meteo zwar mit, sie fehlt aber in der Schweizer
+  // Tabelle und fliegt hier praktisch nie — deshalb nicht ausgewertet.
 ];
-const POLLEN_WORDS = ['keine', 'gering', 'mässig', 'hoch', 'sehr hoch'];
+const POLLEN_WORDS = ['keine', 'schwach', 'mässig', 'stark', 'sehr stark'];
 const pollenLevel = (v, steps) => steps.filter(t => v >= t).length;
 
 /* Sichtweite. Die Grenzen folgen der gängigen meteorologischen Einteilung:
@@ -958,10 +964,13 @@ function renderPollen(){
   }
   if (!best) return;
 
-  el.title = 'Körner pro m³ — ' + alle.join(' · ');
-  el.innerHTML = `<div class="v">${POLLEN_WORDS[best.lvl]}</div>`
+  // Zahl gross wie bei allen anderen Kacheln, Klasse darunter. Welche Art die
+  // Zahl trägt, steht im Tooltip — sonst wird die Kachel wieder zu breit.
+  el.title = `Stärkste Art: ${best.name}. Körner pro m³ — ` + alle.join(' · ')
+    + '. Klassen nach MeteoSchweiz.';
+  el.innerHTML = `<div class="v">${best.v.toFixed(1)}</div>`
     + `<div class="k">Pollen</div>`
-    + (best.lvl ? `<div class="q">${best.name}</div>` : '');
+    + `<div class="q">${POLLEN_WORDS[best.lvl]}</div>`;
 }
 
 async function loadHydro(){
