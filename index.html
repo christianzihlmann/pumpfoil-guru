@@ -163,8 +163,6 @@ h2{
 }
 .now{display:flex;gap:1.4rem;flex-wrap:wrap;align-items:flex-start}
 .metric{min-width:74px}
-/* Erzwingt einen Zeilenumbruch im Flex-Fluss: nimmt volle Breite, null Höhe */
-.break{flex-basis:100%;height:0}
 .metric .v.seg svg{width:30px;height:30px;display:block}
 .metric .v.seg{height:auto}
 .metric .v{font-family:var(--mono);font-size:1.34rem;font-weight:700;letter-spacing:-.02em}
@@ -255,8 +253,13 @@ footer a{color:var(--molasse-dim)}
 <div class="warnbox" id="bandnote" hidden></div>
 
 <section>
+  <h2 id="wxhead">Wetter heute</h2>
+  <div class="now" id="wx"><span class="stamp">Lade Wetter…</span></div>
+</section>
+
+<section>
   <h2 id="nowhead">Jetzt in Pensier</h2>
-  <div class="now" id="now"><span class="stamp">Lade Wetter…</span></div>
+  <div class="now" id="now"></div>
 </section>
 
 <section>
@@ -611,7 +614,7 @@ function renderVerdict(){
   const note = $('#bandnote');
   if (measured == null && levelMin != null && (levelMax-levelMin) > 0.15){
     note.hidden = false;
-    note.innerHTML = `Das ist eine Pegelspanne von ${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft von Sonnenuntergang bis Mitternacht und morgens bis zum Sonnenaufgang. Der Abfluss unten zeigt, ob gerade turbiniert wird.`;
+    note.innerHTML = `Das ist eine Pegelspanne von ${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. Mittags und Nachmittags ist der Pegel oft am höchsten. Der Abfluss unten zeigt, ob gerade turbiniert wird.`;
   } else note.hidden = true;
 }
 
@@ -775,6 +778,7 @@ function renderWeather(){
   if (!wx) return;
   const i = dayIdx, c = wx.current, dy = wx.daily;
 
+  $('#wxhead').textContent  = `Wetter ${DAYS[i].toLowerCase()}`;
   $('#nowhead').textContent = i === 0 ? 'Jetzt in Pensier' : `${DAYS[i]} in Pensier`;
 
   const sr = dy.sunrise[i].slice(11), ss = dy.sunset[i].slice(11);
@@ -798,33 +802,33 @@ function renderWeather(){
   // Erste Zeile: nur die vier Tagesabschnitte. Danach ein erzwungener Umbruch,
   // damit die Messgrössen geschlossen darunter stehen.
   const teile = abschnitte(datum);
-  $('#now').innerHTML =
-      teile.map(a => tile(icon(a.code), a.lab,
-          a.tmin == null ? '' : `${Math.round(a.tmin)}–${Math.round(a.tmax)}°`,
-          { cls:'seg', title:`${SKY[a.code]||''} · Regen bis ${a.regen}%` })).join('')
-    + (teile.length ? '<div class="break"></div>' : '')
+  $('#wx').innerHTML = teile.length
+    ? teile.map(a => tile(icon(a.code), a.lab,
+        a.tmin == null ? '' : `${Math.round(a.tmin)}–${Math.round(a.tmax)}°`,
+        { cls:'seg', title:`${SKY[a.code]||''} · Regen bis ${a.regen}%` })).join('')
+    : '<span class="stamp">Keine Stundenwerte.</span>';
 
-    + tile(heute ? `${Math.round(c.temperature_2m)}°` : temp, 'Luft',
+  $('#now').innerHTML =
+      tile(heute ? `${Math.round(c.temperature_2m)}°` : temp, 'Luft',
            heute ? 'Temp.' : 'max / min')
     + tile(heute ? `${Math.round(feel)}°` : feel, 'Luft', 'Real Feel',
            { title:'Gefühlte Temperatur — Wind, Feuchte und Sonne eingerechnet' })
-    + tile(uv.toFixed(1), heute ? 'UV' : 'UV max', uvWord(uv),
-           { title:'UV-Index nach WHO-Skala' })
+    + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, 'Regen', 'Chance'))
     + tile(`${Math.round(wind)}<small> km/h</small>`, heute ? 'Wind' : 'Wind max',
            windWord(wind)[1], { title:windWord(wind)[2] })
     + tile(`${Math.round(gust)}<small> km/h</small>`, heute ? 'Böen' : 'Böen max',
            windWord(gust)[1], { title:windWord(gust)[2] })
     + tile(dirWord(dir), 'Wind-<br>richtung', '',
            { title:`Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)` })
-    + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, 'Regen',
-           heute ? 'in 3 h' : 'Tagesmax'))
+    + (heute ? tile('–', 'Luftqualität', '', { id:'aqi' }) : '')
     + (sicht == null ? '' : tile(`${sicht < 10 ? sicht.toFixed(1) : Math.round(sicht)}<small> km</small>`,
            'Sicht', sichtWord(sicht), { title:'Sichtweite laut Modell, keine Messung' }))
-    + (heute ? tile('–', 'Luftqualität', '', { id:'aqi' })
-             + tile('–', 'Zufluss', '', { id:'flowin' })
+    + tile(uv.toFixed(1), heute ? 'UV' : 'UV max', uvWord(uv),
+           { title:'UV-Index nach WHO-Skala' })
+    + tile('–', 'Pollen', '', { id:'pollen' })
+    + (heute ? tile('–', 'Zufluss', '', { id:'flowin' })
              + tile('–', 'Abfluss', '', { id:'flow' })
-             + tile('–', 'Pegel', '', { id:'trend' }) : '')
-    + tile('–', 'Pollen', '', { id:'pollen' });
+             + tile('–', 'Pegel', '', { id:'trend' }) : '');
 
   $('#suntimes').innerHTML =
       `<span title="Sonnenaufgang">${SUN_UP}${sr}</span>`

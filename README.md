@@ -240,6 +240,22 @@ Zwei Fallstricke, die beim Bauen aufgefallen sind:
 Der Steg wird per Punkt-in-Polygon-Test geprüft, nicht über eine Region — bei
 mehreren zutreffenden Warnungen gewinnt die schwerste.
 
+## Aufbau der Seite
+
+1. **Kopf** — Ort, Sonnenzeiten, Titel, Tagesreiter, Fazitzeile
+2. **Messlatte** mit den vier Dock-Karten
+3. **Wetter heute** — vier Tagesabschnitte: Morgen, Mittag, Nachmittag, Abend.
+   Bei mehreren Lagen im selben Abschnitt gewinnt die **schlechteste** — bei
+   „Sonne bis 15 Uhr, dann Gewitter" ist das Gewitter die Information.
+4. **Jetzt in Pensier** — Luft (Temp. und Real Feel), Regen, Wind, Böen,
+   Windrichtung, Luftqualität, Sicht, UV, Pollen, Zufluss, Abfluss, Pegel
+5. **Seepegel-Prognose Groupe E**
+6. Fusszeile mit den Quellen
+
+Die Reiter *Heute / Morgen / Übermorgen* schalten beide Wetterabschnitte und die
+Ampeln gemeinsam um. Zufluss, Abfluss, Pegeltrend und Luftqualität gibt es nur
+für heute — dafür existiert keine Prognose.
+
 ## Manuelle Schalter
 
 In `data/level.json`:
