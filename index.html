@@ -443,7 +443,7 @@ const list = a => a.length < 2 ? (a[0] || '')
 function statusFor(dock){
   // Manuelle Sperren gehen dem Pegel vor
   if (dock.manual && !manual.dock4_installed)
-    return { s:'stop', split:false, why:'Out of order.' };
+    return { s:'stop', split:false, why:'Out of order' };
   if (dock.rowing && manual.rowing_competition)
     return { s:'stop', split:false, why:'Ruderwettkampf — gesperrt.' };
 
@@ -614,7 +614,7 @@ function renderVerdict(){
   const note = $('#bandnote');
   if (measured == null && levelMin != null && (levelMax-levelMin) > 0.15){
     note.hidden = false;
-    note.innerHTML = `Das ist eine Pegelspanne von ${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. Mittags und Nachmittags ist der Pegel oft am höchsten. Der Abfluss unten zeigt, ob gerade turbiniert wird.`;
+    note.innerHTML = `Das ist eine Pegelspanne von ${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. Mittags und nachmittags ist der Pegel oft am höchsten. Der Abfluss unten zeigt, ob gerade turbiniert wird.`;
   } else note.hidden = true;
 }
 
@@ -778,7 +778,7 @@ function renderWeather(){
   if (!wx) return;
   const i = dayIdx, c = wx.current, dy = wx.daily;
 
-  $('#wxhead').textContent  = `Wetter ${DAYS[i].toLowerCase()}`;
+  $('#wxhead').textContent  = `Wetter ${DAYS[i].toLowerCase()} in Pensier`;
   $('#nowhead').textContent = i === 0 ? 'Jetzt in Pensier' : `${DAYS[i]} in Pensier`;
 
   const sr = dy.sunrise[i].slice(11), ss = dy.sunset[i].slice(11);
