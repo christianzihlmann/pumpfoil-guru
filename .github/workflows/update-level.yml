@@ -62,6 +62,32 @@ jobs:
             --title "$HEUTE - Kalibrieren: Pegelspanne nur $BAND cm" \
             --body-file /tmp/issue.md
 
+      - name: Dock 2 wird knapp — Schwimmsteg raus
+        if: steps.fetch.outputs.dock2_alert == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAGE: ${{ steps.fetch.outputs.dock2_days }}
+          AB: ${{ steps.fetch.outputs.dock2_from }}
+          LIMIT: ${{ steps.fetch.outputs.dock2_limit }}
+        run: |
+          MARK="Dock 2 knapp ab $AB"
+          # Nur eine Meldung je Trockenphase, nicht alle 30 Minuten eine neue
+          if gh issue list --state all --limit 50 --json title --jq '.[].title' \
+             | grep -qF "$MARK"; then
+            echo "Fuer $AB bereits gemeldet."
+            exit 0
+          fi
+          {
+            printf 'Die Groupe-E-Prognose sagt fuer **%s Tage in Folge ab %s** einen\n' "$TAGE" "$AB"
+            printf 'Tagestiefstand unter **%s m ue. M.** voraus. Das ist die Gruen-Schwelle\n' "$LIMIT"
+            printf 'von Dock 2 — darunter wird das Wasser knapp.\n\n'
+            printf '**Zu tun:** Schwimmsteg (Dock 4) mit dem Schiff rausnehmen, bevor es\n'
+            printf 'zu flach wird. Danach in data/level.json `dock4_installed` auf `false`.\n\n'
+            printf 'Eine Prognose, keine Messung — vor dem Aufwand kurz gegenpruefen.\n\n'
+            printf '_Gemeldet von scripts/fetch_level.py, Schwelle DOCK2_ALERT_DAYS._\n'
+          } > /tmp/dock2.md
+          gh issue create --title "$MARK ($TAGE Tage)" --body-file /tmp/dock2.md
+
       - name: Commit, falls sich etwas geändert hat
         run: |
           git config user.name  "pegel-bot"

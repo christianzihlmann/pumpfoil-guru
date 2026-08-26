@@ -163,6 +163,10 @@ h2{
 }
 .now{display:flex;gap:1.4rem;flex-wrap:wrap;align-items:flex-start}
 .metric{min-width:74px}
+/* Erzwingt einen Zeilenumbruch im Flex-Fluss: nimmt volle Breite, null Höhe */
+.break{flex-basis:100%;height:0}
+.metric .v.seg svg{width:30px;height:30px;display:block}
+.metric .v.seg{height:auto}
 .metric .v{font-family:var(--mono);font-size:1.34rem;font-weight:700;letter-spacing:-.02em}
 .metric .k{
   font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;
@@ -176,9 +180,6 @@ h2{
   font-family:var(--mono);font-size:.6rem;letter-spacing:.04em;
   color:var(--muted);line-height:1.5;
 }
-.sky{display:flex;flex-direction:column;align-items:center;gap:.1rem}
-.sky svg{width:38px;height:38px;flex:none}
-.sky .desc{font-family:var(--display);font-size:.92rem;font-weight:500;line-height:1.2;text-align:center}
 
 
 .fc{display:flex;flex-direction:column;gap:.4rem}
@@ -232,7 +233,7 @@ footer a{color:var(--molasse-dim)}
 
 <header>
   <div class="eyebrow">
-    <span>Pensier · Kanton Freiburg</span>
+    <span>Pensier</span>
     <span class="suntimes" id="suntimes"></span>
   </div>
   <h1>Pumpfoil<br><em>Guru</em></h1>
@@ -291,30 +292,37 @@ const CONFIG = {
   // Die Schwellen unten sind deshalb RELATIV zu refLevel angegeben, dem Seepegel
   // jener Messung. Diese Abstände sind gemessen und ändern sich nicht mehr.
   //
-  // refLevel selbst ist die letzte offene Zahl. NOCH GESCHÄTZT: oberes Ende des
-  // Tagesbands 531.23–531.49 vom 25.08.2026. Sobald an einem Tag mit schmalem
-  // Band (< 10 cm, siehe Kalibriermeldung) einmal gemessen wird, hier eintragen —
-  // damit sind alle drei Docks auf einen Schlag geeicht.
-  refLevel: 531.47,
+  // refLevel selbst ist die letzte offene Zahl. NOCH GESCHÄTZT: das Band galt um
+  // 17:40, dem Messzeitpunkt, 531.15–531.41; genommen ist das obere Ende.
+  // Begründung: turbiniert wurde ab 18:30, der See stand also nahe seinem
+  // Tageshöchststand. Und über drei Tage lag der Groupe-E-Tageswert im Mittel
+  // bei 84 % der Bandbreite, nicht bei 50 % — die Bandmitte wäre zu tief, und
+  // ein zu tiefes refLevel macht die Ampel ZU OPTIMISTISCH.
+  //
+  // Sobald an einem Tag mit schmalem Band (< 10 cm, siehe Kalibriermeldung)
+  // gemessen wird, hier eintragen — damit sind alle drei Docks auf einen
+  // Schlag geeicht.
+  refLevel: 531.41,
   refLevelCalibrated: false,
 
   // rowing:true  → bei Ruderwettkampf gesperrt
   // manual:true  → nur da, wenn manuell eingeschaltet
   // floating:true → Schwimmsteg, hat gar keine Pegelgrenzen
   //
+  // groundRel             : Seegrund relativ zu refLevel = minus gemessene Tiefe
   // stopLowRel / goLowRel : Meter relativ zu refLevel, aus dem Messband
   // goHigh / stopHigh     : absolut, hängen am Stauziel 532.00, nicht an der Messung
   docks: [
     { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:false,
-      stopLowRel:-0.20, goLowRel:-0.10, goHigh:532.50, stopHigh:532.50 },
+      groundRel:-1.07, stopLowRel:-0.20, goLowRel:-0.10, goHigh:532.50, stopHigh:532.50 },
 
     { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:false, rowing:true,
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
-      stopLowRel:-1.11, goLowRel:-0.91, goHigh:532.50, stopHigh:532.50 },
+      groundRel:-1.91, stopLowRel:-1.11, goLowRel:-0.91, goHigh:532.50, stopHigh:532.50 },
 
     { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:false, rowing:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
-      stopLowRel:-3.35, goLowRel:-3.15, goHigh:532.50, stopHigh:532.50 },
+      groundRel:-4.15, stopLowRel:-3.35, goLowRel:-3.15, goHigh:532.50, stopHigh:532.50 },
 
     { id:'d4', short:'D4', name:'Dock 4', place:'Floating', manual:true, summary:false, floating:true,
       map:'https://maps.app.goo.gl/fDbZoVYaNq99WqA36' }   // 46.847556, 7.142008
@@ -403,6 +411,16 @@ const POLLEN = [
 ];
 const POLLEN_WORDS = ['keine', 'gering', 'mässig', 'hoch', 'sehr hoch'];
 const pollenLevel = (v, steps) => steps.filter(t => v >= t).length;
+
+/* Sichtweite. Die Grenzen folgen der gängigen meteorologischen Einteilung:
+   unter 1 km ist definitionsgemäss Nebel, darüber Dunst in Abstufungen.
+   Keine amtliche Schweizer Norm, aber verbreitet und nachvollziehbar. */
+const SICHT = [[1,'Nebel'],[4,'starker Dunst'],[10,'Dunst'],[1e9,'klar']];
+const sichtWord = km => SICHT.find(([m]) => km < m)[1];
+
+/* Tagesabschnitte. Die Stunden sind so gewählt, dass sie zum Pumpfoilen
+   passen — nicht meteorologisch, sondern praktisch. */
+const ABSCHNITTE = [['Morgen',6,11],['Mittag',11,14],['Nachmittag',14,18],['Abend',18,22]];
 
 const DIRS = ['N','NNO','NO','ONO','O','OSO','SO','SSO',
               'S','SSW','SW','WSW','W','WNW','NW','NNW'];
@@ -537,11 +555,15 @@ function renderDocks(){
               : note  ? note
               : split ? 'Pegel schwankt'
               : '';
+    // Tiefe beim prognostizierten Tagestiefstand — die Zahl, die zählt
+    const cm = depthWord(depthAt(d, levelMin));
+    const tief = cm == null ? '' : `Prognose Wassertiefe &gt; ${cm} cm`;
+    const zeilen = [sub, tief].filter(Boolean).join(' · ');
     el.innerHTML = `
       <span class="lamp ${s}"></span>
       <div>
         <h3>${d.name}${d.place ? ` (${d.place})` : ''}</h3>
-        ${sub ? `<p>${sub}</p>` : ''}
+        ${zeilen ? `<p>${zeilen}</p>` : ''}
       </div>
       <span class="pin">${d.map ? PIN : ''}</span>`;
     wrap.appendChild(el);
@@ -689,8 +711,9 @@ function renderFC(list){
 async function loadWeather(){
   const { lat, lon } = CONFIG.weather;
   const u = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
-    + `&current=temperature_2m,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,uv_index`
-    + `&daily=weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,uv_index_max,sunrise,sunset`
+    + `&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_gusts_10m,wind_direction_10m,uv_index,visibility,precipitation_probability`
+    + `&daily=weather_code,temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,uv_index_max,precipitation_probability_max,sunrise,sunset`
+    + `&hourly=weather_code,temperature_2m,precipitation_probability,visibility`
     + `&timezone=Europe/Zurich&forecast_days=4`;
   try{
     wx = await (await fetch(u)).json();
@@ -713,6 +736,41 @@ function tile(value, label, qual, opts){
     + `</div>`;
 }
 
+/* Fasst die Stundenwerte eines Tages zu vier Abschnitten zusammen.
+   Für den Wettercode gewinnt der SCHLECHTESTE der Stunden — bei
+   "Sonne bis 15 Uhr, dann Gewitter" ist das Gewitter die Information. */
+function abschnitte(dateStr){
+  if (!wx || !wx.hourly) return [];
+  const h = wx.hourly;
+  return ABSCHNITTE.map(([lab, von, bis]) => {
+    const idx = h.time.map((t, i) => [t, i])
+      .filter(([t]) => t.slice(0, 10) === dateStr
+                    && +t.slice(11, 13) >= von && +t.slice(11, 13) < bis)
+      .map(([, i]) => i);
+    if (!idx.length) return null;
+    const temps = idx.map(i => h.temperature_2m[i]).filter(v => v != null);
+    const codes = idx.map(i => h.weather_code[i]).filter(v => v != null);
+    return {
+      lab,
+      code: codes.length ? Math.max(...codes) : null,
+      tmin: temps.length ? Math.min(...temps) : null,
+      tmax: temps.length ? Math.max(...temps) : null,
+      regen: Math.max(...idx.map(i => h.precipitation_probability[i] ?? 0))
+    };
+  }).filter(Boolean);
+}
+
+/* Regenwahrscheinlichkeit der nächsten drei Stunden — nicht des ganzen Tages.
+   Was in acht Stunden passiert, hilft beim Losfahren nicht. */
+function regen3h(){
+  if (!wx || !wx.hourly) return null;
+  const h = wx.hourly, jetzt = new Date();
+  const ab = h.time.findIndex(t => new Date(t) >= jetzt);
+  if (ab < 0) return null;
+  const w = h.precipitation_probability.slice(ab, ab + 3).filter(v => v != null);
+  return w.length ? Math.max(...w) : null;
+}
+
 function renderWeather(){
   if (!wx) return;
   const i = dayIdx, c = wx.current, dy = wx.daily;
@@ -731,9 +789,25 @@ function renderWeather(){
     : `${Math.round(dy.temperature_2m_max[i])}°<small> / ${Math.round(dy.temperature_2m_min[i])}°</small>`;
 
   const heute = i === 0;
-  $('#now').innerHTML = `
-    <div class="sky">${icon(code)}<div class="desc">${SKY[code]||'—'}</div></div>`
-    + tile(temp, heute ? 'Luft' : 'Luft max/min', '')
+  const datum = dy.time[i];
+  const sicht = heute && c.visibility != null ? c.visibility / 1000 : null;
+  const rgn   = heute ? regen3h() : dy.precipitation_probability_max[i];
+  const feel  = heute ? c.apparent_temperature
+    : `${Math.round(dy.apparent_temperature_max[i])}°<small> / ${Math.round(dy.apparent_temperature_min[i])}°</small>`;
+
+  // Erste Zeile: nur die vier Tagesabschnitte. Danach ein erzwungener Umbruch,
+  // damit die Messgrössen geschlossen darunter stehen.
+  const teile = abschnitte(datum);
+  $('#now').innerHTML =
+      teile.map(a => tile(icon(a.code), a.lab,
+          a.tmin == null ? '' : `${Math.round(a.tmin)}–${Math.round(a.tmax)}°`,
+          { cls:'seg', title:`${SKY[a.code]||''} · Regen bis ${a.regen}%` })).join('')
+    + (teile.length ? '<div class="break"></div>' : '')
+
+    + tile(heute ? `${Math.round(c.temperature_2m)}°` : temp, 'Luft',
+           heute ? 'Temp.' : 'max / min')
+    + tile(heute ? `${Math.round(feel)}°` : feel, 'Luft', 'Real Feel',
+           { title:'Gefühlte Temperatur — Wind, Feuchte und Sonne eingerechnet' })
     + tile(uv.toFixed(1), heute ? 'UV' : 'UV max', uvWord(uv),
            { title:'UV-Index nach WHO-Skala' })
     + tile(`${Math.round(wind)}<small> km/h</small>`, heute ? 'Wind' : 'Wind max',
@@ -742,6 +816,10 @@ function renderWeather(){
            windWord(gust)[1], { title:windWord(gust)[2] })
     + tile(dirWord(dir), 'Wind-<br>richtung', '',
            { title:`Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)` })
+    + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, 'Regen',
+           heute ? 'in 3 h' : 'Tagesmax'))
+    + (sicht == null ? '' : tile(`${sicht < 10 ? sicht.toFixed(1) : Math.round(sicht)}<small> km</small>`,
+           'Sicht', sichtWord(sicht), { title:'Sichtweite laut Modell, keine Messung' }))
     + (heute ? tile('–', 'Luftqualität', '', { id:'aqi' })
              + tile('–', 'Zufluss', '', { id:'flowin' })
              + tile('–', 'Abfluss', '', { id:'flow' })
@@ -768,6 +846,18 @@ const ARROW = { up:'↑', down:'↓', flat:'→' };
    Gewertet wird nicht die Bilanz selbst, sondern was sie am Pegel bewirkt —
    ein Kubikmeter pro Sekunde bewegt diesen See um ganze 2 cm pro Tag. */
 const cmPerDay = q => q * 86400 / CONFIG.lakeArea * 100;
+
+/* Wassertiefe an einem Dock bei gegebenem Seepegel. Der Seegrund liegt
+   refLevel minus gemessene Tiefe — das ist einmalig aus der Messung vom
+   25.08.2026 bestimmt und ändert sich nicht mehr. */
+function depthAt(dock, level){
+  if (dock.groundRel == null || level == null) return null;
+  return level - (CONFIG.refLevel + dock.groundRel);
+}
+
+/* Konservativ auf volle 10 cm abgerundet: 193 → 190. Eine Prognose soll nicht
+   genauer aussehen, als sie ist, und abrunden ist die sichere Richtung. */
+const depthWord = m => m == null ? null : Math.floor(m * 10) * 10;
 
 function trendOf(qin, qout){
   if (qin == null || qout == null) return null;

@@ -57,9 +57,17 @@ Schwellen in `CONFIG.docks` **relativ** zu `refLevel` angegeben:
 | Dock 3 (Rowing South) | refLevel − 3.35 | refLevel − 3.15 |
 | Dock 4 (Floating) | – | – |
 
+Auf den Dock-Karten steht daraus **„Prognose Wassertiefe > X cm"**, gerechnet
+gegen `gE_min` — Groupe E nennt diese Spalte selbst „Min Level Prognose", also
+den vorhergesagten Tagestiefstand. Konservativ auf volle 10 cm abgerundet.
+
 **`refLevel` ist die letzte offene Zahl** — der Seepegel um 17:30 jenes Tages.
-Aktuell **geschätzt auf 531.47** (oberes Ende des Tagesbands 531.23–531.49),
-markiert durch `refLevelCalibrated: false`.
+Aktuell **geschätzt auf 531.41** — das Band galt um 17:40, dem Messzeitpunkt,
+531.15–531.41; genommen ist das obere Ende. Begründung: turbiniert wurde ab
+18:30, der See stand also nahe seinem Tageshöchststand. Und über drei Tage lag
+der Groupe-E-Tageswert im Mittel bei **84 % der Bandbreite**, nicht bei 50 % —
+die Bandmitte wäre zu tief, und **ein zu tiefes `refLevel` macht die Ampel zu
+optimistisch**. Markiert durch `refLevelCalibrated: false`.
 
 Sobald an einem Tag mit schmalem Band gemessen wird, ändert **eine einzige
 Zahl** die Eichung aller drei Docks. Genau dafür meldet der Job ein Issue,
@@ -183,6 +191,19 @@ Bisher beobachtete Spannweiten: 24 cm (23.08.2026), 44 cm (24.08.2026). Feuert
 die Meldung über Monate nie, gehört die Schwelle hochgesetzt — die Verteilung
 lässt sich aus `hydro.csv` ablesen (`gE_max` minus `gE_min`).
 
+## Alarm: Dock 2 wird knapp
+
+Sagt die Groupe-E-Prognose für **zwei oder mehr zusammenhängende Tage** einen
+Tagestiefstand unter der Grün-Schwelle von Dock 2 voraus, legt der Job ein
+GitHub-Issue an — Zeit, den Schwimmsteg mit dem Schiff rauszunehmen.
+
+Gesucht wird die längste Serie **irgendwo in der Prognose**, nicht nur ab heute:
+beginnt die Trockenphase erst übermorgen, ist genau das die nützliche Vorwarnzeit.
+
+Die Schwelle liest `fetch_level.py` per Regex **direkt aus `index.html`** —
+bewusst keine zweite Kopie der Zahl, sonst laufen die Definitionen auseinander.
+Schlägt das Lesen fehl, gibt es keinen Alarm; das ist die harmlose Richtung.
+
 ## Gewitterwarnungen
 
 Der stündliche Job holt die Warnungen von **MeteoAlarm**, der europäischen
@@ -284,7 +305,7 @@ nie gekürzt:
 
 ```
 timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215,h2467,t2467,uv,aqi,
-wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt
+wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt,q2179,t2179
 ```
 
 - `gE_min` / `gE_max` — Groupe-E-Band des Tages
@@ -305,6 +326,14 @@ wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt
 - `smn_ff` / `smn_fx` / `smn_dd` / `smn_tt` — MeteoSchweiz-Station **GRA
   (Fribourg/Grangeneuve)**, 8.7 km vom Steg: Wind, Böe, Richtung, Temperatur.
   Das sind **echte Messungen**, alle 10 Minuten.
+
+- `q2179` / `t2179` — BAFU Sense – Thörishaus. Die Sense mündet **unterhalb der
+  Staumauer, aber oberhalb von Laupen**. `q2215` enthält also Sense-Wasser, das
+  nie im See war — genau deshalb ist die Bilanz systematisch zu negativ. Die
+  Sense ist ungestaut und führt bei Regen sehr viel. Ab 26.08.2026 mitgeloggt,
+  um sie später herausrechnen zu können. **Achtung Laufzeit:** Thörishaus →
+  Laupen sind ~12 km, also 1.7–3.3 h. Gleichzeitige Werte zu subtrahieren wäre
+  falsch; der Versatz lässt sich später aus der Kreuzkorrelation bestimmen.
 
 Beide Windquellen werden bewusst nebeneinander geschrieben. Erst über Wochen
 zeigt sich, wie weit das Modell von der Messung abweicht — und ob es sich lohnt,

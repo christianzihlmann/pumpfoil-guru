@@ -46,8 +46,18 @@ ACTUAL_CSV = None      # wird unten gesetzt, sobald DATA bekannt ist
 LAKE_OUT = "2215"          # Saane – Laupen, unterhalb der Staumauer
 LAKE_IN = "2119"           # Sarine – Fribourg, oberhalb des Sees
 WARM = "2467"              # Saane – Guemmenen, einzige Station der Kette mit Temperatur
+# Sense – Thoerishaus. Muendet UNTERHALB der Staumauer, aber OBERHALB von Laupen
+# in die Saane. q2215 enthaelt also Sense-Wasser, das nie im See war — deshalb
+# ist die Bilanz q2119 - q2215 systematisch zu negativ. Die Sense ist ungestaut:
+# bei Regen fuehrt sie sehr viel, bei Trockenheit wenig. Ab 26.08.2026 wird sie
+# mitgeloggt, um sie spaeter herausrechnen zu koennen.
+# ACHTUNG Laufzeit: Thoerishaus → Laupen sind ~12 km Fliessweg, also 1.7–3.3 h.
+# Gleichzeitige Werte zu subtrahieren waere falsch. Erst mit Wochen an Daten
+# laesst sich der Versatz aus der Kreuzkorrelation bestimmen.
+SENSE = "2179"
 HYDRO = ("https://api.existenz.ch/apiv1/hydro/latest"
-         f"?locations={LAKE_IN},{LAKE_OUT},{WARM}&parameters=height,flow,temperature"
+         f"?locations={LAKE_IN},{LAKE_OUT},{WARM},{SENSE}"
+         "&parameters=height,flow,temperature"
          "&app=pumpfoil.guru&version=1.0")
 
 DATA = os.path.join(os.path.dirname(__file__), "..", "data")
@@ -55,7 +65,7 @@ OUT = os.path.join(DATA, "level.json")
 CSV = os.path.join(DATA, "hydro.csv")
 ACTUAL = os.path.join(DATA, "level_daily.csv")     # Datum,Pegel — ein Wert pro Tag
 HEAD = ("timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215,h2467,t2467,uv,aqi,"
-        "wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt\n")
+        "wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt,q2179,t2179\n")
 
 UA = {"User-Agent": "pumpfoil-guru/1.0 (hobby project; contact via GitHub)"}
 
@@ -100,6 +110,11 @@ MIN_SAMPLES = 300
 # hochsetzen; die Verteilung steht in hydro.csv (gE_max minus gE_min).
 NARROW_BAND_CM = 10
 
+# Alarm, wenn Dock 2 an mindestens so vielen Tagen in Folge nicht mehr gruen
+# ist. Dann wird das Wasser knapp und der Schwimmsteg (Dock 4) muss raus.
+DOCK2_ALERT_DAYS = 2
+INDEX = os.path.join(os.path.dirname(__file__), "..", "index.html")
+
 # Manuelle Schalter. Werden in data/level.json direkt auf GitHub umgelegt und
 # hier nie ueberschrieben — nur angelegt, falls sie fehlen.
 MANUAL_DEFAULTS = {"rowing_competition": False, "dock4_installed": False}
@@ -111,6 +126,24 @@ ROW = re.compile(
     r"(\d{3}[.,]\d{1,2})\s*m",
     re.I,
 )
+
+
+def dock2_golow():
+    """Die Gruen-Schwelle von Dock 2, direkt aus index.html gelesen.
+
+    Bewusst KEINE zweite Kopie der Zahl hier — sonst laufen die beiden
+    Definitionen irgendwann auseinander. Schlaegt das Lesen fehl, gibt es
+    keinen Alarm; das ist die harmlose Richtung.
+    """
+    try:
+        with open(INDEX, encoding="utf-8") as f:
+            html = f.read()
+        ref = float(re.search(r"refLevel:\s*([\d.]+)", html).group(1))
+        blk = re.search(r"id:'d2'.*?goLowRel:\s*(-?[\d.]+)", html, re.S)
+        return round(ref + float(blk.group(1)), 2)
+    except Exception as e:                                  # noqa: BLE001
+        print(f"Dock-2-Schwelle nicht lesbar ({e})", file=sys.stderr)
+        return None
 
 
 def strip_tags(html: str) -> str:
@@ -434,6 +467,7 @@ def main() -> int:
             raise ValueError("weder 2215 noch 2119 lieferten Werte")
 
         warm_s = h.get(WARM, {})
+        sense_s = h.get(SENSE, {})
         om = fetch_current(METEO, "uv_index", "wind_speed_10m",
                            "wind_gusts_10m", "wind_direction_10m")
         uv = om.get("uv_index")
@@ -479,6 +513,7 @@ def main() -> int:
             "wdir": om.get("wind_direction_10m"),
             "smn_ff": smn.get("ff"), "smn_fx": smn.get("fx"),
             "smn_dd": smn.get("dd"), "smn_tt": smn.get("tt"),
+            "q2179": sense_s.get("flow"), "t2179": sense_s.get("temperature"),
         }, archive)
 
         payload["hydro"] = {
@@ -525,6 +560,14 @@ def main() -> int:
         }
         # Oberhalb des Sees. Noch nichts fuer die Anzeige — wird gesammelt, um
         # den Zusammenhang zum Groupe-E-Band zu pruefen.
+        payload["sense"] = {
+            "station": SENSE,
+            "name": "Sense – Thörishaus",
+            "flow": sense_s.get("flow"),
+            "temperature": sense_s.get("temperature"),
+            "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — "
+                    "in q2215 enthalten, war nie im See",
+        }
         payload["sarine"] = {
             "station": LAKE_IN,
             "name": "Sarine – Fribourg",
@@ -536,7 +579,7 @@ def main() -> int:
 
         st = payload["hydro"]["stats"]
         bal = (in_s.get("flow") or 0) - (out_s.get("flow") or 0)
-        print(f"Wind Modell {om.get('wind_speed_10m')} / gemessen {smn.get('ff')} km/h · "
+        print(f"Sense {sense_s.get('flow')} m³/s · Wind Modell {om.get('wind_speed_10m')} / gemessen {smn.get('ff')} km/h · "
               f"UV {uv} · Luft {aqi} · Gümmenen {warm_s.get('temperature')} °C · "
               f"Laupen {out_s.get('flow')} m³/s · Fribourg {in_s.get('height')} m ü. M. "
               f"/ {in_s.get('flow')} m³/s · Bilanz {bal:+.2f} m³/s "
@@ -546,7 +589,7 @@ def main() -> int:
                   + ("" if st["enough"] else f", Wortangabe ab {MIN_SAMPLES}"))
     except Exception as e:                                  # noqa: BLE001
         print(f"BAFU nicht geholt ({e}) — alter Stand bleibt", file=sys.stderr)
-        for k in ("hydro", "sarine", "water", "air"):
+        for k in ("hydro", "sarine", "water", "air", "sense"):
             if k in old:
                 payload[k] = old[k]
 
@@ -567,6 +610,23 @@ def main() -> int:
     print(f"{len(forecast)} Tage geschrieben, heute "
           f"{today['min']:.2f}–{today['max']:.2f} m ü. M. (Spanne {band_cm} cm)")
 
+    # Wird das Wasser fuer Dock 2 ueber mehrere Tage knapp? Dann muss der
+    # Schwimmsteg raus. Geprueft wird gegen gE_min, also den Tagestiefstand.
+    # Gesucht ist die laengste Serie zusammenhaengender knapper Tage IRGENDWO
+    # in der Prognose — nicht nur ab heute. Beginnt die Trockenphase erst
+    # uebermorgen, ist genau das die nuetzliche Vorwarnzeit.
+    d2 = dock2_golow()
+    dry_days, run = [], []
+    if d2:
+        for day in forecast:
+            if day["min"] < d2:
+                run.append(day["date"])
+                if len(run) > len(dry_days):
+                    dry_days = list(run)
+            else:
+                run = []
+    dock2_alert = len(dry_days) >= DOCK2_ALERT_DAYS
+
     # An GitHub Actions weiterreichen; ausserhalb davon passiert nichts.
     out = os.environ.get("GITHUB_OUTPUT")
     if out:
@@ -575,6 +635,12 @@ def main() -> int:
             f.write(f"narrow={'true' if band_cm <= NARROW_BAND_CM else 'false'}\n")
             f.write(f"lo={today['min']:.2f}\n")
             f.write(f"hi={today['max']:.2f}\n")
+            f.write(f"dock2_alert={'true' if dock2_alert else 'false'}\n")
+            f.write(f"dock2_days={len(dry_days)}\n")
+            f.write(f"dock2_from={dry_days[0] if dry_days else ''}\n")
+            f.write(f"dock2_limit={d2 if d2 else ''}\n")
+    if dock2_alert:
+        print(f"DOCK-2-ALARM: {len(dry_days)} Tage unter {d2} — {', '.join(dry_days)}")
     if band_cm <= NARROW_BAND_CM:
         print(f"KALIBRIERFENSTER: nur {band_cm} cm Spanne heute")
 
