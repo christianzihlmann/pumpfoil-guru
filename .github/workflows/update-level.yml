@@ -2,11 +2,29 @@ name: Pegel aktualisieren
 
 on:
   schedule:
-    # Halbstündlich. Minute 7 und 37 statt 0 und 30, weil GitHubs Planer zur
-    # vollen und halben Stunde am stärksten ausgelastet ist und Läufe dann
-    # besonders spät kommen oder ganz ausfallen.
-    - cron: "7,37 * * * *"
-  workflow_dispatch:         # Knopf zum manuellen Auslösen
+    # NUR NOCH NOTNAGEL. Von den geplanten 48 Läufen am Tag kamen Ende August
+    # 2026 noch 2 bis 3 an: GitHub verzögert geplante Workflows bei Last und
+    # stellt Repos ohne frische Push-Aktivität hinten an. Der verlässliche Takt
+    # kommt jetzt von aussen über workflow_dispatch (siehe unten).
+    #
+    # Minute 19 und 49 statt 0 und 30: zur vollen, halben und Viertelstunde ist
+    # der Planer am stärksten ausgelastet. Die kleinen Offsets 5 und 7 nehmen
+    # aus demselben Grund viele andere auch.
+    - cron: "19,49 * * * *"
+
+  # Der eigentliche Auslöser. Ein externer Cron-Dienst ruft halbstündlich
+  #   POST /repos/<user>/pumpfoil-guru/actions/workflows/update-level.yml/dispatches
+  #   Authorization: Bearer <fein granuliertes Token, nur actions:write>
+  #   {"ref":"main"}
+  # API-Aufrufe unterliegen der Drosselung oben NICHT — sie laufen sofort.
+  #
+  # Wenn der Sensor am Steg kommt, meldet der ohnehin per repository_dispatch
+  # und wird damit selbst zum Takt; dieser Block bleibt dann als Rückfall.
+  #
+  # Faellt der externe Dienst aus oder laeuft das Token ab, hoert die
+  # Aktualisierung LAUTLOS auf. Dagegen prueft die Seite das Alter von
+  # data/level.json und sagt es an — siehe CONFIG.stale in index.html.
+  workflow_dispatch:
 
 permissions:
   contents: write

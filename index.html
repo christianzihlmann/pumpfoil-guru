@@ -240,6 +240,8 @@ footer a{color:var(--molasse-dim)}
   <p class="stamp" id="stamp"></p>
 </header>
 
+<div class="warnbox" id="stale" hidden></div>
+
 <div class="reading">
   <div class="gauge" id="gauge">
     <div class="fill" id="fill"></div>
@@ -357,6 +359,16 @@ const CONFIG = {
     out: { calm: 25, on: 60 },     // Schiffenen, q2215
     in:  { calm: 20, on: 55 }      // Rossens,    q2119
   },
+
+  // Ab wann data/level.json als veraltet gilt. Der Bot soll halbstündlich
+  // laufen; 3 Stunden lassen also reichlich Luft für GitHubs Unpünktlichkeit,
+  // ohne dass ein echter Ausfall tagelang unbemerkt bliebe.
+  //
+  // Warum das nötig ist: fällt der Abgleich aus, zeigt die Seite eine alte
+  // Prognose weiter, ohne dass man es merkt — und die Ampel wäre einfach
+  // falsch. Wetter und Abfluss holt der Browser selbst, die bleiben frisch;
+  // ausgerechnet das Band, worauf die Ampel beruht, nicht.
+  stale: { warn: 3, bad: 12 },     // Stunden
 
   // Seefläche bei Stauziel. Damit wird aus der Bilanz in m³/s eine Aussage
   // darüber, wie schnell der Pegel wirklich steigt oder fällt:
@@ -662,6 +674,28 @@ function renderVerdict(){
   } else note.hidden = true;
 }
 
+/* Frischeprüfung. Deckt jeden Ausfallgrund gleichzeitig ab — GitHub-Cron
+   gedrosselt, Token abgelaufen, Groupe-E-Seite umgebaut, Action rot. Es zählt
+   nur, wie alt der Stand ist, nicht warum. */
+function renderStale(iso){
+  const el = $('#stale');
+  if (!el) return;
+  const t = iso ? new Date(iso) : null;
+  if (!t || isNaN(t)){ el.hidden = true; return; }      // kein Alarm ohne Grund
+  const h = (Date.now() - t.getTime()) / 36e5;
+  if (h < CONFIG.stale.warn){ el.hidden = true; return; }
+  const wann = t.toLocaleString('de-CH',
+    { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+  const alt = h < 48 ? `${Math.round(h)} Stunden` : `${Math.round(h/24)} Tage`;
+  el.hidden = false;
+  el.innerHTML = h >= CONFIG.stale.bad
+    ? `Die Pegelprognose ist <strong>${alt} alt</strong> (Stand ${wann}). `
+      + `Der Abgleich mit Groupe E läuft seit Längerem nicht — die Ampel kann `
+      + `falsch liegen. Wetter und Abfluss sind aktuell.`
+    : `Die Pegelprognose ist <strong>${alt} alt</strong> (Stand ${wann}). `
+      + `Der Abgleich mit Groupe E hat ausgesetzt. Wetter und Abfluss sind aktuell.`;
+}
+
 function renderAll(){ renderGauge(); renderDocks(); renderVerdict(); }
 
 function renderTabs(){
@@ -718,6 +752,7 @@ async function loadLevel(){
     if (!r.ok) throw 0;
     const d = await r.json();
     forecast = d.forecast || [];
+    renderStale(d.fetched);
     if (d.measured && d.measured.level != null){
       measuredRaw = d.measured.level;
       levelStamp = new Date(d.measured.time).toLocaleString('de-CH',{hour:'2-digit',minute:'2-digit'});
