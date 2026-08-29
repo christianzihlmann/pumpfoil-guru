@@ -58,10 +58,20 @@ body{
 .suntimes{display:inline-flex;align-items:center;gap:.35rem;letter-spacing:.08em}
 .suntimes .dot{margin:0 .15em}
 .suntimes span{display:inline-flex;align-items:center;gap:.3rem}
-/* An die Schriftgrösse gebunden statt 13 px fest: die Zeichnung füllt rund
-   zwei Drittel der 24er-Zeichenfläche, 1.1em ergibt damit ziemlich genau die
-   Versalhöhe von SCHIFFENENSEE daneben. Skaliert mit, wenn die Schrift wächst. */
-.suntimes svg{width:1.1em;height:1.1em;flex:none}
+/* Höhe gegen die Versalhöhe der Schrift daneben gerechnet, nicht geschätzt.
+   JetBrains Mono hat capHeight 730/1000, bei .68rem also 7.94 px. Das
+   Aufgangssymbol zeichnet inklusive Strichbreite 17.8 der 24 Einheiten, füllt
+   den Kasten also zu 0.7417 — für 7.94 px Zeichnung braucht es demnach
+   7.94 / 0.7417 = 10.7 px Kasten, das sind 0.984 em.
+
+   Vorher: 13 px fest = 21 % zu hoch, danach 1.1em = immer noch 12 % zu hoch.
+
+   Das Untergangssymbol bleibt dabei rund 12 % niedriger, weil sein Strahl nur
+   bis y=5 reicht statt bis y=3. Das ist die Zeichnung selbst, kein Fehler —
+   die untergehende Sonne steht tiefer. Beide auf exakt dieselbe Höhe zu
+   bringen ginge nur mit verschiedenen Massstäben, dann wäre die Sonne im einen
+   Symbol grösser als im anderen. */
+.suntimes svg{width:.98em;height:.98em;flex:none}
 
 /* ── masthead ─────────────────────────────────────── */
 header{padding:2.2rem 0 1.4rem}
