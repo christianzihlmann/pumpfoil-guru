@@ -177,8 +177,23 @@ h2{
   text-transform:uppercase;color:var(--molasse-dim);font-weight:400;
   padding-bottom:.5rem;border-bottom:1px solid var(--rule);margin-bottom:.9rem;
 }
-.now{display:flex;gap:1.4rem;flex-wrap:wrap;align-items:flex-start}
-.metric{min-width:74px}
+/* Raster statt Flex-Umbruch. Vorher wurde jede Kachel so breit wie ihre
+   längste Beschriftung — eine lange wie LUFTQUALITÄT schob die folgenden nach
+   rechts, und die Spalten fluchteten von Zeile zu Zeile nicht mehr. Auf
+   Englisch fiel es kaum auf, auf Deutsch und Französisch stark.
+
+   92px Mindestbreite: die längste unumbrechbare Beschriftung ist
+   LUFTQUALITÄT, zwölf Zeichen — in JetBrains Mono bei .6rem mit .12em
+   Sperrung sind das 6.9 px je Zeichen, also 83 px. Auf 360 px Telefonbreite
+   ergeben sich damit genau drei Spalten, auf breiteren Schirmen mehr. */
+.now{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));
+  gap:1.4rem 1.1rem;align-items:start;
+}
+/* Die vier Tagesabschnitte gehören in EINE Zeile — sonst stand "Abend" allein
+   unter den anderen dreien. Bei 360 px sind das 80 px je Spalte; NACHMITTAG
+   und APRÈS-MIDI brauchen 69 px, das passt. */
+#wx{grid-template-columns:repeat(4,1fr);gap:1rem .6rem}
 .metric .v.seg svg{width:30px;height:30px;display:block}
 .metric .v.seg{height:auto}
 .metric .v{font-family:var(--mono);font-size:1.34rem;font-weight:700;letter-spacing:-.02em}
@@ -349,8 +364,7 @@ de: {
   windFrom:'Wind kommt aus {d} ({g}°)', aq:'Luftqualität',
   aqT:'European Air Quality Index (EAQI) — kleiner ist besser',
   vis:'Sicht', visT:'Sichtweite laut Modell, keine Messung',
-  uvT:'UV-Index nach WHO-Skala', pollen:'Pollen',
-  pollenT:'Stärkste Art: {n}. Körner pro m³ — Belastungsklassen der allergenen Pollenarten',
+  uvT:'UV-Index nach WHO-Skala',
   inflow:'Zufluss', outflow:'Abfluss', level:'Pegel',
   inflowT:'Sarine bei Fribourg, oberhalb des Sees',
   outflowT:'Saane bei Laupen, unterhalb der Staumauer. Ab {n} m³/s läuft eine Turbine, der See sinkt dann um mehrere Zentimeter pro Stunde.',
@@ -360,8 +374,6 @@ de: {
   trend:['steigt','sinkt','konstant'],
   uv:['niedrig','mässig','hoch','sehr hoch','extrem'],
   visW:['Nebel','starker Dunst','Dunst','klar'],
-  polN:['Gräser','Birke','Erle','Beifuss','Ambrosia'],
-  polW:['keine','schwach','mässig','stark','sehr stark'],
   dirs:['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'],
   sky:['Klar','Meist klar','Leicht bewölkt','Bedeckt','Nebel','Nieselregen','Regen',
        'Starkregen','Schnee','Schauer','Starke Schauer','Gewitter'],
@@ -370,7 +382,7 @@ de: {
   bafuName:'Bundesamt für Umwelt BAFU',
   srcLevel:'Pegel-Prognose: {gE} — Min/Max-Band, stündlich aktualisiert, keine Messung.',
   srcFlow:'Abfluss: {l2215} und {l2119}, {bafu}, via {existenz}. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.',
-  srcWx:'Wetter, UV und Pollen: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
+  srcWx:'Wetter und UV: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
   srcPrice:'Strompreis: {vario} — nicht auf der Seite, läuft nur ins Archiv.',
   aqW:['sehr gut','gut','mittel','schlecht','sehr schlecht','extrem schlecht'],
   lake:'Schiffenensee', noFcEmpty:'Keine Prognose.',
@@ -408,8 +420,7 @@ fr: {
   windFrom:'Vent venant du {d} ({g}°)', aq:'Qualité de l’air',
   aqT:'European Air Quality Index (EAQI) — plus bas est meilleur',
   vis:'Visibilité', visT:'Visibilité selon le modèle, pas une mesure',
-  uvT:'Indice UV selon l’échelle de l’OMS', pollen:'Pollen',
-  pollenT:'Espèce dominante : {n}. Grains par m³ — classes de charge pollinique',
+  uvT:'Indice UV selon l’échelle de l’OMS',
   inflow:'Entrée', outflow:'Sortie', level:'Niveau',
   inflowT:'Sarine à Fribourg, en amont du lac',
   outflowT:'Sarine à Laupen, en aval du barrage. Dès {n} m³/s une turbine tourne et le lac baisse de plusieurs centimètres par heure.',
@@ -419,8 +430,6 @@ fr: {
   trend:['monte','baisse','stable'],
   uv:['faible','modéré','élevé','très élevé','extrême'],
   visW:['brouillard','brume épaisse','brume','clair'],
-  polN:['Graminées','Bouleau','Aulne','Armoise','Ambroisie'],
-  polW:['nulle','faible','modérée','forte','très forte'],
   // ACHTUNG: im Französischen ist O = Ouest = Westen, nicht Ost wie im
   // Deutschen. E steht für Est. Ein Vertauschen dreht den Wind um 180°.
   dirs:['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'],
@@ -431,7 +440,7 @@ fr: {
   bafuName:'Office fédéral de l’environnement OFEV',
   srcLevel:'Prévision du niveau : {gE} — plage min/max, mise à jour chaque heure, pas une mesure.',
   srcFlow:'Débit : {l2215} et {l2119}, {bafu}, via {existenz}. Un débit élevé signifie que les turbines tournent et que le lac baisse.',
-  srcWx:'Météo, UV et pollen : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
+  srcWx:'Météo et UV : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
   srcPrice:'Prix de l’électricité : {vario} — pas affiché sur la page, uniquement archivé.',
   aqW:['très bonne','bonne','moyenne','mauvaise','très mauvaise','extrêmement mauvaise'],
   lake:'Lac de Schiffenen', noFcEmpty:'Pas de prévision.',
@@ -464,8 +473,7 @@ en: {
   windFrom:'Wind from {d} ({g}°)', aq:'Air quality',
   aqT:'European Air Quality Index (EAQI) — lower is better',
   vis:'Visibility', visT:'Visibility from the model, not a measurement',
-  uvT:'UV index on the WHO scale', pollen:'Pollen',
-  pollenT:'Strongest type: {n}. Grains per m³ — official pollen load classes',
+  uvT:'UV index on the WHO scale',
   inflow:'Inflow', outflow:'Outflow', level:'Level',
   inflowT:'Sarine at Fribourg, upstream of the lake',
   outflowT:'Saane at Laupen, below the dam. From {n} m³/s a turbine is running and the lake drops several centimetres per hour.',
@@ -475,8 +483,6 @@ en: {
   trend:['rising','falling','steady'],
   uv:['low','moderate','high','very high','extreme'],
   visW:['fog','heavy haze','haze','clear'],
-  polN:['Grass','Birch','Alder','Mugwort','Ragweed'],
-  polW:['none','low','moderate','high','very high'],
   dirs:['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'],
   sky:['Clear','Mostly clear','Partly cloudy','Overcast','Fog','Drizzle','Rain',
        'Heavy rain','Snow','Showers','Heavy showers','Thunderstorm'],
@@ -485,7 +491,7 @@ en: {
   bafuName:'Federal Office for the Environment FOEN',
   srcLevel:'Level forecast: {gE} — min/max band, updated hourly, not a measurement.',
   srcFlow:'Discharge: {l2215} and {l2119}, {bafu}, via {existenz}. High discharge means the turbines are running and the lake is dropping.',
-  srcWx:'Weather, UV and pollen: {om}, measured wind from MeteoSwiss Grangeneuve.',
+  srcWx:'Weather and UV: {om}, measured wind from MeteoSwiss Grangeneuve.',
   srcPrice:'Electricity price: {vario} — not shown on the page, archived only.',
   aqW:['very good','good','medium','poor','very poor','extremely poor'],
   lake:'Lake Schiffenen', noFcEmpty:'No forecast.',
@@ -730,29 +736,6 @@ const uvWord = v => T('uv')[UV_S.findIndex(m => v < m)];
 /* European Air Quality Index, Skala der EEA */
 const AQI_S = [20, 40, 60, 80, 100, 1e9];
 const aqiWord = v => T('aqW')[AQI_S.findIndex(m => v < m)];
-
-/* Pollen. Werte in Körnern pro m³, Klassen nach der amtlichen Tabelle von
-   MeteoSchweiz, "Belastungsklassen der allergenen Pollenarten":
-     Gräser    1–19 schwach · 20–49 mässig ·  50–149 stark · ≥150 sehr stark
-     Birke     1–10 schwach · 11–69 mässig ·  70–299 stark · ≥300 sehr stark
-     Erle      1–10 schwach · 11–69 mässig ·  70–249 stark · ≥250 sehr stark
-     Beifuss   1–5  schwach ·  6–14 mässig ·  15–49  stark · ≥50  sehr stark
-     Ambrosia  1–5  schwach ·  6–10 mässig ·  11–39  stark · ≥40  sehr stark
-   Die Schwellen sind artspezifisch: Ambrosia ist schon bei wenigen Körnern
-   relevant, Gräser erst deutlich später. */
-const POLLEN = [
-  // Der Name kommt aus T('polN'), an derselben Stelle wie hier — deshalb nur
-  // Schlüssel und Schwellen. Reihenfolge muss zur Wortliste passen.
-  { key:'grass_pollen',   steps:[1, 20,  50, 150] },
-  { key:'birch_pollen',   steps:[1, 11,  70, 300] },
-  { key:'alder_pollen',   steps:[1, 11,  70, 250] },
-  { key:'mugwort_pollen', steps:[1,  6,  15,  50] },
-  { key:'ragweed_pollen', steps:[1,  6,  11,  40] }
-  // Olive liefert Open-Meteo zwar mit, sie fehlt aber in der Schweizer
-  // Tabelle und fliegt hier praktisch nie — deshalb nicht ausgewertet.
-];
-const POLLEN_WORDS = () => T('polW');
-const pollenLevel = (v, steps) => steps.filter(t => v >= t).length;
 
 /* Sichtweite. Die Grenzen folgen der gängigen meteorologischen Einteilung:
    unter 1 km ist definitionsgemäss Nebel, darüber Dunst in Abstufungen.
@@ -1206,7 +1189,6 @@ function renderWeather(){
            T('vis'), sichtWord(sicht), { title:T('visT') }))
     + tile(uv.toFixed(1), heute ? 'UV' : 'UV max', uvWord(uv),
            { title:T('uvT') })
-    + tile('–', T('pollen'), '', { id:'pollen' })
     + (heute ? tile('–', T('inflow'), '', { id:'flowin' })
              + tile('–', T('outflow'), '', { id:'flow' })
              + tile('–', T('level'), '', { id:'trend' }) : '');
@@ -1216,7 +1198,7 @@ function renderWeather(){
     + `<span class="dot">·</span>`
     + `<span title="${T('sunDown')}">${SUN_DOWN}${ss}</span>`;
 
-  if (i === 0){ renderFlow(); renderAir(); renderPollen(); }   // nur für heute — keine Prognose dafür
+  if (i === 0){ renderFlow(); renderAir(); }   // nur für heute — keine Prognose dafür
 }
 
 /* Abfluss und Zufluss holt der Browser live von api.existenz.ch; der Stand aus
@@ -1293,21 +1275,17 @@ function renderFlow(){
 
 /* Luftqualität kommt von einer eigenen Open-Meteo-Adresse, ebenfalls ohne
    Schlüssel. Nur für heute — für Folgetage liefert sie keinen Tageswert. */
-let aqi = null, pollen = null;
+let aqi = null;
 
 async function loadAir(){
   const { lat, lon } = CONFIG.weather;
   try{
     const d = await (await fetch(
       `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${lat}&longitude=${lon}`
-      + `&current=european_aqi,${POLLEN.map(p => p.key).join(',')}`
-      + `&timezone=Europe/Zurich`)).json();
-    if (d.current){
-      if (d.current.european_aqi != null) aqi = d.current.european_aqi;
-      pollen = d.current;
-    }
+      + `&current=european_aqi&timezone=Europe/Zurich`)).json();
+    if (d.current && d.current.european_aqi != null) aqi = d.current.european_aqi;
   }catch(e){}
-  renderAir(); renderPollen();
+  renderAir();
 }
 
 function renderAir(){
@@ -1316,31 +1294,6 @@ function renderAir(){
   el.title = T('aqT');
   el.innerHTML = `<div class="v">${Math.round(aqi)}</div>`
     + `<div class="k">${T('aq')}</div><div class="q">${aqiWord(aqi)}</div>`;
-}
-
-function renderPollen(){
-  const el = $('#pollen');
-  if (!el || !pollen) return;
-
-  // Stärkste Art gewinnt: erst nach Stufe, bei Gleichstand nach Konzentration
-  let best = null;
-  const alle = [];
-  for (const p of POLLEN){
-    const v = pollen[p.key];
-    if (v == null) continue;
-    const lvl = pollenLevel(v, p.steps);
-    alle.push(`${T('polN')[POLLEN.indexOf(p)]} ${v.toFixed(1)}`);
-    if (!best || lvl > best.lvl || (lvl === best.lvl && v > best.v))
-      best = { lvl, v, name:T('polN')[POLLEN.indexOf(p)] };
-  }
-  if (!best) return;
-
-  // Zahl gross wie bei allen anderen Kacheln, Klasse darunter. Welche Art die
-  // Zahl trägt, steht im Tooltip — sonst wird die Kachel wieder zu breit.
-  el.title = T('pollenT', { n:best.name }) + ': ' + alle.join(' · ');
-  el.innerHTML = `<div class="v">${best.v.toFixed(1)}</div>`
-    + `<div class="k">${T('pollen')}</div>`
-    + `<div class="q">${POLLEN_WORDS()[best.lvl]}</div>`;
 }
 
 async function loadHydro(){
