@@ -80,6 +80,36 @@ jobs:
             --title "$HEUTE - Kalibrieren: Pegelspanne nur $BAND cm" \
             --body-file /tmp/issue.md
 
+      - name: Lücke melden — Aktualisierung hat ausgesetzt
+        if: steps.fetch.outputs.stale == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STUNDEN: ${{ steps.fetch.outputs.stale_hours }}
+          SEIT: ${{ steps.fetch.outputs.stale_since }}
+        run: |
+          MARK="Luecke ab $SEIT"
+          # Eine Meldung je Lücke, nicht bei jedem Lauf danach
+          if gh issue list --state all --limit 50 --json title --jq '.[].title' \
+             | grep -qF "$MARK"; then
+            echo "Fuer $SEIT bereits gemeldet."
+            exit 0
+          fi
+          {
+            printf 'Zwischen dem letzten erfolgreichen Lauf (**%s**) und diesem\n' "$SEIT"
+            printf 'liegen **%s Stunden**. Geplant sind 30 Minuten.\n\n' "$STUNDEN"
+            printf 'In dieser Zeit fehlen Archivzeilen. Besonders aergerlich beim\n'
+            printf 'VARIO-Preis: der Endpunkt liefert nur den laufenden Tag, was\n'
+            printf 'nicht geholt wurde, ist endgueltig weg.\n\n'
+            printf '**Wo nachsehen, in dieser Reihenfolge:**\n\n'
+            printf '1. Der externe Cron-Dienst — laeuft der Job noch, was sagt sein Log?\n'
+            printf '2. Das Token: fein granulierte Tokens laufen ab. Ein 401 dort\n'
+            printf '   sieht man nur im Log des Dienstes, nicht hier.\n'
+            printf '3. Actions-Tab: kamen Laeufe an und sind rot geworden?\n\n'
+            printf '_Gemeldet von scripts/fetch_level.py, Schwelle STALE_HOURS._\n'
+          } > /tmp/stale.md
+          gh issue create --title "Aktualisierung ausgesetzt: $STUNDEN h ($MARK)" \
+            --body-file /tmp/stale.md
+
       - name: Dock 2 wird knapp — Schwimmsteg raus
         if: steps.fetch.outputs.dock2_alert == 'true'
         env:

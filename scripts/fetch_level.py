@@ -149,6 +149,21 @@ MIN_SAMPLES = 300
 # hochsetzen; die Verteilung steht in hydro.csv (gE_max minus gE_min).
 NARROW_BAND_CM = 10
 
+# Wie lange darf zwischen zwei erfolgreichen Laeufen liegen, bevor es gemeldet
+# wird? Geplant sind 30 Minuten. Sechs Stunden lassen reichlich Luft fuer
+# GitHubs Unpuenktlichkeit und fuer Stunden, in denen BAFU nichts Neues hat.
+#
+# Gemessen wird gegen `fetched` aus der ALTEN level.json, nicht gegen das
+# Archiv: `fetched` wird bei jedem Lauf neu gesetzt, eine Archivzeile dagegen
+# nur, wenn BAFU einen neuen Zeitstempel hat. Der Unterschied ist genau der
+# zwischen "der Bot lief nicht" und "es gab nichts Neues".
+#
+# ACHTUNG, das ist eine Meldung im Nachhinein: sie kann erst rausgehen, wenn
+# wieder ein Lauf zustande kommt. Faellt der Takt vollstaendig aus, kommt gar
+# nichts — dagegen hilft nur die Fehlerbenachrichtigung des externen
+# Cron-Dienstes, die bei einem 401 des abgelaufenen Tokens anschlaegt.
+STALE_HOURS = 6
+
 # Alarm, wenn Dock 2 an mindestens so vielen Tagen in Folge nicht mehr gruen
 # ist. Dann wird das Wasser knapp und der Schwimmsteg (Dock 4) muss raus.
 DOCK2_ALERT_DAYS = 2
@@ -516,6 +531,15 @@ def main() -> int:
     except (FileNotFoundError, json.JSONDecodeError):
         old = {}
 
+    # Wie lange ist der letzte erfolgreiche Lauf her?
+    stale_h, stale_since = None, ""
+    try:
+        vorher = datetime.fromisoformat(old["fetched"])
+        stale_h = (datetime.now(timezone.utc) - vorher).total_seconds() / 3600
+        stale_since = vorher.strftime("%Y-%m-%dT%H:%MZ")
+    except (KeyError, TypeError, ValueError):
+        pass                       # erster Lauf oder kaputtes Feld: kein Alarm
+
     payload = {
         "source": "Groupe E — Seepegel-Prognose Schiffenensee",
         "source_url": URL,
@@ -718,10 +742,16 @@ def main() -> int:
             f.write(f"dock2_days={len(dry_days)}\n")
             f.write(f"dock2_from={dry_days[0] if dry_days else ''}\n")
             f.write(f"dock2_limit={d2 if d2 else ''}\n")
+            luecke = stale_h is not None and stale_h >= STALE_HOURS
+            f.write(f"stale={'true' if luecke else 'false'}\n")
+            f.write(f"stale_hours={round(stale_h) if stale_h else ''}\n")
+            f.write(f"stale_since={stale_since}\n")
     if dock2_alert:
         print(f"DOCK-2-ALARM: {len(dry_days)} Tage unter {d2} — {', '.join(dry_days)}")
     if band_cm <= NARROW_BAND_CM:
         print(f"KALIBRIERFENSTER: nur {band_cm} cm Spanne heute")
+    if stale_h is not None and stale_h >= STALE_HOURS:
+        print(f"LUECKE: {stale_h:.1f} h seit dem letzten Lauf ({stale_since})")
 
     return 0
 
