@@ -44,6 +44,7 @@ body{
   display:flex;justify-content:space-between;align-items:center;
   gap:1rem;flex-wrap:wrap;
 }
+.eyebrow .dot{color:var(--molasse);margin:0 .5em;letter-spacing:0}
 .suntimes{display:inline-flex;align-items:center;gap:.75rem;letter-spacing:.08em}
 .suntimes span{display:inline-flex;align-items:center;gap:.3rem}
 .suntimes svg{width:13px;height:13px;flex:none}
@@ -200,6 +201,14 @@ footer{
   font-size:.72rem;color:var(--muted);line-height:1.7;
 }
 footer a{color:var(--molasse-dim)}
+/* Quellen zugeklappt. <details> statt Javascript — dieselbe Schrift und Grösse
+   wie der Rest des Fussbereichs, damit es nicht wie ein Bedienelement wirkt. */
+footer details{margin-top:.55rem}
+footer summary{
+  cursor:pointer;color:var(--molasse-dim);width:fit-content;
+}
+footer summary::marker{color:var(--rule)}
+footer details[open] summary{margin-bottom:.45rem}
 .verdict .storm{
   display:inline-flex;align-items:baseline;gap:.3em;
   color:var(--warn);white-space:nowrap;
@@ -231,7 +240,7 @@ footer a{color:var(--molasse-dim)}
 
 <header>
   <div class="eyebrow">
-    <span>Pensier</span>
+    <span>Pensier<span class="dot">·</span>Schiffenensee</span>
     <span class="suntimes" id="suntimes"></span>
   </div>
   <h1>Pumpfoil<br><em>Guru</em></h1>
@@ -268,16 +277,20 @@ footer a{color:var(--molasse-dim)}
 </section>
 
 <footer>
-  Pegel-Prognose: <a href="https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen">Groupe E</a> —
-  Min/Max-Band, stündlich aktualisiert, keine Messung.<br>
-  Abfluss: <a href="https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2215">Saane – Laupen (2215)</a>
-  und <a href="https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2119">Sarine – Fribourg (2119)</a>,
-  <a href="https://www.bafu.admin.ch">Bundesamt für Umwelt BAFU</a>, via
-  <a href="https://api.existenz.ch">api.existenz.ch</a>. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.<br>
-  Wetter und UV: <a href="https://open-meteo.com">Open-Meteo</a>.
-  Strompreis: <a href="https://www.groupe-e.ch/de/strom/vario">Groupe E VARIO</a>,
-  dynamischer Tarif, viertelstündlich.<br>
   Ohne Gewähr — im Zweifel: hinfahren und schauen.
+  <details>
+    <summary>Quellen</summary>
+    Pegel-Prognose: <a href="https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen">Groupe E</a> —
+    Min/Max-Band, stündlich aktualisiert, keine Messung.<br>
+    Abfluss: <a href="https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2215">Saane – Laupen (2215)</a>
+    und <a href="https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2119">Sarine – Fribourg (2119)</a>,
+    <a href="https://www.bafu.admin.ch">Bundesamt für Umwelt BAFU</a>, via
+    <a href="https://api.existenz.ch">api.existenz.ch</a>. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.<br>
+    Wetter, UV und Pollen: <a href="https://open-meteo.com">Open-Meteo</a>,
+    gemessener Wind von MeteoSchweiz Grangeneuve.<br>
+    Strompreis: <a href="https://www.groupe-e.ch/de/strom/vario">Groupe E VARIO</a> —
+    nicht auf der Seite, läuft nur ins Archiv.
+  </details>
 </footer>
 
 </div>
@@ -592,7 +605,7 @@ function renderDocks(){
               : '';
     // Tiefe beim prognostizierten Tagestiefstand — die Zahl, die zählt
     const cm = depthWord(depthAt(d, levelMin));
-    const tief = cm == null ? '' : `Prognose Wassertiefe &gt; ${cm} cm`;
+    const tief = cm == null ? '' : `Wassertiefe &gt; ${cm} cm`;
     const zeilen = [sub, tief].filter(Boolean).join(' · ');
     el.innerHTML = `
       <span class="lamp ${s}"></span>
@@ -928,8 +941,7 @@ function renderFlow(){
 
   if (inEl && flowIn != null){
     const wi = flowState(flowIn, CONFIG.turbine.in);
-    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees. Schwankt mit dem '
-      + 'Kraftwerk Rossens — mehr Zufluss heisst: der See füllt schneller.';
+    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees';
     inEl.innerHTML = `<div class="v">${Math.round(flowIn)}<small> m³/s</small></div>`
       + `<div class="k">Zufluss</div>` + (wi ? `<div class="q">${wi}</div>` : '');
   }
@@ -945,10 +957,8 @@ function renderFlow(){
 
   const t = trendOf(flowIn, flowVal);
   if (trEl && t){
-    const vz = t.rate >= 0 ? '+' : '−';
-    trEl.title = `Zufluss ${flowIn} − Abfluss ${flowVal} = ${t.d.toFixed(1)} m³/s`
-      + `, das sind ${vz}${Math.abs(t.rate).toFixed(1)} cm pro Tag auf 4.25 km² Seefläche.`
-      + ' Grobe Bilanz — 2119 misst nur die Sarine, nicht alle Zuflüsse.';
+    // Ohne Erklärung: die Bilanz ist noch zu grob, um sie zu beschreiben —
+    // die Sense steckt drin und wird erst herausgerechnet. Siehe CODEBOOK.
     trEl.innerHTML = `<div class="v">${ARROW[t.k]}</div>`
       + `<div class="k">Pegel</div><div class="q">${t.word}</div>`;
   }
