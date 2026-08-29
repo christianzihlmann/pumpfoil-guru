@@ -58,7 +58,10 @@ body{
 .suntimes{display:inline-flex;align-items:center;gap:.35rem;letter-spacing:.08em}
 .suntimes .dot{margin:0 .15em}
 .suntimes span{display:inline-flex;align-items:center;gap:.3rem}
-.suntimes svg{width:13px;height:13px;flex:none}
+/* An die Schriftgrösse gebunden statt 13 px fest: die Zeichnung füllt rund
+   zwei Drittel der 24er-Zeichenfläche, 1.1em ergibt damit ziemlich genau die
+   Versalhöhe von SCHIFFENENSEE daneben. Skaliert mit, wenn die Schrift wächst. */
+.suntimes svg{width:1.1em;height:1.1em;flex:none}
 
 /* ── masthead ─────────────────────────────────────── */
 header{padding:2.2rem 0 1.4rem}
@@ -251,8 +254,8 @@ footer details[open] summary{margin-bottom:.45rem}
 
 <header>
   <div class="eyebrow">
-    <span>Pensier<span class="dot">·</span>Schiffenensee<span class="dot">·</span><span
-      class="suntimes" id="suntimes"></span></span>
+    <span>Pensier<span class="dot">·</span><span data-i18n="lake">Schiffenensee</span><span
+      class="dot">·</span><span class="suntimes" id="suntimes"></span></span>
     <span class="langs" id="langs"></span>
   </div>
   <h1>Pumpfoil<br><em>Guru</em></h1>
@@ -368,7 +371,8 @@ de: {
   srcFlow:'Abfluss: {l2215} und {l2119}, {bafu}, via {existenz}. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.',
   srcWx:'Wetter, UV und Pollen: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
   srcPrice:'Strompreis: {vario} — nicht auf der Seite, läuft nur ins Archiv.',
-  aqW:['sehr gut','gut','mittel','schlecht','sehr schlecht','extrem schlecht']
+  aqW:['sehr gut','gut','mittel','schlecht','sehr schlecht','extrem schlecht'],
+  lake:'Schiffenensee', noFcEmpty:'Keine Prognose.'
 },
 fr: {
   loadLevel:'Chargement des niveaux…', loadWx:'Chargement de la météo…',
@@ -388,7 +392,7 @@ fr: {
   swings:'Niveau variable', outOfOrder:'Hors service',
   floats:'flotte — niveau sans importance', closedRace:'Régate — fermé.',
   race:'Régate', training:'Entraînement d’aviron',
-  depth:'Profondeur &gt; {n} cm', measuredAt:'Mesuré {v} m s. m. · {t}',
+  depth:'Profondeur de l’eau &gt; {n} cm', measuredAt:'Mesuré {v} m s. m. · {t}',
   mapOpen:'Ouvrir {n} dans Google Maps',
   bandNote:'Il s’agit d’une plage de {n} cm, pas d’une mesure exacte. Le niveau baisse quand Groupe E turbine — souvent le matin et le soir. À midi et l’après-midi, le niveau est souvent au plus haut.',
   bandToday:' Le débit sortant ci-dessous indique si les turbines tournent.',
@@ -425,7 +429,8 @@ fr: {
   srcFlow:'Débit : {l2215} et {l2119}, {bafu}, via {existenz}. Un débit élevé signifie que les turbines tournent et que le lac baisse.',
   srcWx:'Météo, UV et pollen : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
   srcPrice:'Prix de l’électricité : {vario} — pas affiché sur la page, uniquement archivé.',
-  aqW:['très bonne','bonne','moyenne','mauvaise','très mauvaise','extrêmement mauvaise']
+  aqW:['très bonne','bonne','moyenne','mauvaise','très mauvaise','extrêmement mauvaise'],
+  lake:'Lac de Schiffenen', noFcEmpty:'Pas de prévision.'
 },
 en: {
   loadLevel:'Loading level data…', loadWx:'Loading weather…', loadFc:'Loading forecast…',
@@ -477,7 +482,8 @@ en: {
   srcFlow:'Discharge: {l2215} and {l2119}, {bafu}, via {existenz}. High discharge means the turbines are running and the lake is dropping.',
   srcWx:'Weather, UV and pollen: {om}, measured wind from MeteoSwiss Grangeneuve.',
   srcPrice:'Electricity price: {vario} — not shown on the page, archived only.',
-  aqW:['very good','good','medium','poor','very poor','extremely poor']
+  aqW:['very good','good','medium','poor','very poor','extremely poor'],
+  lake:'Lake Schiffenen', noFcEmpty:'No forecast.'
 }
 };
 
@@ -1054,13 +1060,13 @@ async function loadLevel(){
 
 function renderFC(list){
   const el = $('#fc');
-  if (!list.length){ el.innerHTML = '<span class="stamp">Keine Prognose.</span>'; return; }
+  if (!list.length){ el.innerHTML = `<span class="stamp">${T('noFcEmpty')}</span>`; return; }
   const lo = Math.min(...list.map(d=>d.min)), hi = Math.max(...list.map(d=>d.max));
   const span = Math.max(0.3, hi - lo);
   el.innerHTML = list.map((d,i) => {
     const l = (d.min - lo) / span * 100, w = Math.max(3,(d.max - d.min) / span * 100);
     return `<div class="fcrow">
-      <span class="lab">${i===0?'heute':d.date.slice(0,5)}</span>
+      <span class="lab">${i===0 ? DAYS()[0].toLowerCase() : d.date.slice(0,5)}</span>
       <span class="bar"><i style="left:${l}%;width:${w}%"></i></span>
       <span>${d.min.toFixed(2)}–${d.max.toFixed(2)}</span>
     </div>`;
