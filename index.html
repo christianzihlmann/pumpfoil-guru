@@ -382,7 +382,10 @@ de: {
   srcWx:'Wetter, UV und Pollen: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
   srcPrice:'Strompreis: {vario} — nicht auf der Seite, läuft nur ins Archiv.',
   aqW:['sehr gut','gut','mittel','schlecht','sehr schlecht','extrem schlecht'],
-  lake:'Schiffenensee', noFcEmpty:'Keine Prognose.'
+  lake:'Schiffenensee', noFcEmpty:'Keine Prognose.',
+  // Nur für die schmale Spalte der Prognoseliste. Im Französischen wäre
+  // "aujourd'hui" dort dreimal so breit wie ein Datum und sprengt die Zeile.
+  todayShort:'heute'
 },
 fr: {
   loadLevel:'Chargement des niveaux…', loadWx:'Chargement de la météo…',
@@ -440,7 +443,8 @@ fr: {
   srcWx:'Météo, UV et pollen : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
   srcPrice:'Prix de l’électricité : {vario} — pas affiché sur la page, uniquement archivé.',
   aqW:['très bonne','bonne','moyenne','mauvaise','très mauvaise','extrêmement mauvaise'],
-  lake:'Lac de Schiffenen', noFcEmpty:'Pas de prévision.'
+  lake:'Lac de Schiffenen', noFcEmpty:'Pas de prévision.',
+  todayShort:'ajd'
 },
 en: {
   loadLevel:'Loading level data…', loadWx:'Loading weather…', loadFc:'Loading forecast…',
@@ -493,7 +497,8 @@ en: {
   srcWx:'Weather, UV and pollen: {om}, measured wind from MeteoSwiss Grangeneuve.',
   srcPrice:'Electricity price: {vario} — not shown on the page, archived only.',
   aqW:['very good','good','medium','poor','very poor','extremely poor'],
-  lake:'Lake Schiffenen', noFcEmpty:'No forecast.'
+  lake:'Lake Schiffenen', noFcEmpty:'No forecast.',
+  todayShort:'today'
 }
 };
 
@@ -1076,7 +1081,7 @@ function renderFC(list){
   el.innerHTML = list.map((d,i) => {
     const l = (d.min - lo) / span * 100, w = Math.max(3,(d.max - d.min) / span * 100);
     return `<div class="fcrow">
-      <span class="lab">${i===0 ? DAYS()[0].toLowerCase() : d.date.slice(0,5)}</span>
+      <span class="lab">${i===0 ? T('todayShort') : d.date.slice(0,5)}</span>
       <span class="bar"><i style="left:${l}%;width:${w}%"></i></span>
       <span>${d.min.toFixed(2)}–${d.max.toFixed(2)}</span>
     </div>`;
