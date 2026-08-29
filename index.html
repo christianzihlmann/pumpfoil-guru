@@ -275,6 +275,8 @@ footer a{color:var(--molasse-dim)}
   <a href="https://www.bafu.admin.ch">Bundesamt für Umwelt BAFU</a>, via
   <a href="https://api.existenz.ch">api.existenz.ch</a>. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.<br>
   Wetter und UV: <a href="https://open-meteo.com">Open-Meteo</a>.
+  Strompreis: <a href="https://www.groupe-e.ch/de/strom/vario">Groupe E VARIO</a>,
+  dynamischer Tarif, viertelstündlich.<br>
   Ohne Gewähr — im Zweifel: hinfahren und schauen.
 </footer>
 
@@ -336,6 +338,25 @@ const CONFIG = {
   manual: { rowing_competition:false, dock4_installed:false },
   weather: { lat:46.8261, lon:7.1256, place:'Pensier' },
   hydro:   { station:'2215', inflow:'2119' },   // Laupen unten, Fribourg oben
+
+  // Turbiniert oder nicht. Beide Abflüsse sind ZWEIGIPFLIG — entweder läuft
+  // eine Turbine oder nicht, dazwischen liegt kaum etwas. Perzentile ("wenig,
+  // normal, viel") beschreiben deshalb Zustände, die es gar nicht gibt: der
+  // Median von q2215 lag am 27.08.2026 bei 26 m³/s, mitten in der Lücke.
+  //
+  // Die Schwellen sitzen in den Lücken der beobachteten Verteilung (n≈76):
+  //   q2215  ruhig 0–56 · LÜCKE 56–70 · turbiniert 70–155
+  //   q2119  ruhig 0–47 · LÜCKE 47–66 · turbiniert 66–87
+  // Dazwischen ein Übergangsband, statt eine Grenze zu erfinden, die es nicht
+  // gibt — beim An- und Abfahren wandert der Wert wirklich durch die Mitte.
+  //
+  // q2119 misst die Sarine unterhalb von Rossens: dessen Schwankung ist
+  // ebenfalls Kraftwerksbetrieb, nicht Regen. Deshalb dieselbe Logik.
+  // Mit längerem Archiv nachschärfen.
+  turbine: {
+    out: { calm: 25, on: 60 },     // Schiffenen, q2215
+    in:  { calm: 20, on: 55 }      // Rossens,    q2119
+  },
 
   // Seefläche bei Stauziel. Damit wird aus der Bilanz in m³/s eine Aussage
   // darüber, wie schnell der Pegel wirklich steigt oder fällt:
@@ -484,7 +505,12 @@ function renderGauge(){
   if (measured == null && levelMin != null){
     band.hidden = false;
     band.style.bottom = pct(levelMin) + '%';
-    band.style.height = Math.max(2, pct(levelMax) - pct(levelMin)) + '%';
+    // KEIN Mindestwert. Die Latte deckt 5 m ab, 2 % waren also 10 cm — jedes
+    // Band unter 10 cm wurde zu gross und alle sahen gleich aus (9, 3 und 8 cm
+    // am 29.08.2026 identisch). Sichtbar bleibt ein schmales Band trotzdem:
+    // die 1-px-Ränder oben und unten werden immer gezeichnet, box-sizing ist
+    // border-box. Ein 3-cm-Band IST auf dieser Latte eine Linie.
+    band.style.height = Math.max(0, pct(levelMax) - pct(levelMin)) + '%';
   } else band.hidden = true;
 
   const mk = $('#marker');
@@ -618,9 +644,21 @@ function renderVerdict(){
     ? `Gemessen ${fmt(measured)} m ü. M. · ${levelStamp||''}` : '';
 
   const note = $('#bandnote');
-  if (measured == null && levelMin != null && (levelMax-levelMin) > 0.15){
+  // Erscheint, solange keine echte Messung da ist — auch bei schmalem Band.
+  // Vorher lag die Schwelle bei 15 cm, wodurch der Hinweis an genau den
+  // interessanten Tagen verschwand (29.08.2026: 9, 3 und 8 cm, also an drei
+  // von vier Tagen nichts). Ein 3-cm-Band ist genau, aber immer noch eine
+  // Prognose, und das muss dastehen.
+  if (measured == null && levelMin != null){
     note.hidden = false;
-    note.innerHTML = `Das ist eine Pegelspanne von ${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. Mittags und nachmittags ist der Pegel oft am höchsten. Der Abfluss unten zeigt, ob gerade turbiniert wird.`;
+    // Der Abflusshinweis gilt nur heute: die Kachel unten zeigt den aktuellen
+    // Wert, für morgen und übermorgen gibt es keinen.
+    const jetzt = dayIdx === 0
+      ? ' Der Abfluss unten zeigt, ob gerade turbiniert wird.' : '';
+    note.innerHTML = `Das ist eine Pegelspanne von `
+      + `${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. `
+      + `Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. `
+      + `Mittags und nachmittags ist der Pegel oft am höchsten.${jetzt}`;
   } else note.hidden = true;
 }
 
@@ -686,14 +724,10 @@ async function loadLevel(){
     }
     if (d.manual) manual = {...manual, ...d.manual};   // Sperren aus data/level.json
     storm = d.warning || null;   // fehlt, wenn keine Gewitterwarnung gilt
-    if (d.hydro){
-      flowStats = d.hydro.stats || null;
-      if (flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;
-    }
-    if (d.sarine){
-      inStats = d.sarine.stats || null;
-      if (flowIn == null && d.sarine.flow != null) flowIn = d.sarine.flow;
-    }
+    // hydro.stats / sarine.stats bleiben in level.json — als Beleg für die
+    // Zweigipfligkeit im CODEBOOK. Die Seite braucht sie nicht mehr.
+    if (d.hydro && flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;
+    if (d.sarine && flowIn == null && d.sarine.flow != null) flowIn = d.sarine.flow;
     renderFlow();
     renderFC(forecast);
   }catch(e){
@@ -843,10 +877,10 @@ function renderWeather(){
   if (i === 0){ renderFlow(); renderAir(); renderPollen(); }   // nur für heute — keine Prognose dafür
 }
 
-/* Der Abfluss bekommt sein Wort aus dem eigenen Archiv (data/flow.csv, von der
-   stündlichen Action gefüllt). Solange zu wenig Verlauf da ist, steht nur die
-   Zahl — die Statistik kommt als hydro.stats in level.json mit. */
-let flowVal = null, flowIn = null, flowStats = null, inStats = null;
+/* Abfluss und Zufluss holt der Browser live von api.existenz.ch; der Stand aus
+   level.json ist nur der Notnagel. Das Wort daneben kommt aus flowState und
+   braucht kein Archiv — siehe CONFIG.turbine. */
+let flowVal = null, flowIn = null;
 
 // Pfeil als Schriftzeichen, damit er exakt auf derselben Grundlinie sitzt wie
 // die Zahlen daneben und dieselbe Farbe hat.
@@ -879,32 +913,32 @@ function trendOf(qin, qout){
                : { k:'down', word:'sinkt', d, rate };
 }
 
-function flowWord(v, s){
-  if (!s || !s.enough || v == null) return null;
-  if (v < s.p10) return 'sehr wenig';
-  if (v < s.p25) return 'wenig';
-  if (v < s.p75) return 'normal';
-  if (v < s.p90) return 'viel';
-  return 'sehr viel';
+/* Turbiniert oder nicht — die einzige Aussage, die diese Verteilung hergibt.
+   Braucht kein Archiv und ist ab dem ersten Messwert gültig, anders als die
+   Perzentile, die vorher hier standen und 300 Werte gebraucht hätten. */
+function flowState(v, t){
+  if (v == null) return null;
+  if (v >= t.on)   return 'turbiniert';
+  if (v <= t.calm) return 'ruhig';
+  return 'im Übergang';
 }
 
 function renderFlow(){
   const inEl = $('#flowin'), outEl = $('#flow'), trEl = $('#trend');
 
   if (inEl && flowIn != null){
-    const wi = flowWord(flowIn, inStats);
-    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees'
-      + (inStats ? ` — Vergleich mit ${inStats.n} Messwerten aus ${inStats.days} Tagen` : '');
+    const wi = flowState(flowIn, CONFIG.turbine.in);
+    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees. Schwankt mit dem '
+      + 'Kraftwerk Rossens — mehr Zufluss heisst: der See füllt schneller.';
     inEl.innerHTML = `<div class="v">${Math.round(flowIn)}<small> m³/s</small></div>`
       + `<div class="k">Zufluss</div>` + (wi ? `<div class="q">${wi}</div>` : '');
   }
 
   if (outEl && flowVal != null){
-    const w = flowWord(flowVal, flowStats);
-    outEl.title = flowStats
-      ? `Vergleich mit ${flowStats.n} Messwerten aus ${flowStats.days} Tagen`
-        + (flowStats.enough ? '' : ' — noch zu wenig für eine Einordnung')
-      : 'Archiv fängt gerade erst an';
+    const w = flowState(flowVal, CONFIG.turbine.out);
+    outEl.title = 'Saane bei Laupen, unterhalb der Staumauer. '
+      + `Ab ${CONFIG.turbine.out.on} m³/s läuft eine Turbine, der See sinkt dann `
+      + 'um mehrere Zentimeter pro Stunde.';
     outEl.innerHTML = `<div class="v">${Math.round(flowVal)}<small> m³/s</small></div>`
       + `<div class="k">Abfluss</div>` + (w ? `<div class="q">${w}</div>` : '');
   }

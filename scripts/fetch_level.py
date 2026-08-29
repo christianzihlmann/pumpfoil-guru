@@ -65,7 +65,8 @@ OUT = os.path.join(DATA, "level.json")
 CSV = os.path.join(DATA, "hydro.csv")
 ACTUAL = os.path.join(DATA, "level_daily.csv")     # Datum,Pegel — ein Wert pro Tag
 HEAD = ("timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215,h2467,t2467,uv,aqi,"
-        "wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt,q2179,t2179\n")
+        "wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt,smn_rad,q2179,t2179,"
+        "vario_grid,vario_all\n")
 
 UA = {"User-Agent": "pumpfoil-guru/1.0 (hobby project; contact via GitHub)"}
 
@@ -93,9 +94,47 @@ DOCK_LAT, DOCK_LON = 46.8473, 7.1414      # Dock 2, mitten in der Steggruppe
 # Stunden, 30 Minuten Frische bringen nichts.
 WARN_MAX_AGE_MIN = 50
 
+# Groupe E VARIO — der eigene dynamische Tarif, viertelstuendlich, publiziert
+# am Vortag gegen 14:50. Offiziell dokumentierte API, OHNE Schluessel
+# (`subscriptionRequired: false`). Zwei Werte je Viertelstunde:
+#   grid       Netzkomponente, richtet sich nach der Netzlast. Wird NEGATIV,
+#              wenn zu viel Strom im Netz ist (29.08.2026 mittags -3.6 Rp./kWh).
+#   integrated Gesamtpreis, den der Kunde zahlt.
+# Beides in CHF/kWh; hier auf Rappen umgerechnet.
+#
+# WOZU: Der Verdacht ist, dass der Turbinierfahrplan am Strompreis haengt.
+# Der EPEX-Spotpreis (energy-charts) war der erste Versuch und wurde am
+# 29.08.2026 wieder ausgebaut, weil VARIO naeher an der Sache ist: es ist
+# Groupe Es eigener Preis fuer Groupe Es eigenes Gebiet, er enthaelt ueber
+# `grid` deren Netzlast, und er kommt viertelstuendlich statt stuendlich.
+# Die beiden korrelieren mit r = +0.92 — aehnlich, aber nicht dasselbe.
+#
+# WAS DIE ERSTE AUSWERTUNG SAGTE (EPEX, 76 Stunden): Korrelation zu q2215
+# r = +0.59, Median 174 EUR/MWh beim Turbinieren gegen 133 in Ruhe. Klingt
+# gut — ABER die blosse Uhrzeit (6–10 und 18–24) trifft zu 95 % und verpasst
+# nichts, der Preis nur zu 86 %. In den sieben Stunden AUSSERHALB dieser
+# Fenster mit Preis ueber 150 wurde kein einziges Mal turbiniert.
+# Der Preis erklaert also bisher nichts, was die Uhr nicht auch erklaert.
+# Interessant wird er erst an Tagen, die aus dem Rhythmus fallen — davon gab
+# es in acht Augusttagen keinen. Deshalb: mitloggen, nicht auswerten.
+#
+# ACHTUNG Version: v1 ist abgeschaltet und antwortet mit HTTP 410. Bricht v2,
+# stehen die aktuellen Operationen im Entwicklerportal:
+#   https://groupeeapimanagement.developer.azure-api.net
+#   /developer/apis?api-version=2022-04-01-preview
+VARIO = "https://groupeeapimanagement.azure-api.net/v2/tariffs"
+
 SMN_STATION = "GRA"
+# `rad` ist die Globalstrahlung in W/m2, gemessen, alle 10 Minuten. Ab dem
+# 29.08.2026 mitgeloggt, um die Vermutung zu pruefen, dass der Turbinierfahrplan
+# an der Photovoltaik im Netz haengt: viel Sonne mittags -> viel PV -> billiger
+# Strom -> Groupe E turbiniert lieber morgens und abends. Genau dieses Muster
+# zeigen die Daten, die Ursache ist aber unbelegt. Zu pruefen ueber die
+# Korrelation smn_rad gegen q2215, mit Tagen unterschiedlicher Bewoelkung.
+# Der Parametername ist NICHT der SwissMetNet-Code (gre000z0), sondern die
+# eigene Kurzform von api.existenz.ch — gre000z0 liefert ein leeres Payload.
 SMN = ("https://api.existenz.ch/apiv1/smn/latest"
-       f"?locations={SMN_STATION}&parameters=ff,fx,dd,tt"
+       f"?locations={SMN_STATION}&parameters=ff,fx,dd,tt,rad"
        "&app=pumpfoil.guru&version=1.0")
 AIR = (f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={LAT}"
        f"&longitude={LON}&current=european_aqi&timezone=Europe/Zurich")
@@ -338,7 +377,8 @@ def fetch_thunderstorm():
 
 
 def fetch_smn():
-    """Echte Messwerte der MeteoSchweiz-Station. ff/fx in km/h, dd in Grad."""
+    """Echte Messwerte der MeteoSchweiz-Station.
+    ff/fx in km/h, dd in Grad, tt in °C, rad in W/m2."""
     try:
         r = requests.get(SMN, timeout=30, headers=UA)
         r.raise_for_status()
@@ -349,6 +389,36 @@ def fetch_smn():
     except Exception as e:                                  # noqa: BLE001
         print(f"SMN nicht geholt ({e})", file=sys.stderr)
         return {}
+
+
+def fetch_vario():
+    """VARIO-Preis der laufenden Viertelstunde: (grid, integrated) in Rp./kWh.
+
+    Ohne Parameter liefert der Endpunkt den laufenden Tag, 96 Viertelstunden.
+    Genommen wird das Intervall, das den Jetzt-Zeitpunkt enthaelt; faellt das
+    aus, der letzte nicht in der Zukunft liegende. Die Zeitstempel tragen einen
+    Offset, deshalb wird durchgehend zeitzonenbewusst gerechnet.
+    """
+    try:
+        r = requests.get(VARIO, timeout=30, headers=UA)
+        r.raise_for_status()
+        jetzt = datetime.now(timezone.utc)
+        letzte = None
+        for x in r.json().get("prices", []):
+            a = datetime.fromisoformat(x["start_timestamp"])
+            b = datetime.fromisoformat(x["end_timestamp"])
+            g = x.get("grid") or [{}]
+            i = x.get("integrated") or [{}]
+            werte = (None if g[0].get("value") is None else round(g[0]["value"] * 100, 3),
+                     None if i[0].get("value") is None else round(i[0]["value"] * 100, 3))
+            if a <= jetzt < b:
+                return werte
+            if a <= jetzt:
+                letzte = werte
+        return letzte if letzte else (None, None)
+    except Exception as e:                                  # noqa: BLE001
+        print(f"VARIO-Preis nicht geholt ({e})", file=sys.stderr)
+        return (None, None)
 
 
 def read_archive() -> list:
@@ -473,6 +543,7 @@ def main() -> int:
         uv = om.get("uv_index")
         aqi = fetch_current(AIR, "european_aqi").get("european_aqi")
         smn = fetch_smn()
+        v_grid, v_all = fetch_vario()
 
         # Warnung nur holen, wenn der letzte Stand alt genug ist. Das ist
         # robuster als am Zeitplan zu haengen — GitHubs Cron ist unpuenktlich.
@@ -513,7 +584,9 @@ def main() -> int:
             "wdir": om.get("wind_direction_10m"),
             "smn_ff": smn.get("ff"), "smn_fx": smn.get("fx"),
             "smn_dd": smn.get("dd"), "smn_tt": smn.get("tt"),
+            "smn_rad": smn.get("rad"),
             "q2179": sense_s.get("flow"), "t2179": sense_s.get("temperature"),
+            "vario_grid": v_grid, "vario_all": v_all,
         }, archive)
 
         payload["hydro"] = {
@@ -548,6 +621,12 @@ def main() -> int:
             "gust_measured": smn.get("fx"),
             "wind_dir_measured": smn.get("dd"),
             "temp_measured": smn.get("tt"),
+            "radiation_measured": smn.get("rad"),
+            "vario_grid": v_grid,
+            "vario_total": v_all,
+            "vario_unit": "Rp/kWh",
+            "vario_source": "Groupe E VARIO, dynamischer Tarif, "
+                            "viertelstuendlich, Vortag publiziert",
             "measured_station": SMN_STATION + " Fribourg/Grangeneuve, 8.7 km",
             "time": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         }
