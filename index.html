@@ -41,9 +41,13 @@ body{
 .eyebrow{
   font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;
   text-transform:uppercase;color:var(--molasse-dim);
-  display:flex;justify-content:space-between;align-items:center;
+  display:flex;justify-content:space-between;align-items:flex-start;
   gap:1rem;flex-wrap:wrap;
 }
+/* Ort und See in der ersten Zeile, Sonnenzeiten darunter, beide links bündig.
+   Der Sprachumschalter richtet sich an der OBEREN Kante aus, nicht an der
+   Mitte — sonst schwebte er zwischen den beiden Zeilen. */
+.eyebrow .place{line-height:1.9}
 .eyebrow .dot{color:var(--molasse);margin:0 .5em;letter-spacing:0}
 /* Sprachumschalter. Sieht aus wie der übrige Kopf — dieselbe Schrift, dieselbe
    Grösse; nur die aktive Sprache ist hell. Kein Aufklappmenü: bei drei
@@ -270,8 +274,8 @@ footer details[open] summary{margin-bottom:.45rem}
 
 <header>
   <div class="eyebrow">
-    <span>Pensier<span class="dot">·</span><span data-i18n="lake">Schiffenensee</span><span
-      class="dot">·</span><span class="suntimes" id="suntimes"></span></span>
+    <span class="place">Pensier<span class="dot">·</span><span
+      data-i18n="lake">Schiffenensee</span><br><span class="suntimes" id="suntimes"></span></span>
     <span class="langs" id="langs"></span>
   </div>
   <h1>Pumpfoil<br><em>Guru</em></h1>
