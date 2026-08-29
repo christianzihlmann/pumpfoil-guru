@@ -58,20 +58,11 @@ body{
 .suntimes{display:inline-flex;align-items:center;gap:.35rem;letter-spacing:.08em}
 .suntimes .dot{margin:0 .15em}
 .suntimes span{display:inline-flex;align-items:center;gap:.3rem}
-/* Höhe gegen die Versalhöhe der Schrift daneben gerechnet, nicht geschätzt.
-   JetBrains Mono hat capHeight 730/1000, bei .68rem also 7.94 px. Das
-   Aufgangssymbol zeichnet inklusive Strichbreite 17.8 der 24 Einheiten, füllt
-   den Kasten also zu 0.7417 — für 7.94 px Zeichnung braucht es demnach
-   7.94 / 0.7417 = 10.7 px Kasten, das sind 0.984 em.
-
-   Vorher: 13 px fest = 21 % zu hoch, danach 1.1em = immer noch 12 % zu hoch.
-
-   Das Untergangssymbol bleibt dabei rund 12 % niedriger, weil sein Strahl nur
-   bis y=5 reicht statt bis y=3. Das ist die Zeichnung selbst, kein Fehler —
-   die untergehende Sonne steht tiefer. Beide auf exakt dieselbe Höhe zu
-   bringen ginge nur mit verschiedenen Massstäben, dann wäre die Sonne im einen
-   Symbol grösser als im anderen. */
-.suntimes svg{width:.98em;height:.98em;flex:none}
+/* Höhe = Versalhöhe der Schrift daneben. JetBrains Mono hat capHeight
+   730/1000, also .73em — und weil der Zeichenbereich eng zugeschnitten ist,
+   ist das direkt die gezeichnete Höhe. Die Breite folgt dem
+   Seitenverhältnis 21.8 : 11.8, also .73 × 1.847 = 1.3483em. */
+.suntimes svg{height:.73em;width:1.3483em;flex:none}
 
 /* ── masthead ─────────────────────────────────────── */
 header{padding:2.2rem 0 1.4rem}
@@ -883,16 +874,27 @@ const WARNSIGN = `<svg viewBox="0 0 24 24" aria-hidden="true">
 
 // Sonnenauf- und -untergang. Bewusst in der Farbe der Kopfzeile, nicht gelb —
 // das sind Zeitangaben, keine Warnung.
-const SUN_UP = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+/* Sonne über der Linie heisst Aufgang, unter der Linie Untergang. Die
+   Anordnung trägt die Aussage — deshalb brauchen die Symbole keine Pfeile mehr
+   wie die vorherige Fassung, wo sie sich nur durch ein kleines Detail
+   unterschieden. Auf acht Pixel Höhe ist das ein spürbarer Unterschied.
+
+   Der Untergang ist eine exakte 180°-Drehung um die Bildmitte: (x,y) wird zu
+   (24−x, 24−y), der Bogen kippt über die Sweep-Flagge von 1 auf 0. Folge:
+   beide zeichnen exakt 11.8 der 24 Einheiten und sind damit von selbst gleich
+   hoch. Die vorige Fassung war um 12 % verschieden, weil ihre Strahlen
+   unterschiedlich weit reichten.
+
+   Der Zeichenbereich ist eng zugeschnitten, damit die Höhenangabe im CSS
+   direkt die gezeichnete Höhe ist. Seitenverhältnis 21.8 : 11.8 = 1.847. */
+const SUN_UP = `<svg viewBox="1.1 9.1 21.8 11.8" fill="none" stroke="currentColor"
   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M3 19h18M7.5 14.5a4.5 4.5 0 0 1 9 0"/>
-  <path d="M12 3v3.5M5.6 6.6l1.6 1.6M18.4 6.6l-1.6 1.6"/>
-  <path d="M9.5 10.5 12 8l2.5 2.5"/></svg>`;
-const SUN_DOWN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+  <path d="M2 20h20"/><path d="M7 20a5 5 0 0 1 10 0"/>
+  <path d="M12 13v-3"/><path d="M7.1 15.1 4.9 12.9"/><path d="M16.9 15.1 19.1 12.9"/></svg>`;
+const SUN_DOWN = `<svg viewBox="1.1 3.1 21.8 11.8" fill="none" stroke="currentColor"
   stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M3 19h18M7.5 14.5a4.5 4.5 0 0 1 9 0"/>
-  <path d="M12 8.5V5M5.6 6.6l1.6 1.6M18.4 6.6l-1.6 1.6"/>
-  <path d="M9.5 6 12 8.5 14.5 6"/></svg>`;
+  <path d="M2 4h20"/><path d="M7 4a5 5 0 0 0 10 0"/>
+  <path d="M12 11v3"/><path d="M16.9 8.9 19.1 11.1"/><path d="M7.1 8.9 4.9 11.1"/></svg>`;
 
 const PIN = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
