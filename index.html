@@ -382,9 +382,12 @@ de: {
   bafuName:'Bundesamt für Umwelt BAFU',
   srcLevel:'Pegel-Prognose: {gE} — Min/Max-Band, stündlich aktualisiert, keine Messung.',
   srcFlow:'Abfluss: {l2215} und {l2119}, {bafu}, via {existenz}. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.',
-  srcWx:'Wetter und UV: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
+  srcWx:'Wetter, UV und Luftqualität: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
   srcPrice:'Strompreis: {vario} — nicht auf der Seite, läuft nur ins Archiv.',
-  aqW:['sehr gut','gut','mittel','schlecht','sehr schlecht','extrem schlecht'],
+  // Amtliche Bezeichnungen der EUA, nicht frei gewählte. Vorher war die Skala
+   // um eine Stufe zu wohlwollend: was die EUA "ausreichend" nennt, stand hier
+   // als "gut". Klein geschrieben wie die übrigen Kachelwörter.
+  aqW:['gut','ausreichend','mässig','schlecht','sehr schlecht','äusserst schlecht'],
   lake:'Schiffenensee', noFcEmpty:'Keine Prognose.',
   // Nur für die schmale Spalte der Prognoseliste. Im Französischen wäre
   // "aujourd'hui" dort dreimal so breit wie ein Datum und sprengt die Zeile.
@@ -444,10 +447,11 @@ fr: {
   bafuName:'Office fédéral de l’environnement OFEV',
   srcLevel:'Prévision du niveau : {gE} — plage min/max, mise à jour chaque heure, pas une mesure.',
   srcFlow:'Débit : {l2215} et {l2119}, {bafu}, via {existenz}. Un débit élevé signifie que les turbines tournent et que le lac baisse.',
-  srcWx:'Météo et UV : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
+  srcWx:'Météo, UV et qualité de l’air : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
   srcPrice:'Prix de l’électricité : {vario} — pas affiché sur la page, uniquement archivé.',
-  // Weiblich: Bezugswort ist "la qualité".
-  aqW:['très bonne','bonne','moyenne','mauvaise','très mauvaise','extrêmement mauvaise'],
+  // Amtliche EAQI-Bezeichnungen. Männlich, weil es Kategorienamen sind
+  // ("indice : moyen"), keine Aussage über "la qualité".
+  aqW:['bon','moyen','dégradé','mauvais','très mauvais','extrêmement mauvais'],
   lake:'Lac de Schiffenen', noFcEmpty:'Pas de prévision.',
   todayShort:'ajd'
 },
@@ -496,9 +500,9 @@ en: {
   bafuName:'Federal Office for the Environment FOEN',
   srcLevel:'Level forecast: {gE} — min/max band, updated hourly, not a measurement.',
   srcFlow:'Discharge: {l2215} and {l2119}, {bafu}, via {existenz}. High discharge means the turbines are running and the lake is dropping.',
-  srcWx:'Weather and UV: {om}, measured wind from MeteoSwiss Grangeneuve.',
+  srcWx:'Weather, UV and air quality: {om}, measured wind from MeteoSwiss Grangeneuve.',
   srcPrice:'Electricity price: {vario} — not shown on the page, archived only.',
-  aqW:['very good','good','medium','poor','very poor','extremely poor'],
+  aqW:['good','fair','moderate','poor','very poor','extremely poor'],
   lake:'Lake Schiffenen', noFcEmpty:'No forecast.',
   todayShort:'today'
 }
