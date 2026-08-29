@@ -45,7 +45,18 @@ body{
   gap:1rem;flex-wrap:wrap;
 }
 .eyebrow .dot{color:var(--molasse);margin:0 .5em;letter-spacing:0}
-.suntimes{display:inline-flex;align-items:center;gap:.75rem;letter-spacing:.08em}
+/* Sprachumschalter. Sieht aus wie der übrige Kopf — dieselbe Schrift, dieselbe
+   Grösse; nur die aktive Sprache ist hell. Kein Aufklappmenü: bei drei
+   Sprachen ist Nebeneinander kürzer als jedes Menü. */
+.langs{display:inline-flex;gap:.55em;letter-spacing:.18em}
+.langs button{
+  background:none;border:0;padding:0;cursor:pointer;
+  font:inherit;letter-spacing:inherit;text-transform:uppercase;
+  color:var(--molasse-dim);
+}
+.langs button[aria-current="true"]{color:var(--bone)}
+.suntimes{display:inline-flex;align-items:center;gap:.35rem;letter-spacing:.08em}
+.suntimes .dot{margin:0 .15em}
 .suntimes span{display:inline-flex;align-items:center;gap:.3rem}
 .suntimes svg{width:13px;height:13px;flex:none}
 
@@ -240,12 +251,13 @@ footer details[open] summary{margin-bottom:.45rem}
 
 <header>
   <div class="eyebrow">
-    <span>Pensier<span class="dot">·</span>Schiffenensee</span>
-    <span class="suntimes" id="suntimes"></span>
+    <span>Pensier<span class="dot">·</span>Schiffenensee<span class="dot">·</span><span
+      class="suntimes" id="suntimes"></span></span>
+    <span class="langs" id="langs"></span>
   </div>
   <h1>Pumpfoil<br><em>Guru</em></h1>
   <div class="tabs" id="tabs" role="tablist"></div>
-  <p class="verdict" id="verdict">Lade Pegeldaten…</p>
+  <p class="verdict" id="verdict" data-i18n="loadLevel">Lade Pegeldaten…</p>
   <p class="stamp" id="stamp"></p>
 </header>
 
@@ -263,7 +275,7 @@ footer details[open] summary{margin-bottom:.45rem}
 
 <section>
   <h2 id="wxhead">Wetter heute</h2>
-  <div class="now" id="wx"><span class="stamp">Lade Wetter…</span></div>
+  <div class="now" id="wx"><span class="stamp" data-i18n="loadWx">Lade Wetter…</span></div>
 </section>
 
 <section>
@@ -272,30 +284,290 @@ footer details[open] summary{margin-bottom:.45rem}
 </section>
 
 <section>
-  <h2>Seepegel-Prognose Groupe E</h2>
-  <div class="fc" id="fc"><span class="stamp">Lade Prognose…</span></div>
+  <h2 data-i18n="fcTitle">Seepegel-Prognose Groupe E</h2>
+  <div class="fc" id="fc"><span class="stamp" data-i18n="loadFc">Lade Prognose…</span></div>
 </section>
 
 <footer>
-  Ohne Gewähr — im Zweifel: hinfahren und schauen.
+  <span data-i18n="disclaimer">Ohne Gewähr — im Zweifel: hinfahren und schauen.</span>
   <details>
-    <summary>Quellen</summary>
-    Pegel-Prognose: <a href="https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen">Groupe E</a> —
-    Min/Max-Band, stündlich aktualisiert, keine Messung.<br>
-    Abfluss: <a href="https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2215">Saane – Laupen (2215)</a>
-    und <a href="https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2119">Sarine – Fribourg (2119)</a>,
-    <a href="https://www.bafu.admin.ch">Bundesamt für Umwelt BAFU</a>, via
-    <a href="https://api.existenz.ch">api.existenz.ch</a>. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.<br>
-    Wetter, UV und Pollen: <a href="https://open-meteo.com">Open-Meteo</a>,
-    gemessener Wind von MeteoSchweiz Grangeneuve.<br>
-    Strompreis: <a href="https://www.groupe-e.ch/de/strom/vario">Groupe E VARIO</a> —
-    nicht auf der Seite, läuft nur ins Archiv.
+    <summary data-i18n="sources">Quellen</summary>
+    <div id="src"></div>
   </details>
 </footer>
 
 </div>
 
 <script>
+/* ══════════════════════════════════════════════════════
+   SPRACHEN — Deutsch, Französisch, Englisch
+   ══════════════════════════════════════════════════════
+   Der Club hat Mitglieder in allen drei Sprachen.
+
+   Auswahl in dieser Reihenfolge:
+     1. ?lang=fr in der Adresse — schlägt alles andere
+     2. navigator.languages, die Sprachliste des Browsers. Auf Telefonen
+        folgt sie der Gerätesprache; das ist der übliche Weg.
+     3. Deutsch
+
+   KEIN localStorage — das ist eine Projektregel. Die Wahl hält deshalb über
+   die Adresse: wer umschaltet, bekommt ?lang=xx angehängt, und ein Lesezeichen
+   darauf bleibt bei seiner Sprache. Ohne Parameter entscheidet wieder der
+   Browser. Für eine Seite ohne Speicher ist das die ehrliche Lösung.       */
+const LANGS = ['de', 'fr', 'en'];
+const LOCALE = { de:'de-CH', fr:'fr-CH', en:'en-GB' };
+
+const I18N = {
+de: {
+  loadLevel:'Lade Pegeldaten…', loadWx:'Lade Wetter…', loadFc:'Lade Prognose…',
+  noLevel:'Keine Pegeldaten verfügbar.',
+  noWx:'Wetter nicht verfügbar.',
+  noFc:'Prognose nicht verfügbar — läuft der GitHub-Action schon?',
+  nowIn:'Jetzt in {p}', wxIn:'Wetter {d} in {p}', fcTitle:'Seepegel-Prognose Groupe E',
+  disclaimer:'Ohne Gewähr — im Zweifel: hinfahren und schauen.', sources:'Quellen',
+  days:['Heute','Morgen','Übermorgen'], parts:['Morgen','Mittag','Nachmittag','Abend'],
+  and:' und ',
+  allGo:'Alle offenen Docks gehen.', allBlocked:'Alle Docks gesperrt.',
+  nothing:'Es geht nichts. Pegel ausserhalb aller Fenster.',
+  goes:'{x} geht.', goPl:'{x} gehen.', limit:'{x} am Limit.', blockedS:'{x} gesperrt.',
+  swings:'Pegel schwankt', outOfOrder:'Out of order',
+  floats:'schwimmt mit — Pegel egal', closedRace:'Ruderwettkampf — gesperrt.',
+  race:'Ruderwettkampf', training:'Rudertraining',
+  depth:'Wassertiefe &gt; {n} cm', measuredAt:'Gemessen {v} m ü. M. · {t}',
+  mapOpen:'{n} auf Google Maps öffnen',
+  bandNote:'Das ist eine Pegelspanne von {n} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. Mittags und nachmittags ist der Pegel oft am höchsten.',
+  bandToday:' Der Abfluss unten zeigt, ob gerade turbiniert wird.',
+  stormNow:'Gewitterwarnung aktiv', stormFrom:'Gewitterwarnung ab {t}',
+  air:'Luft', temp:'Temp.', maxmin:'max / min', feels:'Real Feel',
+  feelsT:'Gefühlte Temperatur — Wind, Feuchte und Sonne eingerechnet',
+  rain:'Regen', chance:'Chance', wind:'Wind', windMax:'Wind max',
+  gust:'Böen', gustMax:'Böen max', windDir:'Wind-<br>richtung',
+  windFrom:'Wind kommt aus {d} ({g}°)', aq:'Luftqualität',
+  aqT:'European Air Quality Index (EAQI) — kleiner ist besser',
+  vis:'Sicht', visT:'Sichtweite laut Modell, keine Messung',
+  uvT:'UV-Index nach WHO-Skala', pollen:'Pollen',
+  pollenT:'Stärkste Art: {n}. Körner pro m³ — Belastungsklassen der allergenen Pollenarten',
+  inflow:'Zufluss', outflow:'Abfluss', level:'Pegel',
+  inflowT:'Sarine bei Fribourg, oberhalb des Sees',
+  outflowT:'Saane bei Laupen, unterhalb der Staumauer. Ab {n} m³/s läuft eine Turbine, der See sinkt dann um mehrere Zentimeter pro Stunde.',
+  sunUp:'Sonnenaufgang', sunDown:'Sonnenuntergang',
+  rainTo:'Regen bis {n}%',
+  flow:['turbiniert','ruhig','im Übergang'],
+  trend:['steigt','sinkt','konstant'],
+  uv:['niedrig','mässig','hoch','sehr hoch','extrem'],
+  visW:['Nebel','starker Dunst','Dunst','klar'],
+  polN:['Gräser','Birke','Erle','Beifuss','Ambrosia'],
+  polW:['keine','schwach','mässig','stark','sehr stark'],
+  dirs:['N','NNO','NO','ONO','O','OSO','SO','SSO','S','SSW','SW','WSW','W','WNW','NW','NNW'],
+  sky:['Klar','Meist klar','Leicht bewölkt','Bedeckt','Nebel','Nieselregen','Regen',
+       'Starkregen','Schnee','Schauer','Starke Schauer','Gewitter'],
+  bft:['Windstille','leiser Zug','leichte Brise','schwache Brise','mässige Brise',
+       'frische Brise','starker Wind','steifer Wind','stürmischer Wind','Sturm','schwerer Sturm'],
+  bafuName:'Bundesamt für Umwelt BAFU',
+  srcLevel:'Pegel-Prognose: {gE} — Min/Max-Band, stündlich aktualisiert, keine Messung.',
+  srcFlow:'Abfluss: {l2215} und {l2119}, {bafu}, via {existenz}. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.',
+  srcWx:'Wetter, UV und Pollen: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
+  srcPrice:'Strompreis: {vario} — nicht auf der Seite, läuft nur ins Archiv.',
+  aqW:['sehr gut','gut','mittel','schlecht','sehr schlecht','extrem schlecht']
+},
+fr: {
+  loadLevel:'Chargement des niveaux…', loadWx:'Chargement de la météo…',
+  loadFc:'Chargement de la prévision…',
+  noLevel:'Aucune donnée de niveau disponible.',
+  noWx:'Météo indisponible.',
+  noFc:'Prévision indisponible — le GitHub Action tourne-t-il déjà ?',
+  nowIn:'Maintenant à {p}', wxIn:'Météo {d} à {p}',
+  fcTitle:'Prévision du niveau du lac, Groupe E',
+  disclaimer:'Sans garantie — en cas de doute : allez voir sur place.', sources:'Sources',
+  days:['Aujourd’hui','Demain','Après-demain'], parts:['Matin','Midi','Après-midi','Soir'],
+  and:' et ',
+  allGo:'Tous les pontons ouverts sont praticables.', allBlocked:'Tous les pontons sont fermés.',
+  nothing:'Rien ne va. Niveau hors de toutes les plages.',
+  goes:'{x} est praticable.', goPl:'{x} sont praticables.',
+  limit:'{x} à la limite.', blockedS:'{x} fermé.',
+  swings:'Niveau variable', outOfOrder:'Hors service',
+  floats:'flotte — niveau sans importance', closedRace:'Régate — fermé.',
+  race:'Régate', training:'Entraînement d’aviron',
+  depth:'Profondeur &gt; {n} cm', measuredAt:'Mesuré {v} m s. m. · {t}',
+  mapOpen:'Ouvrir {n} dans Google Maps',
+  bandNote:'Il s’agit d’une plage de {n} cm, pas d’une mesure exacte. Le niveau baisse quand Groupe E turbine — souvent le matin et le soir. À midi et l’après-midi, le niveau est souvent au plus haut.',
+  bandToday:' Le débit sortant ci-dessous indique si les turbines tournent.',
+  stormNow:'Alerte orage en cours', stormFrom:'Alerte orage dès {t}',
+  air:'Air', temp:'Temp.', maxmin:'max / min', feels:'Ressenti',
+  feelsT:'Température ressentie — vent, humidité et soleil compris',
+  rain:'Pluie', chance:'Risque', wind:'Vent', windMax:'Vent max',
+  gust:'Rafales', gustMax:'Rafales max', windDir:'Direction<br>du vent',
+  windFrom:'Vent venant du {d} ({g}°)', aq:'Qualité de l’air',
+  aqT:'European Air Quality Index (EAQI) — plus bas est meilleur',
+  vis:'Visibilité', visT:'Visibilité selon le modèle, pas une mesure',
+  uvT:'Indice UV selon l’échelle de l’OMS', pollen:'Pollen',
+  pollenT:'Espèce dominante : {n}. Grains par m³ — classes de charge pollinique',
+  inflow:'Entrée', outflow:'Sortie', level:'Niveau',
+  inflowT:'Sarine à Fribourg, en amont du lac',
+  outflowT:'Sarine à Laupen, en aval du barrage. Dès {n} m³/s une turbine tourne et le lac baisse de plusieurs centimètres par heure.',
+  sunUp:'Lever du soleil', sunDown:'Coucher du soleil',
+  rainTo:'Pluie jusqu’à {n}%',
+  flow:['turbinage','calme','en transition'],
+  trend:['monte','baisse','stable'],
+  uv:['faible','modéré','élevé','très élevé','extrême'],
+  visW:['brouillard','brume épaisse','brume','clair'],
+  polN:['Graminées','Bouleau','Aulne','Armoise','Ambroisie'],
+  polW:['nulle','faible','modérée','forte','très forte'],
+  // ACHTUNG: im Französischen ist O = Ouest = Westen, nicht Ost wie im
+  // Deutschen. E steht für Est. Ein Vertauschen dreht den Wind um 180°.
+  dirs:['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'],
+  sky:['Ciel clair','Plutôt clair','Peu nuageux','Couvert','Brouillard','Bruine','Pluie',
+       'Forte pluie','Neige','Averses','Fortes averses','Orage'],
+  bft:['Calme','Très légère brise','Légère brise','Petite brise','Jolie brise',
+       'Bonne brise','Vent frais','Grand frais','Coup de vent','Fort coup de vent','Tempête'],
+  bafuName:'Office fédéral de l’environnement OFEV',
+  srcLevel:'Prévision du niveau : {gE} — plage min/max, mise à jour chaque heure, pas une mesure.',
+  srcFlow:'Débit : {l2215} et {l2119}, {bafu}, via {existenz}. Un débit élevé signifie que les turbines tournent et que le lac baisse.',
+  srcWx:'Météo, UV et pollen : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
+  srcPrice:'Prix de l’électricité : {vario} — pas affiché sur la page, uniquement archivé.',
+  aqW:['très bonne','bonne','moyenne','mauvaise','très mauvaise','extrêmement mauvaise']
+},
+en: {
+  loadLevel:'Loading level data…', loadWx:'Loading weather…', loadFc:'Loading forecast…',
+  noLevel:'No level data available.',
+  noWx:'Weather unavailable.',
+  noFc:'Forecast unavailable — is the GitHub Action running yet?',
+  nowIn:'Now in {p}', wxIn:'Weather {d} in {p}', fcTitle:'Lake level forecast, Groupe E',
+  disclaimer:'No guarantee — when in doubt, go and look.', sources:'Sources',
+  days:['Today','Tomorrow','Day after'], parts:['Morning','Midday','Afternoon','Evening'],
+  and:' and ',
+  allGo:'All open docks are good.', allBlocked:'All docks closed.',
+  nothing:'Nothing doing. Level outside every window.',
+  goes:'{x} is good.', goPl:'{x} are good.', limit:'{x} borderline.', blockedS:'{x} closed.',
+  swings:'Level swings', outOfOrder:'Out of order',
+  floats:'floats with the water — level irrelevant', closedRace:'Rowing race — closed.',
+  race:'Rowing race', training:'Rowing training',
+  depth:'Water depth &gt; {n} cm', measuredAt:'Measured {v} m a.s.l. · {t}',
+  mapOpen:'Open {n} in Google Maps',
+  bandNote:'That is a {n} cm range, not an exact measurement. The lake drops when Groupe E runs the turbines — often mornings and evenings. Around midday and in the afternoon the level is usually highest.',
+  bandToday:' The outflow below shows whether the turbines are running.',
+  stormNow:'Thunderstorm warning active', stormFrom:'Thunderstorm warning from {t}',
+  air:'Air', temp:'Temp.', maxmin:'max / min', feels:'Feels like',
+  feelsT:'Apparent temperature — wind, humidity and sun included',
+  rain:'Rain', chance:'Chance', wind:'Wind', windMax:'Wind max',
+  gust:'Gusts', gustMax:'Gusts max', windDir:'Wind<br>direction',
+  windFrom:'Wind from {d} ({g}°)', aq:'Air quality',
+  aqT:'European Air Quality Index (EAQI) — lower is better',
+  vis:'Visibility', visT:'Visibility from the model, not a measurement',
+  uvT:'UV index on the WHO scale', pollen:'Pollen',
+  pollenT:'Strongest type: {n}. Grains per m³ — official pollen load classes',
+  inflow:'Inflow', outflow:'Outflow', level:'Level',
+  inflowT:'Sarine at Fribourg, upstream of the lake',
+  outflowT:'Saane at Laupen, below the dam. From {n} m³/s a turbine is running and the lake drops several centimetres per hour.',
+  sunUp:'Sunrise', sunDown:'Sunset',
+  rainTo:'Rain up to {n}%',
+  flow:['turbining','calm','changing'],
+  trend:['rising','falling','steady'],
+  uv:['low','moderate','high','very high','extreme'],
+  visW:['fog','heavy haze','haze','clear'],
+  polN:['Grass','Birch','Alder','Mugwort','Ragweed'],
+  polW:['none','low','moderate','high','very high'],
+  dirs:['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'],
+  sky:['Clear','Mostly clear','Partly cloudy','Overcast','Fog','Drizzle','Rain',
+       'Heavy rain','Snow','Showers','Heavy showers','Thunderstorm'],
+  bft:['Calm','Light air','Light breeze','Gentle breeze','Moderate breeze','Fresh breeze',
+       'Strong breeze','Near gale','Gale','Strong gale','Storm'],
+  bafuName:'Federal Office for the Environment FOEN',
+  srcLevel:'Level forecast: {gE} — min/max band, updated hourly, not a measurement.',
+  srcFlow:'Discharge: {l2215} and {l2119}, {bafu}, via {existenz}. High discharge means the turbines are running and the lake is dropping.',
+  srcWx:'Weather, UV and pollen: {om}, measured wind from MeteoSwiss Grangeneuve.',
+  srcPrice:'Electricity price: {vario} — not shown on the page, archived only.',
+  aqW:['very good','good','medium','poor','very poor','extremely poor']
+}
+};
+
+function pickLang(){
+  const u = new URLSearchParams(location.search).get('lang');
+  if (LANGS.includes(u)) return u;
+  for (const l of (navigator.languages || [navigator.language || 'de'])){
+    const p = String(l).slice(0, 2).toLowerCase();
+    if (LANGS.includes(p)) return p;
+  }
+  return 'de';
+}
+let lang = pickLang();
+
+/* Die Adressen stehen EINMAL hier, die Sätze drumherum je Sprache im
+   Wörterbuch. Sonst müsste man eine geänderte URL an drei Stellen nachziehen.
+   Die Groupe-E-Links zeigen bewusst auf die deutschen Seiten: die
+   französischen Entsprechungen sind nicht durchgehend geprüft, und ein
+   funktionierender Link in der falschen Sprache ist besser als ein toter. */
+const SRC = {
+  gE:'https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen',
+  s2215:'https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2215',
+  s2119:'https://www.hydrodaten.admin.ch/de/seen-und-fluesse/stationen-und-daten/2119',
+  bafu:'https://www.bafu.admin.ch',
+  existenz:'https://api.existenz.ch',
+  om:'https://open-meteo.com',
+  vario:'https://www.groupe-e.ch/de/strom/vario'
+};
+
+/* Fällt ein Schlüssel in einer Sprache aus, greift Deutsch — lieber ein
+   deutsches Wort als ein leeres Feld oder der rohe Schlüsselname. */
+function T(key, vars){
+  let v = I18N[lang][key];
+  if (v === undefined) v = I18N.de[key];
+  if (v === undefined) return key;
+  if (vars) for (const k in vars) v = v.split('{' + k + '}').join(vars[k]);
+  return v;
+}
+
+function renderSources(){
+  const el = document.querySelector('#src');
+  if (!el) return;
+  const a = (href, text) => `<a href="${href}">${text}</a>`;
+  const L = {
+    gE:a(SRC.gE, 'Groupe E'),
+    l2215:a(SRC.s2215, 'Saane – Laupen (2215)'),
+    l2119:a(SRC.s2119, 'Sarine – Fribourg (2119)'),
+    bafu:a(SRC.bafu, T('bafuName')),
+    existenz:a(SRC.existenz, 'api.existenz.ch'),
+    om:a(SRC.om, 'Open-Meteo'),
+    vario:a(SRC.vario, 'Groupe E VARIO')
+  };
+  el.innerHTML = ['srcLevel','srcFlow','srcWx','srcPrice'].map(k => T(k, L)).join('<br>');
+}
+
+/* Alles neu beschriften. Wird beim Start und bei jedem Wechsel gerufen —
+   die Seite wird nicht neu geladen, damit der gewählte Tag stehen bleibt. */
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = T(el.dataset.i18n);
+  });
+  const box = document.querySelector('#langs');
+  if (box){
+    box.innerHTML = LANGS.map(l =>
+      `<button type="button" data-l="${l}" aria-current="${l === lang}"`
+      + ` lang="${l}">${l}</button>`).join('');
+    box.onclick = e => {
+      const b = e.target.closest('button');
+      if (b && b.dataset.l !== lang) setLang(b.dataset.l);
+    };
+  }
+  renderSources();
+  renderTabs(); renderAll(); renderWeather();
+  if (typeof forecast !== 'undefined' && forecast.length) renderFC(forecast);
+}
+
+/* Die Wahl hält über die Adresse, nicht über localStorage — Projektregel.
+   replaceState statt href-Zuweisung: kein Neuladen, kein neuer Verlaufseintrag,
+   der Zurück-Knopf bleibt brauchbar. Wer die Seite mit ?lang=fr als Lesezeichen
+   ablegt, bekommt immer Französisch. */
+function setLang(l){
+  if (!LANGS.includes(l)) return;
+  lang = l;
+  const u = new URL(location.href);
+  u.searchParams.set('lang', l);
+  history.replaceState(null, '', u);
+  applyLang();
+}
+
 /* ══════════════════════════════════════════════════════
    CONFIG — hier anpassen
    ══════════════════════════════════════════════════════ */
@@ -409,7 +681,7 @@ const rowingOn = iso => rowing.find(e => iso >= e.from && iso <= e.to) || null;
 
 /* Groupe E liefert mehrere Tage. dayIdx wählt, welcher gezeigt wird —
    Pegel, Ampeln und Wetter hängen alle daran. Abfluss gibt es nur für heute. */
-const DAYS = ['Heute','Morgen','Übermorgen'];
+const DAYS = () => T('days');
 let forecast = [], dayIdx = 0, measuredRaw = null, wx = null, storm = null;
 let manual = {...CONFIG.manual};
 
@@ -419,20 +691,13 @@ const pct = m => Math.max(0, Math.min(100,
   (m - CONFIG.scale.min) / (CONFIG.scale.max - CONFIG.scale.min) * 100));
 
 /* ── Windstärke in Worten (Beaufort) ───────────────── */
-const WIND = [
-  [  1, 'still',          'Windstille'],
-  [  6, 'sehr leicht',    'leiser Zug · 1 Bft'],
-  [ 12, 'leicht',         'leichte Brise · 2 Bft'],
-  [ 20, 'schwach',        'schwache Brise · 3 Bft'],
-  [ 29, 'mässig',         'mässige Brise · 4 Bft'],
-  [ 39, 'frisch',         'frische Brise · 5 Bft'],
-  [ 50, 'stark',          'starker Wind · 6 Bft'],
-  [ 62, 'steif',          'steifer Wind · 7 Bft'],
-  [ 75, 'stürmisch',      'stürmischer Wind · 8 Bft'],
-  [ 89, 'Sturm',          'Sturm · 9 Bft'],
-  [1e9, 'schwerer Sturm', 'schwerer Sturm · ab 10 Bft']
-];
-const windWord = k => WIND.find(([m]) => k < m);
+/* Beaufort. Das kurze Wort ist von der Kachel verschwunden — dort stehen
+   Knoten — und lebt nur noch im Tooltip weiter, wo es die Skala erklärt. */
+const BFT = [1, 6, 12, 20, 29, 39, 50, 62, 75, 89, 1e9];
+const windWord = k => {
+  const i = BFT.findIndex(m => k < m);
+  return `${T('bft')[i]}${i ? ` · ${i} Bft` : ''}`;
+};
 
 /* Knoten statt Beaufort-Wort auf der Kachel. Die amtlichen Wörter sind fürs
    Pumpfoilen irreführend: „mässige Brise" ist für uns schon fast zu viel.
@@ -447,13 +712,12 @@ const kn = kmh => {
 
 /* Windrichtung ist meteorologisch die Richtung, aus der es weht.
    270° heisst Westwind — der Wind kommt von Westen. */
-const UV_W = [[3,'niedrig'],[6,'mässig'],[8,'hoch'],[11,'sehr hoch'],[1e9,'extrem']];
-const uvWord = v => UV_W.find(([m]) => v < m)[1];
+const UV_S = [3, 6, 8, 11, 1e9];
+const uvWord = v => T('uv')[UV_S.findIndex(m => v < m)];
 
 /* European Air Quality Index, Skala der EEA */
-const AQI_W = [[20,'sehr gut'],[40,'gut'],[60,'mittel'],
-               [80,'schlecht'],[100,'sehr schlecht'],[1e9,'extrem schlecht']];
-const aqiWord = v => AQI_W.find(([m]) => v < m)[1];
+const AQI_S = [20, 40, 60, 80, 100, 1e9];
+const aqiWord = v => T('aqW')[AQI_S.findIndex(m => v < m)];
 
 /* Pollen. Werte in Körnern pro m³, Klassen nach der amtlichen Tabelle von
    MeteoSchweiz, "Belastungsklassen der allergenen Pollenarten":
@@ -465,30 +729,32 @@ const aqiWord = v => AQI_W.find(([m]) => v < m)[1];
    Die Schwellen sind artspezifisch: Ambrosia ist schon bei wenigen Körnern
    relevant, Gräser erst deutlich später. */
 const POLLEN = [
-  { key:'grass_pollen',   name:'Gräser',   steps:[1, 20,  50, 150] },
-  { key:'birch_pollen',   name:'Birke',    steps:[1, 11,  70, 300] },
-  { key:'alder_pollen',   name:'Erle',     steps:[1, 11,  70, 250] },
-  { key:'mugwort_pollen', name:'Beifuss',  steps:[1,  6,  15,  50] },
-  { key:'ragweed_pollen', name:'Ambrosia', steps:[1,  6,  11,  40] }
+  // Der Name kommt aus T('polN'), an derselben Stelle wie hier — deshalb nur
+  // Schlüssel und Schwellen. Reihenfolge muss zur Wortliste passen.
+  { key:'grass_pollen',   steps:[1, 20,  50, 150] },
+  { key:'birch_pollen',   steps:[1, 11,  70, 300] },
+  { key:'alder_pollen',   steps:[1, 11,  70, 250] },
+  { key:'mugwort_pollen', steps:[1,  6,  15,  50] },
+  { key:'ragweed_pollen', steps:[1,  6,  11,  40] }
   // Olive liefert Open-Meteo zwar mit, sie fehlt aber in der Schweizer
   // Tabelle und fliegt hier praktisch nie — deshalb nicht ausgewertet.
 ];
-const POLLEN_WORDS = ['keine', 'schwach', 'mässig', 'stark', 'sehr stark'];
+const POLLEN_WORDS = () => T('polW');
 const pollenLevel = (v, steps) => steps.filter(t => v >= t).length;
 
 /* Sichtweite. Die Grenzen folgen der gängigen meteorologischen Einteilung:
    unter 1 km ist definitionsgemäss Nebel, darüber Dunst in Abstufungen.
    Keine amtliche Schweizer Norm, aber verbreitet und nachvollziehbar. */
-const SICHT = [[1,'Nebel'],[4,'starker Dunst'],[10,'Dunst'],[1e9,'klar']];
-const sichtWord = km => SICHT.find(([m]) => km < m)[1];
+const SICHT_S = [1, 4, 10, 1e9];
+const sichtWord = km => T('visW')[SICHT_S.findIndex(m => km < m)];
 
 /* Tagesabschnitte. Die Stunden sind so gewählt, dass sie zum Pumpfoilen
    passen — nicht meteorologisch, sondern praktisch. */
-const ABSCHNITTE = [['Morgen',6,11],['Mittag',11,14],['Nachmittag',14,18],['Abend',18,22]];
+const ABSCHNITTE = [[6,11],[11,14],[14,18],[18,22]];
 
-const DIRS = ['N','NNO','NO','ONO','O','OSO','SO','SSO',
-              'S','SSW','SW','WSW','W','WNW','NW','NNW'];
-const dirWord = deg => DIRS[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
+/* Die Kürzel sind sprachabhängig, und zwar heimtückisch: französisch O steht
+   für Ouest, also Westen — deutsch O für Ost. Deshalb je Sprache eine Liste. */
+const dirWord = deg => T('dirs')[Math.round((((deg % 360) + 360) % 360) / 22.5) % 16];
 
 /* ── Ampel-Logik ───────────────────────────────────── */
 function rate(dock, m){
@@ -499,25 +765,25 @@ function rate(dock, m){
 }
 // Aufzaehlung: "A, B und C" statt "A und B und C"
 const list = a => a.length < 2 ? (a[0] || '')
-  : a.slice(0, -1).join(', ') + ' und ' + a[a.length - 1];
+  : a.slice(0, -1).join(', ') + T('and') + a[a.length - 1];
 
 function statusFor(dock){
   // Manuelle Sperren gehen dem Pegel vor
   if (dock.manual && !manual.dock4_installed)
-    return { s:'stop', split:false, why:'Out of order' };
+    return { s:'stop', split:false, why:T('outOfOrder') };
   if (dock.rowing && manual.rowing_competition)
-    return { s:'stop', split:false, why:'Ruderwettkampf — gesperrt.' };
+    return { s:'stop', split:false, why:T('closedRace') };
 
   // Kalender des Ruderclubs: orange, nicht rot. Der See ist belegt, gesperrt
   // ist er nicht — die Einschätzung bleibt beim Fahrer. Steht bewusst VOR der
   // Schwimmsteg-Regel, sonst käme Dock 4 nie hierher.
   if (dock.regatta && rowingDay)
     return { s:'warn', split:false,
-             note: rowingDay.kind === 'race' ? 'Ruderwettkampf' : 'Rudertraining' };
+             note: rowingDay.kind === 'race' ? T('race') : T('training') };
 
   // Schwimmsteg hebt und senkt sich mit dem Wasser — der Pegel ist ihm egal.
   // Er hat deshalb gar keine Schwellen und steht nicht an der Messlatte.
-  if (dock.floating) return { s:'go', split:false, note:'schwimmt mit — Pegel egal' };
+  if (dock.floating) return { s:'go', split:false, note:T('floats') };
 
   if (measured != null) return { s: rate(dock, measured), split:false };
   if (levelMin == null) return { s:'off', split:false };
@@ -624,16 +890,16 @@ function renderDocks(){
       el.href = d.map;
       el.target = '_blank';
       el.rel = 'noopener';
-      el.title = `${d.name} auf Google Maps öffnen`;
+      el.title = T('mapOpen', { n:d.name });
     }
     // calibrated bleibt in der Config als Notiz für uns, wird aber nicht angezeigt
     const sub = why   ? `<span class="blocked">${why}</span>`
               : note  ? note
-              : split ? 'Pegel schwankt'
+              : split ? T('swings')
               : '';
     // Tiefe beim prognostizierten Tagestiefstand — die Zahl, die zählt
     const cm = depthWord(depthAt(d, levelMin));
-    const tief = cm == null ? '' : `Wassertiefe &gt; ${cm} cm`;
+    const tief = cm == null ? '' : T('depth', { n:cm });
     const zeilen = [sub, tief].filter(Boolean).join(' · ');
     el.innerHTML = `
       <span class="lamp ${s}"></span>
@@ -648,7 +914,7 @@ function renderDocks(){
 
 function renderVerdict(){
   const v = $('#verdict');
-  if (levelMin == null && measured == null){ v.textContent = 'Keine Pegeldaten verfügbar.'; return; }
+  if (levelMin == null && measured == null){ v.textContent = T('noLevel'); return; }
   const st      = docks.filter(d => d.summary !== false).map(d => ({ d, ...statusFor(d) }));
   const blocked = st.filter(x => x.why);
   const open    = st.filter(x => !x.why);
@@ -656,29 +922,31 @@ function renderVerdict(){
   const iffy    = open.filter(x => x.s === 'warn').map(x => x.d.name);
 
   let txt;
-  if (!open.length)                     txt = 'Alle Docks gesperrt.';
-  else if (good.length === open.length) txt = open.length === 1 ? `${good[0]} geht.` : 'Alle offenen Docks gehen.';
-  else if (good.length)                 txt = `${list(good)} ${good.length>1?'gehen':'geht'}.`
-                                            + (iffy.length ? ` ${list(iffy)} am Limit.` : '');
-  else if (iffy.length)                 txt = `${list(iffy)} am Limit.`;
-  else                                  txt = 'Es geht nichts. Pegel ausserhalb aller Fenster.';
-  if (blocked.length) txt += ` ${list(blocked.map(x => x.d.name))} gesperrt.`;
+  if (!open.length)                     txt = T('allBlocked');
+  else if (good.length === open.length) txt = open.length === 1
+                                            ? T('goes', { x:good[0] }) : T('allGo');
+  else if (good.length)                 txt = T(good.length > 1 ? 'goPl' : 'goes', { x:list(good) })
+                                            + (iffy.length ? ' ' + T('limit', { x:list(iffy) }) : '');
+  else if (iffy.length)                 txt = T('limit', { x:list(iffy) });
+  else                                  txt = T('nothing');
+  if (blocked.length) txt += ' ' + T('blockedS', { x:list(blocked.map(x => x.d.name)) });
 
   // Ruderbetrieb gilt für den gewählten Tag, nicht nur für heute — man schaut
   // ja gerade nach, ob morgen etwas geht.
   let extra = '';
   if (rowingDay){
-    const wort = rowingDay.kind === 'race' ? 'Ruderwettkampf' : 'Rudertraining';
+    const wort = rowingDay.kind === 'race' ? T('race') : T('training');
+    const heute = dayIdx === 0 ? DAYS()[0] + ' ' : '';
     extra += ` <span class="storm" title="${rowingDay.name.replace(/"/g,'')}">`
-           + `${WARNSIGN}${dayIdx === 0 ? 'Heute ' : ''}${wort}.</span>`;
+           + `${WARNSIGN}${heute}${wort}.</span>`;
   }
   if (storm && dayIdx === 0){
-    const t = s => s ? new Date(s).toLocaleTimeString('de-CH',
+    const t = s => s ? new Date(s).toLocaleTimeString(LOCALE[lang],
       { hour:'2-digit', minute:'2-digit' }) : '';
     const kommt = storm.onset && new Date(storm.onset) > new Date();
-    const wort = kommt ? `Gewitterwarnung ab ${t(storm.onset)}` : 'Gewitterwarnung aktiv';
+    const wort = kommt ? T('stormFrom', { t:t(storm.onset) }) : T('stormNow');
     const tip = [storm.event, storm.severity, storm.area,
-                 storm.expires ? `bis ${t(storm.expires)}` : ''].filter(Boolean).join(' · ');
+                 storm.expires ? t(storm.expires) : ''].filter(Boolean).join(' · ');
     extra += ` <span class="storm" title="${tip}">${WARNSIGN}${wort}.</span>`;
   }
   v.innerHTML = txt.replace(/&/g,'&amp;').replace(/</g,'&lt;') + extra;
@@ -688,7 +956,7 @@ function renderVerdict(){
   // hier die echte Messung; das ist etwas anderes als eine Prognose.
   const s = $('#stamp');
   s.textContent = measured != null
-    ? `Gemessen ${fmt(measured)} m ü. M. · ${levelStamp||''}` : '';
+    ? T('measuredAt', { v:fmt(measured), t:levelStamp || '' }) : '';
 
   const note = $('#bandnote');
   // Erscheint, solange keine echte Messung da ist — auch bei schmalem Band.
@@ -700,12 +968,8 @@ function renderVerdict(){
     note.hidden = false;
     // Der Abflusshinweis gilt nur heute: die Kachel unten zeigt den aktuellen
     // Wert, für morgen und übermorgen gibt es keinen.
-    const jetzt = dayIdx === 0
-      ? ' Der Abfluss unten zeigt, ob gerade turbiniert wird.' : '';
-    note.innerHTML = `Das ist eine Pegelspanne von `
-      + `${Math.round((levelMax-levelMin)*100)} cm, keine exakte Messung. `
-      + `Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. `
-      + `Mittags und nachmittags ist der Pegel oft am höchsten.${jetzt}`;
+    const jetzt = dayIdx === 0 ? T('bandToday') : '';
+    note.innerHTML = T('bandNote', { n:Math.round((levelMax-levelMin)*100) }) + jetzt;
   } else note.hidden = true;
 }
 
@@ -713,8 +977,8 @@ function renderAll(){ renderGauge(); renderDocks(); renderVerdict(); }
 
 function renderTabs(){
   const t = $('#tabs');
-  const n = Math.max(1, Math.min(DAYS.length, forecast.length));
-  t.innerHTML = DAYS.slice(0, n).map((lab, i) =>
+  const n = Math.max(1, Math.min(DAYS().length, forecast.length));
+  t.innerHTML = DAYS().slice(0, n).map((lab, i) =>
     `<button role="tab" data-i="${i}" aria-selected="${i === dayIdx}">${lab}</button>`).join('');
   t.onclick = e => {
     const b = e.target.closest('button');
@@ -756,10 +1020,11 @@ function icon(code, big){
   else g = cloud + rain;
   return `<svg viewBox="0 0 44 44" aria-hidden="true">${g}</svg>`;
 }
-const SKY = {0:'Klar',1:'Meist klar',2:'Leicht bewölkt',3:'Bedeckt',45:'Nebel',48:'Nebel',
-  51:'Nieselregen',53:'Nieselregen',55:'Nieselregen',61:'Regen',63:'Regen',65:'Starkregen',
-  71:'Schnee',73:'Schnee',75:'Schnee',80:'Schauer',81:'Schauer',82:'Starke Schauer',
-  95:'Gewitter',96:'Gewitter',99:'Gewitter'};
+/* Wettercode auf einen Platz in T('sky'). Die Wortliste steht bei den Sprachen,
+   die Zuordnung Code -> Platz ist sprachunabhängig und deshalb hier. */
+const SKY_I = {0:0, 1:1, 2:2, 3:3, 45:4, 48:4, 51:5, 53:5, 55:5, 61:6, 63:6, 65:7,
+  71:8, 73:8, 75:8, 80:9, 81:9, 82:10, 95:11, 96:11, 99:11};
+const skyWord = code => (SKY_I[code] == null ? '' : T('sky')[SKY_I[code]]);
 
 /* ── Daten holen ───────────────────────────────────── */
 async function loadLevel(){
@@ -770,7 +1035,7 @@ async function loadLevel(){
     forecast = d.forecast || [];
     if (d.measured && d.measured.level != null){
       measuredRaw = d.measured.level;
-      levelStamp = new Date(d.measured.time).toLocaleString('de-CH',{hour:'2-digit',minute:'2-digit'});
+      levelStamp = new Date(d.measured.time).toLocaleString(LOCALE[lang],{hour:'2-digit',minute:'2-digit'});
     }
     if (d.manual) manual = {...manual, ...d.manual};   // Sperren aus data/level.json
     storm = d.warning || null;   // fehlt, wenn keine Gewitterwarnung gilt
@@ -782,7 +1047,7 @@ async function loadLevel(){
     renderFlow();
     renderFC(forecast);
   }catch(e){
-    $('#fc').innerHTML = '<span class="stamp">Prognose nicht verfügbar — läuft der GitHub-Action schon?</span>';
+    $('#fc').innerHTML = `<span class="stamp">${T('noFc')}</span>`;
   }
   applyDay();
 }
@@ -814,7 +1079,7 @@ async function loadWeather(){
     renderWeather();
     loadHydro();
     loadAir();
-  }catch(e){ $('#now').innerHTML = '<span class="stamp">Wetter nicht verfügbar.</span>'; }
+  }catch(e){ $('#now').innerHTML = `<span class="stamp">${T('noWx')}</span>`; }
 }
 
 /* Eine Kachel: Wert gross, darunter die Bezeichnung, darunter die Einordnung.
@@ -836,7 +1101,8 @@ function tile(value, label, qual, opts){
 function abschnitte(dateStr){
   if (!wx || !wx.hourly) return [];
   const h = wx.hourly;
-  return ABSCHNITTE.map(([lab, von, bis]) => {
+  return ABSCHNITTE.map(([von, bis], nr) => {
+    const lab = T('parts')[nr];
     const idx = h.time.map((t, i) => [t, i])
       .filter(([t]) => t.slice(0, 10) === dateStr
                     && +t.slice(11, 13) >= von && +t.slice(11, 13) < bis)
@@ -869,8 +1135,9 @@ function renderWeather(){
   if (!wx) return;
   const i = dayIdx, c = wx.current, dy = wx.daily;
 
-  $('#wxhead').textContent  = `Wetter ${DAYS[i].toLowerCase()} in Pensier`;
-  $('#nowhead').textContent = i === 0 ? 'Jetzt in Pensier' : `${DAYS[i]} in Pensier`;
+  const ort = CONFIG.weather.place;
+  $('#wxhead').textContent  = T('wxIn', { d:DAYS()[i].toLowerCase(), p:ort });
+  $('#nowhead').textContent = i === 0 ? T('nowIn', { p:ort }) : `${DAYS()[i]} · ${ort}`;
 
   const sr = dy.sunrise[i].slice(11), ss = dy.sunset[i].slice(11);
 
@@ -896,34 +1163,35 @@ function renderWeather(){
   $('#wx').innerHTML = teile.length
     ? teile.map(a => tile(icon(a.code), a.lab,
         a.tmin == null ? '' : `${Math.round(a.tmin)}–${Math.round(a.tmax)}°`,
-        { cls:'seg', title:`${SKY[a.code]||''} · Regen bis ${a.regen}%` })).join('')
-    : '<span class="stamp">Keine Stundenwerte.</span>';
+        { cls:'seg', title:`${skyWord(a.code)} · ${T('rainTo', { n:a.regen })}` })).join('')
+    : `<span class="stamp">${T('noWx')}</span>`;
 
   $('#now').innerHTML =
-      tile(heute ? `${Math.round(c.temperature_2m)}°` : temp, 'Luft',
-           heute ? 'Temp.' : 'max / min')
-    + tile(heute ? `${Math.round(feel)}°` : feel, 'Luft', 'Real Feel',
-           { title:'Gefühlte Temperatur — Wind, Feuchte und Sonne eingerechnet' })
-    + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, 'Regen', 'Chance'))
-    + tile(`${Math.round(wind)}<small> km/h</small>`, heute ? 'Wind' : 'Wind max',
-           kn(wind), { title:windWord(wind)[2] })
-    + tile(`${Math.round(gust)}<small> km/h</small>`, heute ? 'Böen' : 'Böen max',
-           kn(gust), { title:windWord(gust)[2] })
-    + tile(dirWord(dir), 'Wind-<br>richtung', '',
-           { title:`Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)` })
-    + (heute ? tile('–', 'Luftqualität', '', { id:'aqi' }) : '')
+      tile(heute ? `${Math.round(c.temperature_2m)}°` : temp, T('air'),
+           heute ? T('temp') : T('maxmin'))
+    + tile(heute ? `${Math.round(feel)}°` : feel, T('air'), T('feels'),
+           { title:T('feelsT') })
+    + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, T('rain'), T('chance')))
+    + tile(`${Math.round(wind)}<small> km/h</small>`, heute ? T('wind') : T('windMax'),
+           kn(wind), { title:windWord(wind) })
+    + tile(`${Math.round(gust)}<small> km/h</small>`, heute ? T('gust') : T('gustMax'),
+           kn(gust), { title:windWord(gust) })
+    + tile(dirWord(dir), T('windDir'), '',
+           { title:T('windFrom', { d:dirWord(dir), g:Math.round(dir) }) })
+    + (heute ? tile('–', T('aq'), '', { id:'aqi' }) : '')
     + (sicht == null ? '' : tile(`${sicht < 10 ? sicht.toFixed(1) : Math.round(sicht)}<small> km</small>`,
-           'Sicht', sichtWord(sicht), { title:'Sichtweite laut Modell, keine Messung' }))
+           T('vis'), sichtWord(sicht), { title:T('visT') }))
     + tile(uv.toFixed(1), heute ? 'UV' : 'UV max', uvWord(uv),
-           { title:'UV-Index nach WHO-Skala' })
-    + tile('–', 'Pollen', '', { id:'pollen' })
-    + (heute ? tile('–', 'Zufluss', '', { id:'flowin' })
-             + tile('–', 'Abfluss', '', { id:'flow' })
-             + tile('–', 'Pegel', '', { id:'trend' }) : '');
+           { title:T('uvT') })
+    + tile('–', T('pollen'), '', { id:'pollen' })
+    + (heute ? tile('–', T('inflow'), '', { id:'flowin' })
+             + tile('–', T('outflow'), '', { id:'flow' })
+             + tile('–', T('level'), '', { id:'trend' }) : '');
 
   $('#suntimes').innerHTML =
-      `<span title="Sonnenaufgang">${SUN_UP}${sr}</span>`
-    + `<span title="Sonnenuntergang">${SUN_DOWN}${ss}</span>`;
+      `<span title="${T('sunUp')}">${SUN_UP}${sr}</span>`
+    + `<span class="dot">·</span>`
+    + `<span title="${T('sunDown')}">${SUN_DOWN}${ss}</span>`;
 
   if (i === 0){ renderFlow(); renderAir(); renderPollen(); }   // nur für heute — keine Prognose dafür
 }
@@ -959,9 +1227,9 @@ function trendOf(qin, qout){
   const d = qin - qout;
   const rate = cmPerDay(d);
   if (Math.abs(rate) < CONFIG.trendDeadbandCmPerDay)
-    return { k:'flat', word:'konstant', d, rate };
-  return d > 0 ? { k:'up', word:'steigt', d, rate }
-               : { k:'down', word:'sinkt', d, rate };
+    return { k:'flat', word:T('trend')[2], d, rate };
+  return d > 0 ? { k:'up', word:T('trend')[0], d, rate }
+               : { k:'down', word:T('trend')[1], d, rate };
 }
 
 /* Turbiniert oder nicht — die einzige Aussage, die diese Verteilung hergibt.
@@ -969,9 +1237,9 @@ function trendOf(qin, qout){
    Perzentile, die vorher hier standen und 300 Werte gebraucht hätten. */
 function flowState(v, t){
   if (v == null) return null;
-  if (v >= t.on)   return 'turbiniert';
-  if (v <= t.calm) return 'ruhig';
-  return 'im Übergang';
+  if (v >= t.on)   return T('flow')[0];
+  if (v <= t.calm) return T('flow')[1];
+  return T('flow')[2];
 }
 
 function renderFlow(){
@@ -979,18 +1247,16 @@ function renderFlow(){
 
   if (inEl && flowIn != null){
     const wi = flowState(flowIn, CONFIG.turbine.in);
-    inEl.title = 'Sarine bei Fribourg, oberhalb des Sees';
+    inEl.title = T('inflowT');
     inEl.innerHTML = `<div class="v">${Math.round(flowIn)}<small> m³/s</small></div>`
-      + `<div class="k">Zufluss</div>` + (wi ? `<div class="q">${wi}</div>` : '');
+      + `<div class="k">${T('inflow')}</div>` + (wi ? `<div class="q">${wi}</div>` : '');
   }
 
   if (outEl && flowVal != null){
     const w = flowState(flowVal, CONFIG.turbine.out);
-    outEl.title = 'Saane bei Laupen, unterhalb der Staumauer. '
-      + `Ab ${CONFIG.turbine.out.on} m³/s läuft eine Turbine, der See sinkt dann `
-      + 'um mehrere Zentimeter pro Stunde.';
+    outEl.title = T('outflowT', { n:CONFIG.turbine.out.on });
     outEl.innerHTML = `<div class="v">${Math.round(flowVal)}<small> m³/s</small></div>`
-      + `<div class="k">Abfluss</div>` + (w ? `<div class="q">${w}</div>` : '');
+      + `<div class="k">${T('outflow')}</div>` + (w ? `<div class="q">${w}</div>` : '');
   }
 
   const t = trendOf(flowIn, flowVal);
@@ -998,7 +1264,7 @@ function renderFlow(){
     // Ohne Erklärung: die Bilanz ist noch zu grob, um sie zu beschreiben —
     // die Sense steckt drin und wird erst herausgerechnet. Siehe CODEBOOK.
     trEl.innerHTML = `<div class="v">${ARROW[t.k]}</div>`
-      + `<div class="k">Pegel</div><div class="q">${t.word}</div>`;
+      + `<div class="k">${T('level')}</div><div class="q">${t.word}</div>`;
   }
 }
 
@@ -1024,9 +1290,9 @@ async function loadAir(){
 function renderAir(){
   const el = $('#aqi');
   if (!el || aqi == null) return;
-  el.title = 'European Air Quality Index (EAQI) — kleiner ist besser';
+  el.title = T('aqT');
   el.innerHTML = `<div class="v">${Math.round(aqi)}</div>`
-    + `<div class="k">Luftqualität</div><div class="q">${aqiWord(aqi)}</div>`;
+    + `<div class="k">${T('aq')}</div><div class="q">${aqiWord(aqi)}</div>`;
 }
 
 function renderPollen(){
@@ -1040,19 +1306,18 @@ function renderPollen(){
     const v = pollen[p.key];
     if (v == null) continue;
     const lvl = pollenLevel(v, p.steps);
-    alle.push(`${p.name} ${v.toFixed(1)}`);
+    alle.push(`${T('polN')[POLLEN.indexOf(p)]} ${v.toFixed(1)}`);
     if (!best || lvl > best.lvl || (lvl === best.lvl && v > best.v))
-      best = { lvl, v, name:p.name };
+      best = { lvl, v, name:T('polN')[POLLEN.indexOf(p)] };
   }
   if (!best) return;
 
   // Zahl gross wie bei allen anderen Kacheln, Klasse darunter. Welche Art die
   // Zahl trägt, steht im Tooltip — sonst wird die Kachel wieder zu breit.
-  el.title = `Stärkste Art: ${best.name}. Körner pro m³ — ` + alle.join(' · ')
-    + '. Klassen nach MeteoSchweiz.';
+  el.title = T('pollenT', { n:best.name }) + ': ' + alle.join(' · ');
   el.innerHTML = `<div class="v">${best.v.toFixed(1)}</div>`
-    + `<div class="k">Pollen</div>`
-    + `<div class="q">${POLLEN_WORDS[best.lvl]}</div>`;
+    + `<div class="k">${T('pollen')}</div>`
+    + `<div class="q">${POLLEN_WORDS()[best.lvl]}</div>`;
 }
 
 async function loadHydro(){
@@ -1069,7 +1334,7 @@ async function loadHydro(){
   renderFlow();
 }
 
-renderTicks(); renderTabs(); renderAll(); loadLevel(); loadWeather();
+renderTicks(); applyLang(); loadLevel(); loadWeather();
 setInterval(loadLevel, 300000);
 setInterval(loadWeather, 600000);
 </script>
