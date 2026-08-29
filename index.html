@@ -434,6 +434,17 @@ const WIND = [
 ];
 const windWord = k => WIND.find(([m]) => k < m);
 
+/* Knoten statt Beaufort-Wort auf der Kachel. Die amtlichen Wörter sind fürs
+   Pumpfoilen irreführend: „mässige Brise" ist für uns schon fast zu viel.
+   Knoten sind die Einheit, in der Wassersportler denken, und sagen nichts,
+   was sie nicht messen. Das Beaufort-Wort bleibt im Tooltip stehen.
+   Unter 10 kn eine Nachkommastelle — dort unten entscheidet sich, ob es
+   spiegelglatt ist, und 3 gegen 4 Knoten ist ein spürbarer Unterschied. */
+const kn = kmh => {
+  const k = kmh / 1.852;
+  return `${k < 10 ? k.toFixed(1) : Math.round(k)} kn`;
+};
+
 /* Windrichtung ist meteorologisch die Richtung, aus der es weht.
    270° heisst Westwind — der Wind kommt von Westen. */
 const UV_W = [[3,'niedrig'],[6,'mässig'],[8,'hoch'],[11,'sehr hoch'],[1e9,'extrem']];
@@ -895,9 +906,9 @@ function renderWeather(){
            { title:'Gefühlte Temperatur — Wind, Feuchte und Sonne eingerechnet' })
     + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, 'Regen', 'Chance'))
     + tile(`${Math.round(wind)}<small> km/h</small>`, heute ? 'Wind' : 'Wind max',
-           windWord(wind)[1], { title:windWord(wind)[2] })
+           kn(wind), { title:windWord(wind)[2] })
     + tile(`${Math.round(gust)}<small> km/h</small>`, heute ? 'Böen' : 'Böen max',
-           windWord(gust)[1], { title:windWord(gust)[2] })
+           kn(gust), { title:windWord(gust)[2] })
     + tile(dirWord(dir), 'Wind-<br>richtung', '',
            { title:`Wind kommt aus ${dirWord(dir)} (${Math.round(dir)}°)` })
     + (heute ? tile('–', 'Luftqualität', '', { id:'aqi' }) : '')
