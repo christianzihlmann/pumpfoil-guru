@@ -323,7 +323,13 @@ const CONFIG = {
   refLevel: 531.41,
   refLevelCalibrated: false,
 
-  // rowing:true  → bei Ruderwettkampf gesperrt
+  // rowing:true  → bei manuell gesetztem Ruderwettkampf gesperrt (rot)
+  // regatta:true → liegt im Betriebsbereich des Ruderclubs. An Tagen aus
+  //                dessen Kalender orange, nicht rot: der See ist belegt,
+  //                aber nicht gesperrt. Dock 1 ist privat und nie betroffen.
+  //                Bewusst ein EIGENES Merkmal, nicht rowing: der manuelle
+  //                Schalter lässt Dock 4 absichtlich unberührt, der Kalender
+  //                nicht — dort liegt der Schwimmsteg mitten im Geschehen.
   // manual:true  → nur da, wenn manuell eingeschaltet
   // floating:true → Schwimmsteg, hat gar keine Pegelgrenzen
   //
@@ -334,15 +340,15 @@ const CONFIG = {
     { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:false,
       groundRel:-1.07, stopLowRel:-0.20, goLowRel:-0.10, goHigh:532.50, stopHigh:532.50 },
 
-    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:false, rowing:true,
+    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:false, rowing:true, regatta:true,
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
       groundRel:-1.91, stopLowRel:-1.11, goLowRel:-0.91, goHigh:532.50, stopHigh:532.50 },
 
-    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:false, rowing:true,
+    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:false, rowing:true, regatta:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
       groundRel:-4.15, stopLowRel:-3.35, goLowRel:-3.15, goHigh:532.50, stopHigh:532.50 },
 
-    { id:'d4', short:'D4', name:'Dock 4', place:'Floating', manual:true, summary:false, floating:true,
+    { id:'d4', short:'D4', name:'Dock 4', place:'Floating', manual:true, summary:false, floating:true, regatta:true,
       map:'https://maps.app.goo.gl/fDbZoVYaNq99WqA36' }   // 46.847556, 7.142008
   ],
 
@@ -396,6 +402,10 @@ let docks = CONFIG.docks.map(d => ({
   goLow:   d.goLowRel   == null ? undefined : +(CONFIG.refLevel + d.goLowRel).toFixed(2)
 }));
 let levelMin = null, levelMax = null, measured = null, levelStamp = null;
+/* Anlässe des Ruderclubs Vevey in Schiffenen, aus data/level.json.
+   rowingDay hält den Anlass des gerade gewählten Tages, sonst null. */
+let rowing = [], rowingDay = null;
+const rowingOn = iso => rowing.find(e => iso >= e.from && iso <= e.to) || null;
 
 /* Groupe E liefert mehrere Tage. dayIdx wählt, welcher gezeigt wird —
    Pegel, Ampeln und Wetter hängen alle daran. Abfluss gibt es nur für heute. */
@@ -486,6 +496,13 @@ function statusFor(dock){
     return { s:'stop', split:false, why:'Out of order' };
   if (dock.rowing && manual.rowing_competition)
     return { s:'stop', split:false, why:'Ruderwettkampf — gesperrt.' };
+
+  // Kalender des Ruderclubs: orange, nicht rot. Der See ist belegt, gesperrt
+  // ist er nicht — die Einschätzung bleibt beim Fahrer. Steht bewusst VOR der
+  // Schwimmsteg-Regel, sonst käme Dock 4 nie hierher.
+  if (dock.regatta && rowingDay)
+    return { s:'warn', split:false,
+             note: rowingDay.kind === 'race' ? 'Ruderwettkampf' : 'Rudertraining' };
 
   // Schwimmsteg hebt und senkt sich mit dem Wasser — der Pegel ist ihm egal.
   // Er hat deshalb gar keine Schwellen und steht nicht an der Messlatte.
@@ -636,8 +653,14 @@ function renderVerdict(){
   else                                  txt = 'Es geht nichts. Pegel ausserhalb aller Fenster.';
   if (blocked.length) txt += ` ${list(blocked.map(x => x.d.name))} gesperrt.`;
 
-  // Gewitterwarnung nur heute und nur, wenn es eine gibt — sonst gar nichts
+  // Ruderbetrieb gilt für den gewählten Tag, nicht nur für heute — man schaut
+  // ja gerade nach, ob morgen etwas geht.
   let extra = '';
+  if (rowingDay){
+    const wort = rowingDay.kind === 'race' ? 'Ruderwettkampf' : 'Rudertraining';
+    extra += ` <span class="storm" title="${rowingDay.name.replace(/"/g,'')}">`
+           + `${WARNSIGN}${dayIdx === 0 ? 'Heute ' : ''}${wort}.</span>`;
+  }
   if (storm && dayIdx === 0){
     const t = s => s ? new Date(s).toLocaleTimeString('de-CH',
       { hour:'2-digit', minute:'2-digit' }) : '';
@@ -645,7 +668,7 @@ function renderVerdict(){
     const wort = kommt ? `Gewitterwarnung ab ${t(storm.onset)}` : 'Gewitterwarnung aktiv';
     const tip = [storm.event, storm.severity, storm.area,
                  storm.expires ? `bis ${t(storm.expires)}` : ''].filter(Boolean).join(' · ');
-    extra = ` <span class="storm" title="${tip}">${WARNSIGN}${wort}.</span>`;
+    extra += ` <span class="storm" title="${tip}">${WARNSIGN}${wort}.</span>`;
   }
   v.innerHTML = txt.replace(/&/g,'&amp;').replace(/</g,'&lt;') + extra;
 
@@ -692,6 +715,9 @@ function applyDay(){
   const f = forecast[dayIdx];
   levelMin = f ? f.min : null;
   levelMax = f ? f.max : null;
+  // TT.MM.JJJJ aus der Prognose in JJJJ-MM-TT, damit sich Zeichenketten
+  // vergleichen lassen — kein Date-Objekt, keine Zeitzonenfallen.
+  rowingDay = f ? rowingOn(`${f.date.slice(6)}-${f.date.slice(3,5)}-${f.date.slice(0,2)}`) : null;
   measured = dayIdx === 0 ? measuredRaw : null;   // Sensormessung gilt nur für heute
   renderTabs(); renderAll(); renderWeather();
 }
@@ -737,6 +763,7 @@ async function loadLevel(){
     }
     if (d.manual) manual = {...manual, ...d.manual};   // Sperren aus data/level.json
     storm = d.warning || null;   // fehlt, wenn keine Gewitterwarnung gilt
+    rowing = (d.rowing && d.rowing.events) || [];
     // hydro.stats / sarine.stats bleiben in level.json — als Beleg für die
     // Zweigipfligkeit im CODEBOOK. Die Seite braucht sie nicht mehr.
     if (d.hydro && flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;

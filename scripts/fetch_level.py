@@ -31,7 +31,8 @@ import json
 import os
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
+from html import unescape
 
 import requests
 
@@ -123,6 +124,32 @@ WARN_MAX_AGE_MIN = 50
 #   https://groupeeapimanagement.developer.azure-api.net
 #   /developer/apis?api-version=2022-04-01-preview
 VARIO = "https://groupeeapimanagement.azure-api.net/v2/tariffs"
+
+# Wettkampfkalender des Club Aviron Vevey. Die Tabelle "Date | Lieu | Evenement"
+# nennt bei jedem Anlass den Ort; uns interessieren nur die mit "Schiffenen".
+# An solchen Tagen ist der See von Ruderbooten belegt.
+#
+# Franzoesische Datumsangaben, und zwar unregelmaessige: "10 octobre",
+# "13 - 14 juin", "10-11 janvier", "1er fevrier", "3 - 4 - 5 juillet",
+# "15 juin - 2 juillet" (ueber den Monatswechsel!) und "TBA fin octobre",
+# das gar kein Datum ist. Der Parser unten deckt alle diese Formen ab; was er
+# nicht versteht, laesst er weg — lieber eine Luecke als ein falsches Orange.
+#
+# Einmal die Woche reicht: ein Jahreskalender aendert sich selten, und die
+# Seite gehoert einem Verein, der uns nichts schuldet.
+ROWING = "https://aviron-vevey.ch/calendrier-competition/"
+ROWING_MAX_AGE_DAYS = 7
+ROWING_PLACE = "schiffenen"
+
+MOIS = {"janvier": 1, "février": 2, "fevrier": 2, "mars": 3, "avril": 4,
+        "mai": 5, "juin": 6, "juillet": 7, "août": 8, "aout": 8,
+        "septembre": 9, "octobre": 10, "novembre": 11,
+        "décembre": 12, "decembre": 12}
+
+# Trainingslager sind keine Wettkaempfe. Das Wort auf der Seite richtet sich
+# danach, sonst stuende ueber einem 18-taegigen Trainingsblock "Wettkampf".
+ROWING_TRAINING = ("entrainement", "entraînement", "préparation", "preparation",
+                   "stage", "camp")
 
 SMN_STATION = "GRA"
 # `rad` ist die Globalstrahlung in W/m2, gemessen, alle 10 Minuten. Ab dem
@@ -388,6 +415,73 @@ def fetch_thunderstorm():
         return best
     except Exception as e:                                  # noqa: BLE001
         print(f"Warnungen nicht geholt ({e})", file=sys.stderr)
+        return None
+
+
+def rowing_dates(txt: str, year: int):
+    """Franzoesische Datumsangabe -> (erster Tag, letzter Tag) oder None.
+
+    Jede Zahl bekommt den naechsten Monatsnamen, der IHR FOLGT; steht keiner
+    mehr dahinter, den letzten der Zeile. Genau das macht "15 juin - 2 juillet"
+    und "13 - 15 fevrier" gleichzeitig richtig.
+    """
+    t = txt.replace("\u00a0", " ").replace("–", "-").replace("—", "-").lower()
+    tage = [(int(m.group(1)), m.start())
+            for m in re.finditer(r"\b(\d{1,2})(?:er)?\b", t)]
+    # group(0), nicht group(1): das zusammengesetzte Muster hat keine Klammern
+    monate = [(MOIS[m.group(0)], m.start())
+              for m in re.finditer("|".join(MOIS), t)]
+    if not tage or not monate:
+        return None                    # z.B. "TBA fin octobre"
+    raus = []
+    for tag, pos in tage:
+        mon = next((mm for mm, mp in monate if mp >= pos), monate[-1][0])
+        try:
+            raus.append(date(year, mon, tag))
+        except ValueError:
+            return None                # 31. Februar und dergleichen
+    return min(raus), max(raus)
+
+
+def fetch_rowing():
+    """Anlaesse in Schiffenen aus dem Vereinskalender. Leere Liste bei Fehler —
+    ein Ausfall darf die Ampel nie einfaerben."""
+    try:
+        r = requests.get(ROWING, timeout=30, headers=UA)
+        r.raise_for_status()
+        html = r.text
+        jahr = int(re.search(r"Calendrier[^<]{0,40}?(20\d\d)", html).group(1)) \
+            if re.search(r"Calendrier[^<]{0,40}?(20\d\d)", html) \
+            else datetime.now().year
+        tbl = re.search(r"<table.*?</table>", html, re.S)
+        if not tbl:
+            raise ValueError("keine Tabelle")
+        t = re.sub(r"</t[dh]>", "|", tbl.group(0), flags=re.I)
+        t = re.sub(r"</tr>", "\n", t, flags=re.I)
+        t = re.sub(r"<[^>]+>", "", t)
+        t = unescape(t)
+        zellen = [c.strip() for c in t.replace("\n", "|").split("|") if c.strip()]
+        # Kopfzeile abschneiden, dann in Dreiergruppen Datum/Ort/Anlass
+        if zellen[:3] and "date" in zellen[0].lower():
+            zellen = zellen[3:]
+        raus = []
+        for i in range(0, len(zellen) - 2, 3):
+            wann, ort, was = zellen[i], zellen[i + 1], zellen[i + 2]
+            if ROWING_PLACE not in ort.lower():
+                continue
+            spanne = rowing_dates(wann, jahr)
+            if not spanne:
+                print(f"Ruderkalender: '{wann}' nicht lesbar, uebersprungen",
+                      file=sys.stderr)
+                continue
+            training = any(w in was.lower() for w in ROWING_TRAINING)
+            raus.append({"from": spanne[0].isoformat(), "to": spanne[1].isoformat(),
+                         "kind": "training" if training else "race", "name": was})
+        return {"source": ROWING, "season": jahr,
+                "checked": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                "events": raus}
+    except Exception as e:                                  # noqa: BLE001
+        print(f"Ruderkalender nicht geholt ({e})", file=sys.stderr)
         return None
 
 
@@ -697,6 +791,26 @@ def main() -> int:
                 payload[k] = old[k]
 
     # Tatsaechliche Tageswerte — die einzige echte Pegelmessung, die wir kennen
+    # Ruderkalender: hoechstens einmal pro Woche, sonst den alten Stand behalten.
+    alt_r = old.get("rowing")
+    frisch = False
+    if alt_r and alt_r.get("checked"):
+        try:
+            frisch = (datetime.now(timezone.utc)
+                      - datetime.fromisoformat(alt_r["checked"])).days < ROWING_MAX_AGE_DAYS
+        except ValueError:
+            frisch = False
+    if frisch:
+        payload["rowing"] = alt_r
+    else:
+        neu = fetch_rowing()
+        if neu:
+            payload["rowing"] = neu
+            print(f"Ruderkalender {neu['season']}: {len(neu['events'])} Anlaesse "
+                  f"in Schiffenen")
+        elif alt_r:
+            payload["rowing"] = alt_r          # lieber alt als gar nicht
+
     actuals = fetch_actuals()
     if actuals:
         payload["actual_daily"] = actuals
