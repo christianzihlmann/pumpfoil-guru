@@ -370,7 +370,8 @@ de: {
   uvT:'UV-Index nach WHO-Skala',
   inflow:'Zufluss', outflow:'Abfluss', level:'Pegel',
   inflowT:'Sarine bei Fribourg, oberhalb des Sees',
-  outflowT:'Saane bei Laupen, unterhalb der Staumauer. Ab {n} m³/s läuft eine Turbine, der See sinkt dann um mehrere Zentimeter pro Stunde.',
+  outflowT:'Geschätzter Abfluss aus dem See: Messung Saane–Laupen minus {s} m³/s Sense, die unterhalb der Staumauer einmündet und nie im See war. Ab {n} m³/s läuft eine Turbine.',
+  outflowRaw:'Saane bei Laupen, unterhalb der Staumauer. Enthält die Sense — kein Wert für sie verfügbar, deshalb nicht herausgerechnet.',
   sunUp:'Sonnenaufgang', sunDown:'Sonnenuntergang',
   rainTo:'Regen bis {n}%',
   flow:['turbiniert','ruhig','im Übergang'],
@@ -432,7 +433,8 @@ fr: {
   uvT:'Indice UV selon l’échelle de l’OMS',
   inflow:'Entrée', outflow:'Sortie', level:'Niveau',
   inflowT:'Sarine à Fribourg, en amont du lac',
-  outflowT:'Sarine à Laupen, en aval du barrage. Dès {n} m³/s une turbine tourne et le lac baisse de plusieurs centimètres par heure.',
+  outflowT:'Débit estimé sortant du lac : mesure Sarine–Laupen moins {s} m³/s de la Singine, qui se jette en aval du barrage et n’a jamais été dans le lac. Dès {n} m³/s une turbine tourne.',
+  outflowRaw:'Sarine à Laupen, en aval du barrage. Contient la Singine — aucune valeur disponible, donc non déduite.',
   sunUp:'Lever du soleil', sunDown:'Coucher du soleil',
   rainTo:'Pluie jusqu’à {n}%',
   flow:['turbinage','calme','en transition'],
@@ -486,7 +488,8 @@ en: {
   uvT:'UV index on the WHO scale',
   inflow:'Inflow', outflow:'Outflow', level:'Level',
   inflowT:'Sarine at Fribourg, upstream of the lake',
-  outflowT:'Saane at Laupen, below the dam. From {n} m³/s a turbine is running and the lake drops several centimetres per hour.',
+  outflowT:'Estimated outflow from the lake: Saane–Laupen gauge minus {s} m³/s for the Sense, which joins below the dam and was never in the lake. From {n} m³/s a turbine is running.',
+  outflowRaw:'Saane at Laupen, below the dam. Includes the Sense — no value available, so not subtracted.',
   sunUp:'Sunrise', sunDown:'Sunset',
   rainTo:'Rain up to {n}%',
   flow:['turbining','calm','changing'],
@@ -675,7 +678,7 @@ const CONFIG = {
   // Im Betrieb wird dieser Block in data/level.json direkt auf GitHub umgeschaltet.
   manual: { rowing_competition:false, dock4_installed:false },
   weather: { lat:46.8261, lon:7.1256, place:'Pensier' },
-  hydro:   { station:'2215', inflow:'2119' },   // Laupen unten, Fribourg oben
+  hydro:   { station:'2215', inflow:'2119', sense:'2179' },   // Laupen, Fribourg, Sense
 
   // Turbiniert oder nicht. Beide Abflüsse sind ZWEIGIPFLIG — entweder läuft
   // eine Turbine oder nicht, dazwischen liegt kaum etwas. Perzentile ("wenig,
@@ -1088,6 +1091,7 @@ async function loadLevel(){
     // Zweigipfligkeit im CODEBOOK. Die Seite braucht sie nicht mehr.
     if (d.hydro && flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;
     if (d.sarine && flowIn == null && d.sarine.flow != null) flowIn = d.sarine.flow;
+    if (d.sense && flowSense == null && d.sense.flow != null) flowSense = d.sense.flow;
     renderFlow();
     renderFC(forecast);
   }catch(e){
@@ -1242,7 +1246,34 @@ function renderWeather(){
 /* Abfluss und Zufluss holt der Browser live von api.existenz.ch; der Stand aus
    level.json ist nur der Notnagel. Das Wort daneben kommt aus flowState und
    braucht kein Archiv — siehe CONFIG.turbine. */
-let flowVal = null, flowIn = null;
+/* flowVal ist der ROHE Wert der Station Laupen. Angezeigt wird flowOut(),
+   also abzüglich der Sense — siehe dort. */
+let flowVal = null, flowIn = null, flowSense = null;
+
+/* Geschätzter Ausfluss AUS DEM SEE.
+
+   Die Station Laupen liegt unterhalb der Einmündung der Sense. Ihr Wert
+   enthält deshalb Wasser, das nie im See war. In ruhigen Phasen sind das
+   rund 2.4 von 8.6 m³/s, also 29 % der Anzeige — genug, dass die Kachel den
+   Eindruck erweckt, der See sinke, obwohl er nachweislich still steht.
+
+   Die Sense ist ungestaut und weiss nichts vom Kraftwerk: sie liefert immer
+   etwa denselben Betrag, ob turbiniert wird oder nicht. Der Abzug ist damit
+   eine Konstante, und die Laufzeit von Thörishaus nach Laupen (1.7–3.3 h)
+   spielt keine Rolle — bei einem flachen Signal ist q2179(t−τ) für jedes τ
+   dieselbe Zahl. Der verbleibende Fehler ist ihre Streuung, 0.39 m³/s.
+
+   BEI REGEN GILT DAS NICHT MEHR. Dann schwankt die Sense stark, und die
+   Laufzeit wird wichtig. Sobald ein Regenereignis im Archiv liegt, lässt sie
+   sich aus der Kreuzkorrelation bestimmen und hier einsetzen.
+
+   Fehlt der Sense-Wert, wird der rohe Wert gezeigt — lieber ungenau als
+   erfunden. Der Tooltip sagt dann, dass nicht korrigiert wurde.
+
+   Das Archiv speichert weiterhin den ROHEN BAFU-Wert. Eine amtliche Messung
+   wird nicht stillschweigend verändert; die Korrektur ist reine Anzeige. */
+const flowOut = () => (flowVal == null) ? null
+  : Math.max(0, flowVal - (flowSense == null ? 0 : flowSense));
 
 // Pfeil als Schriftzeichen, damit er exakt auf derselben Grundlinie sitzt wie
 // die Zahlen daneben und dieselbe Farbe hat.
@@ -1295,14 +1326,18 @@ function renderFlow(){
       + `<div class="k">${T('inflow')}</div>` + (wi ? `<div class="q">${wi}</div>` : '');
   }
 
-  if (outEl && flowVal != null){
-    const w = flowState(flowVal, CONFIG.turbine.out);
-    outEl.title = T('outflowT', { n:CONFIG.turbine.out.on });
-    outEl.innerHTML = `<div class="v">${Math.round(flowVal)}<small> m³/s</small></div>`
+  const raus = flowOut();
+  if (outEl && raus != null){
+    const w = flowState(raus, CONFIG.turbine.out);
+    outEl.title = flowSense == null ? T('outflowRaw')
+      : T('outflowT', { n:CONFIG.turbine.out.on, s:flowSense.toFixed(1) });
+    outEl.innerHTML = `<div class="v">${Math.round(raus)}<small> m³/s</small></div>`
       + `<div class="k">${T('outflow')}</div>` + (w ? `<div class="q">${w}</div>` : '');
   }
 
-  const t = trendOf(flowIn, flowVal);
+  // Auch die Bilanz rechnet mit dem korrigierten Wert — sonst zöge sie Wasser
+  // vom Seeinhalt ab, das nie darin war.
+  const t = trendOf(flowIn, raus);
   if (trEl && t){
     // Ohne Erklärung: die Bilanz ist noch zu grob, um sie zu beschreiben —
     // die Sense steckt drin und wird erst herausgerechnet. Siehe CODEBOOK.
@@ -1336,14 +1371,16 @@ function renderAir(){
 
 async function loadHydro(){
   const u = `https://api.existenz.ch/apiv1/hydro/latest`
-    + `?locations=${CONFIG.hydro.inflow},${CONFIG.hydro.station}`
+    + `?locations=${CONFIG.hydro.inflow},${CONFIG.hydro.station},${CONFIG.hydro.sense}`
     + `&parameters=flow&app=${CONFIG.app}&version=1.0`;
   try{
     const d = await (await fetch(u)).json();
     const pick = loc => (d.payload||[]).find(x => x.par === 'flow' && String(x.loc) === loc);
-    const out = pick(CONFIG.hydro.station), inn = pick(CONFIG.hydro.inflow);
-    if (out) flowVal = out.val;      // live schlägt den stündlichen Stand
-    if (inn) flowIn  = inn.val;
+    const out = pick(CONFIG.hydro.station), inn = pick(CONFIG.hydro.inflow),
+          sen = pick(CONFIG.hydro.sense);
+    if (out) flowVal   = out.val;    // live schlägt den stündlichen Stand
+    if (inn) flowIn    = inn.val;
+    if (sen) flowSense = sen.val;
   }catch(e){}
   renderFlow();
 }
