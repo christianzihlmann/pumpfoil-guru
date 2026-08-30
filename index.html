@@ -605,26 +605,36 @@ function setLang(l){
 const CONFIG = {
   scale: { min: 527.5, max: 532.5 },        // Skala der Pegellatte
   // ── Eichung ──────────────────────────────────────────────────────────
-  // Am 25.08.2026 um 17:30 wurde an allen drei Docks die Wassertiefe gemessen
-  // (Seegrund bis Oberfläche): Dock 1 = 107 cm, Dock 2 = 191 cm, Dock 3 = 415 cm.
-  // Daraus stehen die Docks UNTEREINANDER exakt fest — Grund bei Dock 2 liegt
-  // 84 cm tiefer als bei Dock 1, bei Dock 3 308 cm tiefer.
+  // GEEICHT am 30.08.2026. Gemessen um 11:00 und um 13:15, beide Male auf den
+  // Zentimeter gleich — der See stand still, das Band war mit 4 cm das
+  // schmalste je beobachtete. Wassertiefe Seegrund bis Oberfläche:
+  //     Dock 1 =  37 cm      Dock 2 = 133 cm      Dock 3 nicht gemessen
   //
-  // Die Schwellen unten sind deshalb RELATIV zu refLevel angegeben, dem Seepegel
-  // jener Messung. Diese Abstände sind gemessen und ändern sich nicht mehr.
+  // refLevel ist der Seepegel jenes Zeitpunkts. Drei unabhängige Wege führen
+  // auf dieselbe Zahl:
+  //   · Rückrechnung über Dock 2 aus dem Groupe-E-Tageswert vom 25.08. (531.31)
+  //     minus dem gemessenen Fall von 58 cm            -> 530.73
+  //   · das Prognoseband des Tages                      -> 530.70–530.74
+  //   · die bisherige Bandlage, band_pos im Mittel 0.84 -> 530.734
   //
-  // refLevel selbst ist die letzte offene Zahl. NOCH GESCHÄTZT: das Band galt um
-  // 17:40, dem Messzeitpunkt, 531.15–531.41; genommen ist das obere Ende.
-  // Begründung: turbiniert wurde ab 18:30, der See stand also nahe seinem
-  // Tageshöchststand. Und über drei Tage lag der Groupe-E-Tageswert im Mittel
-  // bei 84 % der Bandbreite, nicht bei 50 % — die Bandmitte wäre zu tief, und
-  // ein zu tiefes refLevel macht die Ampel ZU OPTIMISTISCH.
+  // WARUM DIE ALTEN ZAHLEN FALSCH WAREN. Die Messung vom 25.08. ergab für den
+  // Abstand Dock 1 zu Dock 2 84 cm, die vom 30.08. ergibt 96 cm. Der Seegrund
+  // bewegt sich nicht, also war eine Reihe falsch. Der Groupe-E-Tageswert
+  // entscheidet: über Dock 2 zurückgerechnet landet der heutige Pegel bei
+  // 530.73 und damit im Band, über Dock 1 bei 530.61 und damit daneben.
+  // Die 107 cm bei Dock 1 waren rund 12 cm zu viel.
   //
-  // Sobald an einem Tag mit schmalem Band (< 10 cm, siehe Kalibriermeldung)
-  // gemessen wird, hier eintragen — damit sind alle drei Docks auf einen
-  // Schlag geeicht.
-  refLevel: 531.41,
-  refLevelCalibrated: false,
+  // Gegenprobe: die damalige Beurteilung "Dock 1 grün ab 97 cm" beruhte auf
+  // dieser falschen Tiefe. Um 12 cm korrigiert sind es 85 cm — und am
+  // 30.08. lautete das Urteil unabhängig davon "funktioniert ab 87, grün ab
+  // 90". Beide Einschätzungen decken sich, sobald der Messfehler heraus ist.
+  //
+  // OFFEN: Dock 3 wurde am 30.08. nicht gemessen. Sein Abstand zu Dock 2
+  // (224 cm) stammt weiterhin vom 25.08., also aus der Reihe mit dem Fehler.
+  // Ob Dock 3 damals besser getroffen war, ist unbekannt — deshalb steht dort
+  // weiterhin calibrated:false. Beim nächsten Mal mitmessen.
+  refLevel: 530.73,
+  refLevelCalibrated: true,
 
   // rowing:true  → bei manuell gesetztem Ruderwettkampf gesperrt (rot)
   // regatta:true → liegt im Betriebsbereich des Ruderclubs. An Tagen aus
@@ -640,16 +650,21 @@ const CONFIG = {
   // stopLowRel / goLowRel : Meter relativ zu refLevel, aus dem Messband
   // goHigh / stopHigh     : absolut, hängen am Stauziel 532.00, nicht an der Messung
   docks: [
-    { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:false,
-      groundRel:-1.07, stopLowRel:-0.20, goLowRel:-0.10, goHigh:532.50, stopHigh:532.50 },
+    // Tiefe 37 cm · rot unter 85 · grün ab 90
+    { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:true,
+      groundRel:-0.37, stopLowRel:0.48, goLowRel:0.53, goHigh:532.50, stopHigh:532.50 },
 
-    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:false, rowing:true, regatta:true,
+    // Tiefe 133 cm · rot unter 80 · grün ab 120. Die 100 cm vom 25.08. waren
+    // zu optimistisch — bei 133 cm lautete das Urteil "noch grün".
+    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:true, rowing:true, regatta:true,
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
-      groundRel:-1.91, stopLowRel:-1.11, goLowRel:-0.91, goHigh:532.50, stopHigh:532.50 },
+      groundRel:-1.33, stopLowRel:-0.53, goLowRel:-0.13, goHigh:532.50, stopHigh:532.50 },
 
+    // Am 30.08. NICHT gemessen. Grund liegt 224 cm tiefer als Dock 2, diese
+    // Zahl stammt noch vom 25.08. Schwellen wie Dock 2: rot unter 80, grün ab 120.
     { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:false, rowing:true, regatta:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
-      groundRel:-4.15, stopLowRel:-3.35, goLowRel:-3.15, goHigh:532.50, stopHigh:532.50 },
+      groundRel:-3.57, stopLowRel:-2.77, goLowRel:-2.37, goHigh:532.50, stopHigh:532.50 },
 
     { id:'d4', short:'D4', name:'Dock 4', place:'Floating', manual:true, summary:false, floating:true, regatta:true,
       map:'https://maps.app.goo.gl/fDbZoVYaNq99WqA36' }   // 46.847556, 7.142008
