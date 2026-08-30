@@ -354,8 +354,7 @@ de: {
   nothing:'Es geht nichts. Pegel ausserhalb aller Fenster.',
   goes:'{x} geht.', goPl:'{x} gehen.', limit:'{x} am Limit.', blockedS:'{x} gesperrt.',
   swings:'Pegel schwankt', outOfOrder:'Out of order',
-  floats:'schwimmt mit — Pegel egal', closedRace:'Ruderwettkampf — gesperrt.',
-  race:'Ruderwettkampf', training:'Rudertraining',
+  floats:'schwimmt mit — Pegel egal', race:'Ruderwettkampf', training:'Rudertraining',
   depth:'Wassertiefe &gt; {n} cm', measuredAt:'Gemessen {v} m ü. M. · {t}',
   mapOpen:'{n} auf Google Maps öffnen',
   bandNote:'Das ist eine Pegelspanne von {n} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. Mittags und nachmittags ist der Pegel oft am höchsten.',
@@ -413,8 +412,7 @@ fr: {
   goes:'{x} est praticable.', goPl:'{x} sont praticables.',
   limit:'{x} à la limite.', blockedS:'{x} fermé.',
   swings:'Niveau variable', outOfOrder:'Hors service',
-  floats:'flotte — niveau sans importance', closedRace:'Régate — fermé.',
-  race:'Régate', training:'Entraînement d’aviron',
+  floats:'flotte — niveau sans importance', race:'Régate', training:'Entraînement d’aviron',
   depth:'Profondeur de l’eau &gt; {n} cm', measuredAt:'Mesuré {v} m s. m. · {t}',
   mapOpen:'Ouvrir {n} dans Google Maps',
   bandNote:'Il s’agit d’une plage de {n} cm, pas d’une mesure exacte. Le niveau baisse quand Groupe E turbine — souvent le matin et le soir. À midi et l’après-midi, le niveau est souvent au plus haut.',
@@ -472,8 +470,7 @@ en: {
   nothing:'Nothing doing. Level outside every window.',
   goes:'{x} is good.', goPl:'{x} are good.', limit:'{x} borderline.', blockedS:'{x} closed.',
   swings:'Level swings', outOfOrder:'Out of order',
-  floats:'floats with the water — level irrelevant', closedRace:'Rowing race — closed.',
-  race:'Rowing race', training:'Rowing training',
+  floats:'floats with the water — level irrelevant', race:'Rowing race', training:'Rowing training',
   depth:'Water depth &gt; {n} cm', measuredAt:'Measured {v} m a.s.l. · {t}',
   mapOpen:'Open {n} in Google Maps',
   bandNote:'That is a {n} cm range, not an exact measurement. The lake drops when Groupe E runs the turbines — often mornings and evenings. Around midday and in the afternoon the level is usually highest.',
@@ -640,13 +637,12 @@ const CONFIG = {
   refLevel: 530.73,
   refLevelCalibrated: true,
 
-  // rowing:true  → bei manuell gesetztem Ruderwettkampf gesperrt (rot)
-  // regatta:true → liegt im Betriebsbereich des Ruderclubs. An Tagen aus
-  //                dessen Kalender orange, nicht rot: der See ist belegt,
-  //                aber nicht gesperrt. Dock 1 ist privat und nie betroffen.
-  //                Bewusst ein EIGENES Merkmal, nicht rowing: der manuelle
-  //                Schalter lässt Dock 4 absichtlich unberührt, der Kalender
-  //                nicht — dort liegt der Schwimmsteg mitten im Geschehen.
+  // regatta:true → liegt im Betriebsbereich des Ruderclubs. Bei Ruderbetrieb
+  //                orange, nicht rot: der See ist belegt, aber nicht gesperrt.
+  //                Gilt für Dock 2, 3 und 4 — Dock 1 ist privat.
+  //                Beide Quellen, Kalender und manueller Schalter, wirken
+  //                gleich; früher sperrte der Schalter noch rot und liess
+  //                Dock 4 aus.
   // manual:true  → nur da, wenn manuell eingeschaltet
   // floating:true → Schwimmsteg, hat gar keine Pegelgrenzen
   //
@@ -660,14 +656,14 @@ const CONFIG = {
 
     // Tiefe 133 cm · rot unter 80 · grün ab 120. Die 100 cm vom 25.08. waren
     // zu optimistisch — bei 133 cm lautete das Urteil "noch grün".
-    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:true, rowing:true, regatta:true,
+    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:true, regatta:true,
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
       groundRel:-1.33, stopLowRel:-0.53, goLowRel:-0.13, goHigh:532.50, stopHigh:532.50 },
 
     // Grund 224 cm tiefer als Dock 2, am 25.08. zusammen mit Dock 2 gemessen
     // und deshalb verlässlich. Schwellen von Dock 2 übernommen: rot unter 80,
     // grün ab 120 — gleiche Beurteilung, am Dock 3 selbst nicht nachgeprüft.
-    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:true, rowing:true, regatta:true,
+    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:true, regatta:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
       groundRel:-3.57, stopLowRel:-2.77, goLowRel:-2.37, goHigh:532.50, stopHigh:532.50 },
 
@@ -729,6 +725,14 @@ let levelMin = null, levelMax = null, measured = null, levelStamp = null;
    rowingDay hält den Anlass des gerade gewählten Tages, sonst null. */
 let rowing = [], rowingDay = null;
 const rowingOn = iso => rowing.find(e => iso >= e.from && iso <= e.to) || null;
+
+/* Ruderbetrieb hat ZWEI Quellen, die dasselbe bewirken: den Vereinskalender
+   und den manuellen Schalter in data/level.json. Der Schalter ist für Anlässe
+   da, die nicht im Kalender des Clubs Aviron Vevey stehen — ein anderer Verein
+   etwa. Er gilt für alle angezeigten Tage, weil er kein Datum kennt, und zählt
+   immer als Wettkampf. */
+const rowingNow = () =>
+  rowingDay || (manual.rowing_competition ? { kind:'race', name:'' } : null);
 
 /* Groupe E liefert mehrere Tage. dayIdx wählt, welcher gezeigt wird —
    Pegel, Ampeln und Wetter hängen alle daran. Abfluss gibt es nur für heute. */
@@ -799,15 +803,15 @@ function statusFor(dock){
   // Manuelle Sperren gehen dem Pegel vor
   if (dock.manual && !manual.dock4_installed)
     return { s:'stop', split:false, why:T('outOfOrder') };
-  if (dock.rowing && manual.rowing_competition)
-    return { s:'stop', split:false, why:T('closedRace') };
-
-  // Kalender des Ruderclubs: orange, nicht rot. Der See ist belegt, gesperrt
-  // ist er nicht — die Einschätzung bleibt beim Fahrer. Steht bewusst VOR der
-  // Schwimmsteg-Regel, sonst käme Dock 4 nie hierher.
-  if (dock.regatta && rowingDay)
+  // Ruderbetrieb: ORANGE, nicht rot. Der See ist belegt, gesperrt ist er
+  // nicht — die Einschätzung bleibt beim Fahrer. Gilt für Dock 2, 3 und 4;
+  // Dock 1 ist privat und nie betroffen.
+  //
+  // Steht bewusst VOR der Schwimmsteg-Regel, sonst käme Dock 4 nie hierher.
+  const rud = rowingNow();
+  if (dock.regatta && rud)
     return { s:'warn', split:false,
-             note: rowingDay.kind === 'race' ? T('race') : T('training') };
+             note: rud.kind === 'training' ? T('training') : T('race') };
 
   // Schwimmsteg hebt und senkt sich mit dem Wasser — der Pegel ist ihm egal.
   // Er hat deshalb gar keine Schwellen und steht nicht an der Messlatte.
@@ -973,10 +977,11 @@ function renderVerdict(){
   // Ruderbetrieb gilt für den gewählten Tag, nicht nur für heute — man schaut
   // ja gerade nach, ob morgen etwas geht.
   let extra = '';
-  if (rowingDay){
-    const wort = rowingDay.kind === 'race' ? T('race') : T('training');
+  const rud = rowingNow();
+  if (rud){
+    const wort = rud.kind === 'training' ? T('training') : T('race');
     const heute = dayIdx === 0 ? DAYS()[0] + ' ' : '';
-    extra += ` <span class="storm" title="${rowingDay.name.replace(/"/g,'')}">`
+    extra += ` <span class="storm"${rud.name ? ` title="${rud.name.replace(/"/g,'')}"` : ''}>`
            + `${WARNSIGN}${heute}${wort}.</span>`;
   }
   if (storm && dayIdx === 0){
