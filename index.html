@@ -629,10 +629,14 @@ const CONFIG = {
   // 30.08. lautete das Urteil unabhängig davon "funktioniert ab 87, grün ab
   // 90". Beide Einschätzungen decken sich, sobald der Messfehler heraus ist.
   //
-  // OFFEN: Dock 3 wurde am 30.08. nicht gemessen. Sein Abstand zu Dock 2
-  // (224 cm) stammt weiterhin vom 25.08., also aus der Reihe mit dem Fehler.
-  // Ob Dock 3 damals besser getroffen war, ist unbekannt — deshalb steht dort
-  // weiterhin calibrated:false. Beim nächsten Mal mitmessen.
+  // Dock 3 wurde am 30.08. nicht gemessen. Sein Abstand zu Dock 2 (224 cm)
+  // stammt vom 25.08. — laut Besitzer aber verlässlich, weil er Dock 2 und
+  // Dock 3 damals in einem Zug gemessen hat. Der Fehler jener Reihe steckte
+  // allein in Dock 1. Die Lage von Dock 3 gilt damit als geeicht.
+  //
+  // Was NICHT gemessen ist: seine Schwellen. Die 80 und 120 cm sind von Dock 2
+  // übernommen, weil der Besitzer beide gleich beurteilt. Plausibel, aber am
+  // Dock 3 selbst nie geprüft.
   refLevel: 530.73,
   refLevelCalibrated: true,
 
@@ -660,9 +664,10 @@ const CONFIG = {
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
       groundRel:-1.33, stopLowRel:-0.53, goLowRel:-0.13, goHigh:532.50, stopHigh:532.50 },
 
-    // Am 30.08. NICHT gemessen. Grund liegt 224 cm tiefer als Dock 2, diese
-    // Zahl stammt noch vom 25.08. Schwellen wie Dock 2: rot unter 80, grün ab 120.
-    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:false, rowing:true, regatta:true,
+    // Grund 224 cm tiefer als Dock 2, am 25.08. zusammen mit Dock 2 gemessen
+    // und deshalb verlässlich. Schwellen von Dock 2 übernommen: rot unter 80,
+    // grün ab 120 — gleiche Beurteilung, am Dock 3 selbst nicht nachgeprüft.
+    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:true, rowing:true, regatta:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
       groundRel:-3.57, stopLowRel:-2.77, goLowRel:-2.37, goHigh:532.50, stopHigh:532.50 },
 
