@@ -610,12 +610,22 @@ const CONFIG = {
   // schmalste je beobachtete. Wassertiefe Seegrund bis Oberfläche:
   //     Dock 1 =  37 cm      Dock 2 = 133 cm      Dock 3 nicht gemessen
   //
-  // refLevel ist der Seepegel jenes Zeitpunkts. Drei unabhängige Wege führen
-  // auf dieselbe Zahl:
-  //   · Rückrechnung über Dock 2 aus dem Groupe-E-Tageswert vom 25.08. (531.31)
-  //     minus dem gemessenen Fall von 58 cm            -> 530.73
-  //   · das Prognoseband des Tages                      -> 530.70–530.74
-  //   · die bisherige Bandlage, band_pos im Mittel 0.84 -> 530.734
+  // refLevel ist der Seepegel jenes Zeitpunkts. Genommen ist der von Groupe E
+  // publizierte TAGESWERT des Messtags, 530.71 — eine Zahl, keine Kette.
+  //
+  // Zuvor stand hier 530.73, rückgerechnet über Dock 2 aus dem Tageswert vom
+  // 25.08. Diese Kette enthielt zwei unbekannte Bezugszeitpunkte statt einem
+  // und wurde am 31.08. ersetzt, sobald der Tageswert für den 30.08. vorlag.
+  //
+  // GEGENPROBE über fünf Tage, zwei völlig getrennte Verfahren:
+  //     Groupe E   531.31 -> 530.71  =  -60 cm
+  //     Messband   191 cm -> 133 cm  =  -58 cm   (Dock 2)
+  // Zwei Zentimeter Abweichung über einen Pegelfall von 60 cm. Zum Vergleich:
+  // Groupe Es eigene zwei Reihen stimmen selbst nicht besser überein — am
+  // 29.08. lag der Tageswert 530.69 einen Zentimeter UNTER dem Band jenes
+  // Tages (530.70-530.74).
+  //
+  // Das Prognoseband des Messtags lautete 530.70-530.74; 530.71 liegt darin.
   //
   // WARUM DIE ALTEN ZAHLEN FALSCH WAREN. Die Messung vom 25.08. ergab für den
   // Abstand Dock 1 zu Dock 2 84 cm, die vom 30.08. ergibt 96 cm. Der Seegrund
@@ -637,7 +647,7 @@ const CONFIG = {
   // Was NICHT gemessen ist: seine Schwellen. Die 80 und 120 cm sind von Dock 2
   // übernommen, weil der Besitzer beide gleich beurteilt. Plausibel, aber am
   // Dock 3 selbst nie geprüft.
-  refLevel: 530.73,
+  refLevel: 530.71,
   refLevelCalibrated: true,
 
   // regatta:true → liegt im Betriebsbereich des Ruderclubs. Bei Ruderbetrieb
