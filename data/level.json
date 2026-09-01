@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-01T18:30:35+00:00",
+  "fetched": "2026-09-01T18:52:20+00:00",
   "forecast": [
     {
       "date": "01.09.2026",
@@ -29,7 +29,6 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-09-01T17:52:27+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
@@ -50,6 +49,32 @@
       "max": 153.11
     }
   },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 531.95,
+    "flow": 5.04,
+    "stats": {
+      "n": 252,
+      "days": 9.4,
+      "enough": false,
+      "min": 4.78,
+      "p10": 4.95,
+      "p25": 5.07,
+      "median": 5.1,
+      "p75": 13.14,
+      "p90": 65.84,
+      "max": 87.38
+    },
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 17.86,
+    "height": 471.7,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
@@ -69,38 +94,12 @@
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
     "time": "2026-09-01T18:30:37+00:00"
   },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 17.86,
-    "height": 471.7,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.6,
     "temperature": 19.74,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
-  },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 531.95,
-    "flow": 5.04,
-    "stats": {
-      "n": 252,
-      "days": 9.4,
-      "enough": false,
-      "min": 4.78,
-      "p10": 4.95,
-      "p25": 5.07,
-      "median": 5.1,
-      "p75": 13.14,
-      "p90": 65.84,
-      "max": 87.38
-    },
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
