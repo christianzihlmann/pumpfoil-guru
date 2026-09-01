@@ -2,52 +2,86 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-01T01:52:20+00:00",
+  "fetched": "2026-09-01T02:08:20+00:00",
   "forecast": [
     {
       "date": "01.09.2026",
-      "min": 530.01,
-      "max": 530.52
+      "min": 529.99,
+      "max": 530.51
     },
     {
       "date": "02.09.2026",
-      "min": 530.01,
-      "max": 530.58
+      "min": 530.0,
+      "max": 530.57
     },
     {
       "date": "03.09.2026",
-      "min": 530.05,
-      "max": 530.76
+      "min": 530.03,
+      "max": 530.75
     },
     {
       "date": "04.09.2026",
-      "min": 530.24,
-      "max": 530.95
+      "min": 530.23,
+      "max": 530.94
     }
   ],
   "manual": {
     "rowing_competition": false,
     "dock4_installed": false
   },
+  "warning_checked": "2026-09-01T02:08:24+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 8.14,
-    "time": "2026-09-01T01:00:00+00:00",
+    "flow": 7.68,
+    "time": "2026-09-01T02:00:00+00:00",
     "stats": {
-      "n": 221,
-      "days": 9.4,
+      "n": 222,
+      "days": 9.5,
       "enough": false,
       "min": 7.63,
       "p10": 7.86,
       "p25": 7.95,
-      "median": 8.45,
-      "p75": 28.81,
-      "p90": 101.69,
+      "median": 8.43,
+      "p75": 28.65,
+      "p90": 101.66,
       "max": 153.11
     }
+  },
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 0.0,
+    "european_aqi": 15.0,
+    "wind_model": 4.0,
+    "gust_model": 6.1,
+    "wind_dir_model": 185.0,
+    "wind_measured": 2.2,
+    "gust_measured": 4.0,
+    "wind_dir_measured": 197.0,
+    "temp_measured": 13.7,
+    "radiation_measured": 4.0,
+    "vario_grid": 8.0,
+    "vario_total": 19.95,
+    "vario_unit": "Rp/kWh",
+    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-09-01T02:08:45+00:00"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 17.12,
+    "height": 470.36,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.77,
+    "temperature": 16.78,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
@@ -55,51 +89,18 @@
     "height": 531.95,
     "flow": 5.07,
     "stats": {
-      "n": 220,
-      "days": 8.7,
+      "n": 221,
+      "days": 8.8,
       "enough": false,
       "min": 4.78,
       "p10": 4.95,
       "p25": 5.07,
       "median": 5.13,
-      "p75": 14.48,
-      "p90": 66.56,
+      "p75": 13.96,
+      "p90": 66.52,
       "max": 87.38
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 17.28,
-    "height": 470.43,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.0,
-    "european_aqi": 15.0,
-    "wind_model": 3.3,
-    "gust_model": 5.0,
-    "wind_dir_model": 221.0,
-    "wind_measured": 2.9,
-    "gust_measured": 5.8,
-    "wind_dir_measured": 113.0,
-    "temp_measured": 14.2,
-    "radiation_measured": 4.0,
-    "vario_grid": 7.8,
-    "vario_total": 19.75,
-    "vario_unit": "Rp/kWh",
-    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-01T01:08:25+00:00"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.77,
-    "temperature": 17.17,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
