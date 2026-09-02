@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-02T18:45:55+00:00",
+  "fetched": "2026-09-02T18:52:22+00:00",
   "forecast": [
     {
       "date": "02.09.2026",
@@ -36,17 +36,17 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 139.21,
-    "time": "2026-09-02T18:30:00+00:00",
+    "time": "2026-09-02T18:40:00+00:00",
     "stats": {
-      "n": 301,
+      "n": 302,
       "days": 11.2,
       "enough": true,
       "min": 7.39,
       "p10": 7.6,
       "p25": 7.89,
       "median": 8.26,
-      "p75": 30.71,
-      "p90": 106.76,
+      "p75": 31.33,
+      "p90": 107.26,
       "max": 153.11
     }
   },
@@ -67,36 +67,36 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-02T18:46:22+00:00"
+    "time": "2026-09-02T18:52:25+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 17.93,
-    "height": 471.71,
+    "temperature": 17.91,
+    "height": 471.72,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.52,
-    "temperature": 19.84,
+    "temperature": 19.78,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.62,
-    "flow": 67.58,
+    "height": 532.55,
+    "flow": 58.82,
     "stats": {
-      "n": 300,
-      "days": 10.4,
+      "n": 301,
+      "days": 10.5,
       "enough": true,
       "min": 4.78,
       "p10": 4.95,
       "p25": 5.07,
       "median": 5.1,
-      "p75": 26.36,
+      "p75": 26.69,
       "p90": 68.25,
       "max": 87.38
     },
