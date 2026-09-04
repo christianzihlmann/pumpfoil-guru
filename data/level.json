@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-04T06:52:19+00:00",
+  "fetched": "2026-09-04T07:08:22+00:00",
   "forecast": [
     {
       "date": "04.09.2026",
@@ -11,52 +11,86 @@
     },
     {
       "date": "05.09.2026",
-      "min": 530.55,
+      "min": 530.56,
       "max": 531.0
     },
     {
       "date": "06.09.2026",
-      "min": 530.86,
+      "min": 530.87,
       "max": 531.31
     },
     {
       "date": "07.09.2026",
       "min": 531.17,
-      "max": 531.75
+      "max": 531.76
     }
   ],
   "manual": {
     "rowing_competition": false,
     "dock4_installed": false
   },
+  "warning_checked": "2026-09-04T07:08:26+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 135.9,
-    "time": "2026-09-04T06:20:00+00:00",
+    "flow": 137.1,
+    "time": "2026-09-04T07:00:00+00:00",
     "stats": {
-      "n": 372,
-      "days": 12.6,
+      "n": 373,
+      "days": 12.7,
       "enough": true,
       "min": 7.25,
       "p10": 7.42,
       "p25": 7.8,
       "median": 8.23,
-      "p75": 37.31,
-      "p90": 110.27,
+      "p75": 38.51,
+      "p90": 110.54,
       "max": 153.11
     }
+  },
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 1.45,
+    "european_aqi": 21.0,
+    "wind_model": 2.5,
+    "gust_model": 5.8,
+    "wind_dir_model": 180.0,
+    "wind_measured": 1.1,
+    "gust_measured": 1.8,
+    "wind_dir_measured": 20.0,
+    "temp_measured": 15.6,
+    "radiation_measured": 272.0,
+    "vario_grid": 8.82,
+    "vario_total": 25.47,
+    "vario_unit": "Rp/kWh",
+    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-09-04T07:08:27+00:00"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 17.87,
+    "height": 471.73,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.45,
+    "temperature": 15.33,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.63,
-    "flow": 68.51,
+    "height": 532.55,
+    "flow": 58.05,
     "stats": {
-      "n": 371,
-      "days": 11.9,
+      "n": 372,
+      "days": 12.0,
       "enough": true,
       "min": 4.78,
       "p10": 4.95,
@@ -67,39 +101,6 @@
       "max": 87.38
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 17.46,
-    "height": 471.67,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.95,
-    "european_aqi": 18.0,
-    "wind_model": 2.9,
-    "gust_model": 5.8,
-    "wind_dir_model": 180.0,
-    "wind_measured": 1.4,
-    "gust_measured": 4.0,
-    "wind_dir_measured": 210.0,
-    "temp_measured": 13.9,
-    "radiation_measured": 149.0,
-    "vario_grid": 11.13,
-    "vario_total": 27.78,
-    "vario_unit": "Rp/kWh",
-    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-04T06:32:07+00:00"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.45,
-    "temperature": 15.32,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
