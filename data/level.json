@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-04T15:06:18+00:00",
+  "fetched": "2026-09-04T15:08:27+00:00",
   "forecast": [
     {
       "date": "04.09.2026",
@@ -12,7 +12,7 @@
     {
       "date": "05.09.2026",
       "min": 530.38,
-      "max": 530.82
+      "max": 530.83
     },
     {
       "date": "06.09.2026",
@@ -36,17 +36,17 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.31,
-    "time": "2026-09-04T14:50:00+00:00",
+    "time": "2026-09-04T15:00:00+00:00",
     "stats": {
-      "n": 390,
+      "n": 391,
       "days": 13.0,
       "enough": true,
       "min": 7.25,
       "p10": 7.39,
-      "p25": 7.75,
-      "median": 8.21,
-      "p75": 34.21,
-      "p90": 109.92,
+      "p25": 7.72,
+      "median": 8.2,
+      "p75": 33.8,
+      "p90": 109.88,
       "max": 153.11
     }
   },
@@ -67,12 +67,12 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-04T15:06:22+00:00"
+    "time": "2026-09-04T15:08:30+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 21.86,
+    "temperature": 21.85,
     "height": 470.34,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -80,16 +80,16 @@
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.41,
-    "temperature": 21.31,
+    "temperature": 21.28,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.13,
-    "flow": 12.58,
+    "height": 532.14,
+    "flow": 12.99,
     "stats": {
-      "n": 389,
+      "n": 390,
       "days": 12.3,
       "enough": true,
       "min": 4.78,
