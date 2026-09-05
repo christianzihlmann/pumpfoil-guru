@@ -355,13 +355,17 @@ de: {
   goes:'{x} geht.', goPl:'{x} gehen.', limit:'{x} am Limit.', blockedS:'{x} gesperrt.',
   swings:'Pegel schwankt', outOfOrder:'Out of order',
   floats:'schwimmt mit — Pegel egal', race:'Ruderwettkampf', training:'Rudertraining',
-  depth:'Wassertiefe &gt; {n} cm', measuredAt:'Gemessen {v} m ü. M. · {t}',
+  depth:'Wassertiefe: Min. {a} cm, Max. {b} cm', depthNow:'Wassertiefe: {n} cm',
+  measuredAt:'Gemessen {v} m ü. M. · {t}',
   mapOpen:'{n} auf Google Maps öffnen',
   bandNote:'Das ist eine Pegelspanne von {n} cm, keine exakte Messung. Der Pegel sinkt, wenn Groupe E turbiniert — oft morgens und abends. Mittags und nachmittags ist der Pegel oft am höchsten.',
   bandToday:' Der Abfluss unten zeigt, ob gerade turbiniert wird.',
   stormNow:'Gewitterwarnung aktiv', stormFrom:'Gewitterwarnung ab {t}',
   air:'Luft', temp:'Temp.', maxmin:'max / min', feels:'Real Feel',
   feelsT:'Gefühlte Temperatur — Wind, Feuchte und Sonne eingerechnet',
+  water:'Wasser',
+  waterT:'Wassertemperatur Schiffenensee, gemessen {t} — Sensor von schiffenen.guru',
+  waterStale:'Letzte Wassertemperatur von {t} — zu alt, deshalb nicht angezeigt',
   rain:'Regen', chance:'Chance', wind:'Wind', windMax:'Wind max',
   gust:'Böen', gustMax:'Böen max', windDir:'Wind-<br>richtung',
   windFrom:'Wind kommt aus {d} ({g}°)', aq:'Luftqualität',
@@ -384,6 +388,7 @@ de: {
   bft:['Windstille','leiser Zug','leichte Brise','schwache Brise','mässige Brise',
        'frische Brise','starker Wind','steifer Wind','stürmischer Wind','Sturm','schwerer Sturm'],
   bafuName:'Bundesamt für Umwelt BAFU',
+  srcWater:'Wassertemperatur: {sg}. Danke vielmals!',
   srcLevel:'Pegel-Prognose: {gE} — Min/Max-Band, stündlich aktualisiert, keine Messung.',
   srcFlow:'Abfluss: {l2215} und {l2119}, {bafu}, via {existenz}. Hoher Abfluss heisst: es wird turbiniert, der See sinkt.',
   srcWx:'Wetter, UV und Luftqualität: {om}, gemessener Wind von MeteoSchweiz Grangeneuve.',
@@ -414,13 +419,17 @@ fr: {
   limit:'{x} à la limite.', blockedS:'{x} fermé.',
   swings:'Niveau variable', outOfOrder:'Hors service',
   floats:'flotte — niveau sans importance', race:'Régate', training:'Entraînement d’aviron',
-  depth:'Profondeur de l’eau &gt; {n} cm', measuredAt:'Mesuré {v} m s. m. · {t}',
+  depth:'Profondeur de l’eau : min. {a} cm, max. {b} cm', depthNow:'Profondeur de l’eau : {n} cm',
+  measuredAt:'Mesuré {v} m s. m. · {t}',
   mapOpen:'Ouvrir {n} dans Google Maps',
   bandNote:'Il s’agit d’une plage de {n} cm, pas d’une mesure exacte. Le niveau baisse quand Groupe E turbine — souvent le matin et le soir. À midi et l’après-midi, le niveau est souvent au plus haut.',
   bandToday:' Le débit sortant ci-dessous indique si les turbines tournent.',
   stormNow:'Alerte orage en cours', stormFrom:'Alerte orage dès {t}',
   air:'Air', temp:'Temp.', maxmin:'max / min', feels:'Ressenti',
   feelsT:'Température ressentie — vent, humidité et soleil compris',
+  water:'Eau',
+  waterT:'Température de l’eau du lac de Schiffenen, mesurée {t} — capteur de schiffenen.guru',
+  waterStale:'Dernière température de l’eau : {t} — trop ancienne, donc non affichée',
   rain:'Pluie', chance:'Risque', wind:'Vent', windMax:'Vent max',
   gust:'Rafales', gustMax:'Rafales max', windDir:'Direction<br>du vent',
   // Verkürzt von "Qualité de l'air": sechzehn Zeichen brachen auf dem Telefon
@@ -449,6 +458,7 @@ fr: {
   bft:['Calme','Très légère brise','Légère brise','Petite brise','Jolie brise',
        'Bonne brise','Vent frais','Grand frais','Coup de vent','Fort coup de vent','Tempête'],
   bafuName:'Office fédéral de l’environnement OFEV',
+  srcWater:'Température de l’eau : {sg}. Merci beaucoup !',
   srcLevel:'Prévision du niveau : {gE} — plage min/max, mise à jour chaque heure, pas une mesure.',
   srcFlow:'Débit : {l2215} et {l2119}, {bafu}, via {existenz}. Un débit élevé signifie que les turbines tournent et que le lac baisse.',
   srcWx:'Météo, UV et qualité de l’air : {om}, vent mesuré par MétéoSuisse Grangeneuve.',
@@ -473,13 +483,17 @@ en: {
   goes:'{x} is good.', goPl:'{x} are good.', limit:'{x} borderline.', blockedS:'{x} closed.',
   swings:'Level swings', outOfOrder:'Out of order',
   floats:'floats with the water — level irrelevant', race:'Rowing race', training:'Rowing training',
-  depth:'Water depth &gt; {n} cm', measuredAt:'Measured {v} m a.s.l. · {t}',
+  depth:'Water depth: min. {a} cm, max. {b} cm', depthNow:'Water depth: {n} cm',
+  measuredAt:'Measured {v} m a.s.l. · {t}',
   mapOpen:'Open {n} in Google Maps',
   bandNote:'That is a {n} cm range, not an exact measurement. The lake drops when Groupe E runs the turbines — often mornings and evenings. Around midday and in the afternoon the level is usually highest.',
   bandToday:' The outflow below shows whether the turbines are running.',
   stormNow:'Thunderstorm warning active', stormFrom:'Thunderstorm warning from {t}',
   air:'Air', temp:'Temp.', maxmin:'max / min', feels:'Feels like',
   feelsT:'Apparent temperature — wind, humidity and sun included',
+  water:'Water',
+  waterT:'Water temperature of Lake Schiffenen, measured {t} — sensor by schiffenen.guru',
+  waterStale:'Last water temperature from {t} — too old, so not shown',
   rain:'Rain', chance:'Chance', wind:'Wind', windMax:'Wind max',
   gust:'Gusts', gustMax:'Gusts max', windDir:'Wind<br>direction',
   windFrom:'Wind from {d} ({g}°)', aq:'Air quality',
@@ -502,6 +516,7 @@ en: {
   bft:['Calm','Light air','Light breeze','Gentle breeze','Moderate breeze','Fresh breeze',
        'Strong breeze','Near gale','Gale','Strong gale','Storm'],
   bafuName:'Federal Office for the Environment FOEN',
+  srcWater:'Water temperature: {sg}. Many thanks!',
   srcLevel:'Level forecast: {gE} — min/max band, updated hourly, not a measurement.',
   srcFlow:'Discharge: {l2215} and {l2119}, {bafu}, via {existenz}. High discharge means the turbines are running and the lake is dropping.',
   srcWx:'Weather, UV and air quality: {om}, measured wind from MeteoSwiss Grangeneuve.',
@@ -535,7 +550,8 @@ const SRC = {
   bafu:'https://www.bafu.admin.ch',
   existenz:'https://api.existenz.ch',
   om:'https://open-meteo.com',
-  vario:'https://www.groupe-e.ch/de/strom/vario'
+  vario:'https://www.groupe-e.ch/de/strom/vario',
+  sg:'https://www.schiffenen.guru'
 };
 
 /* Fällt ein Schlüssel in einer Sprache aus, greift Deutsch — lieber ein
@@ -559,9 +575,12 @@ function renderSources(){
     bafu:a(SRC.bafu, T('bafuName')),
     existenz:a(SRC.existenz, 'api.existenz.ch'),
     om:a(SRC.om, 'Open-Meteo'),
-    vario:a(SRC.vario, 'Groupe E VARIO')
+    vario:a(SRC.vario, 'Groupe E VARIO'),
+    sg:a(SRC.sg, 'schiffenen.guru')
   };
-  el.innerHTML = ['srcLevel','srcFlow','srcWx','srcPrice'].map(k => T(k, L)).join('<br>');
+  // Die Wassertemperatur zuerst: sie kommt von einem Nachbarprojekt, das sie
+  // uns freiwillig überlässt — der Dank steht deshalb an erster Stelle.
+  el.innerHTML = ['srcWater','srcLevel','srcFlow','srcWx','srcPrice'].map(k => T(k, L)).join('<br>');
 }
 
 /* Alles neu beschriften. Wird beim Start und bei jedem Wechsel gerufen —
@@ -722,6 +741,12 @@ const CONFIG = {
   // Verzerrung: 2119 misst nur die Sarine, der See hat ungemessene Zuflüsse,
   // die Bilanz ist deshalb zu negativ.
   trendDeadbandCmPerDay: 10,
+
+  // Wassertemperatur von schiffenen.guru: deren Endpunkt gibt immer den
+  // LETZTEN Wert zurück, auch wenn der Sensor seit Tagen schweigt. Älter als
+  // das, und die Kachel zeigt nur noch „–" — ein Sensor, der ausgefallen ist,
+  // darf nicht wochenlang dieselbe Zahl als Messung ausgeben.
+  lakeTempMaxAgeH: 12,
   app: 'pumpfoil.guru'
 };
 
@@ -953,9 +978,11 @@ function renderDocks(){
               : note  ? note
               : split ? T('swings')
               : '';
-    // Tiefe beim prognostizierten Tagestiefstand — die Zahl, die zählt
-    const cm = depthWord(depthAt(d, levelMin));
-    const tief = cm == null ? '' : T('depth', { n:cm });
+    // Wassertiefe als Spanne über den Tag, Min und Max aus dem Prognoseband.
+    // Vorher stand nur „> Minimum" da: das „>" verstanden viele nicht, und
+    // mittags liegt der See meist deutlich über dem Tagestiefstand. Der
+    // Schwimmsteg hat keinen Seegrund-Wert und bekommt deshalb keine Tiefe.
+    const tief = depthText(d);
     const zeilen = [sub, tief].filter(Boolean).join(' · ');
     el.innerHTML = `
       <span class="lamp ${s}"></span>
@@ -1102,7 +1129,8 @@ async function loadLevel(){
     if (d.hydro && flowVal == null && d.hydro.flow != null) flowVal = d.hydro.flow;
     if (d.sarine && flowIn == null && d.sarine.flow != null) flowIn = d.sarine.flow;
     if (d.sense && flowSense == null && d.sense.flow != null) flowSense = d.sense.flow;
-    renderFlow();
+    if (d.lake){ lakeTemp = d.lake.temperature ?? null; lakeTime = d.lake.time || null; }
+    renderFlow(); renderLake();
     renderFC(forecast);
   }catch(e){
     $('#fc').innerHTML = `<span class="stamp">${T('noFc')}</span>`;
@@ -1211,7 +1239,10 @@ function renderWeather(){
   const heute = i === 0;
   const datum = dy.time[i];
   const sicht = heute && c.visibility != null ? c.visibility / 1000 : null;
-  const rgn   = heute ? regen3h() : dy.precipitation_probability_max[i];
+  // Regenkachel am 05.09.2026 auskommentiert, nicht gelöscht — an ihrer
+  // Stelle steht jetzt die Wassertemperatur. regen3h() und die Wörterbuch-
+  // einträge rain/chance bleiben für einen Wiedereinbau stehen.
+  // const rgn   = heute ? regen3h() : dy.precipitation_probability_max[i];
   const feel  = heute ? c.apparent_temperature
     : `${Math.round(dy.apparent_temperature_max[i])}°<small> / ${Math.round(dy.apparent_temperature_min[i])}°</small>`;
 
@@ -1229,7 +1260,10 @@ function renderWeather(){
            heute ? T('temp') : T('maxmin'))
     + tile(heute ? `${Math.round(feel)}°` : feel, T('air'), T('feels'),
            { title:T('feelsT') })
-    + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, T('rain'), T('chance')))
+    // + (rgn == null ? '' : tile(`${Math.round(rgn)}<small> %</small>`, T('rain'), T('chance')))
+    // Wassertemperatur nur für heute: eine Messung, keine Prognose — wie
+    // Luftqualität, Sicht und die Abflusskacheln.
+    + (heute ? tile('–', T('water'), '', { id:'lake' }) : '')
     + tile(`${Math.round(wind)}<small> km/h</small>`, heute ? T('wind') : T('windMax'),
            kn(wind), { title:windWord(wind) })
     + tile(`${Math.round(gust)}<small> km/h</small>`, heute ? T('gust') : T('gustMax'),
@@ -1250,7 +1284,7 @@ function renderWeather(){
     + `<span class="dot">·</span>`
     + `<span title="${T('sunDown')}">${SUN_DOWN}${ss}</span>`;
 
-  if (i === 0){ renderFlow(); renderAir(); }   // nur für heute — keine Prognose dafür
+  if (i === 0){ renderFlow(); renderAir(); renderLake(); }   // nur für heute — keine Prognose dafür
 }
 
 /* Abfluss und Zufluss holt der Browser live von api.existenz.ch; der Stand aus
@@ -1302,9 +1336,20 @@ function depthAt(dock, level){
   return level - (CONFIG.refLevel + dock.groundRel);
 }
 
-/* Konservativ auf volle 10 cm abgerundet: 193 → 190. Eine Prognose soll nicht
-   genauer aussehen, als sie ist, und abrunden ist die sichere Richtung. */
-const depthWord = m => m == null ? null : Math.floor(m * 10) * 10;
+/* Wassertiefe fürs Dock als Text. Mit eigener Messung eine Zahl, sonst die
+   Spanne aus dem Prognoseband des gewählten Tages. Ganze Zentimeter: Seegrund
+   und Band sind beide auf den Zentimeter bekannt, seit refLevel geeicht ist —
+   die frühere Abrundung auf 10 cm hätte ein 4-cm-Band auf null gedrückt.
+   Dass es eine Prognose ist, sagt der Hinweis unter der Latte. */
+function depthText(dock){
+  if (measured != null){
+    const n = depthAt(dock, measured);
+    return n == null ? '' : T('depthNow', { n:Math.round(n * 100) });
+  }
+  const a = depthAt(dock, levelMin), b = depthAt(dock, levelMax);
+  if (a == null || b == null) return '';
+  return T('depth', { a:Math.round(a * 100), b:Math.round(b * 100) });
+}
 
 function trendOf(qin, qout){
   if (qin == null || qout == null) return null;
@@ -1377,6 +1422,30 @@ function renderAir(){
   el.title = T('aqT');
   el.innerHTML = `<div class="v">${Math.round(aqi)}</div>`
     + `<div class="k">${T('aq')}</div><div class="q">${aqiWord(aqi)}</div>`;
+}
+
+/* Wassertemperatur des Sees — von schiffenen.guru, mit Erlaubnis von
+   appery.ch seit 05.09.2026. Nicht live aus dem Browser: deren API lässt nur
+   ihre eigene Seite zu (CORS). Der halbstündliche Job holt sie und legt sie
+   als `lake` in level.json ab; Wasser ändert seine Temperatur langsam genug.
+   Die Dankeszeile auf der Kachel ist in allen Sprachen dieselbe. */
+let lakeTemp = null, lakeTime = null;
+
+function renderLake(){
+  const el = $('#lake');
+  if (!el) return;
+  const when = lakeTime ? new Date(lakeTime) : null;
+  const ok = when && !isNaN(when);
+  const t = ok ? when.toLocaleString(LOCALE[lang],
+    { weekday:'short', hour:'2-digit', minute:'2-digit' }) : '';
+  const fresh = ok && (Date.now() - when) < CONFIG.lakeTempMaxAgeH * 3600e3;
+  if (lakeTemp == null || !fresh){
+    el.title = t ? T('waterStale', { t }) : '';
+    return;                                  // Platzhalter „–" bleibt stehen
+  }
+  el.title = T('waterT', { t });
+  el.innerHTML = `<div class="v">${lakeTemp.toFixed(1)}°</div>`
+    + `<div class="k">${T('water')}</div><div class="q">Thx schiffenen.guru</div>`;
 }
 
 async function loadHydro(){

@@ -67,7 +67,7 @@ CSV = os.path.join(DATA, "hydro.csv")
 ACTUAL = os.path.join(DATA, "level_daily.csv")     # Datum,Pegel — ein Wert pro Tag
 HEAD = ("timestamp,gE_min,gE_max,h2119,q2119,h2215,q2215,h2467,t2467,uv,aqi,"
         "wind,gust,wdir,smn_ff,smn_fx,smn_dd,smn_tt,smn_rad,q2179,t2179,"
-        "vario_grid,vario_all\n")
+        "vario_grid,vario_all,t_lake\n")
 
 UA = {"User-Agent": "pumpfoil-guru/1.0 (hobby project; contact via GitHub)"}
 
@@ -163,6 +163,26 @@ SMN_STATION = "GRA"
 SMN = ("https://api.existenz.ch/apiv1/smn/latest"
        f"?locations={SMN_STATION}&parameters=ff,fx,dd,tt,rad"
        "&app=pumpfoil.guru&version=1.0")
+# Wassertemperatur DES SEES — von schiffenen.guru (appery.ch, Duedingen), mit
+# deren Erlaubnis seit 05.09.2026. Am 23.08.2026 schon einmal eingebaut und am
+# selben Tag wieder ausgebaut, weil die Erlaubnis noch fehlte.
+#
+# Ihr eigener Sensor: Dragino-Node "dragino-temp-03" ueber Swisscom LPN
+# (LoRaWAN), Azure-Backend "Talaria". Die einzige Wassertemperatur, die es fuer
+# diesen See gibt — BAFU misst keine, Alplakes liefert nur alle paar Wochen
+# ein Satellitenbild, und BAFU 2467 ist Tiefenwasser aus der Staumauer.
+#
+# Antwort: JSON-Liste mit einem Eintrag. Der Messwert steckt als JSON-STRING im
+# Feld "Payload" (TempC1 in °C, dazu BatV = Batteriespannung), der Zeitpunkt
+# in "CreatedDate" (UTC). Der Endpunkt gibt immer den LETZTEN Wert zurueck,
+# auch wenn er alt ist — das Alter prueft deshalb die Seite, nicht der Job.
+#
+# Nur der Job holt ihn, nie der Browser: Access-Control-Allow-Origin ist auf
+# www.schiffenen.guru beschraenkt. Halbstuendlich reicht — Wasser aendert
+# seine Temperatur langsam, und der Sensor selbst meldet etwa stuendlich.
+LAKE_TEMP = ("https://func-core-talaria-other-prod.azurewebsites.net"
+             "/api/getLatestTemperature")
+LAKE_SITE = "https://www.schiffenen.guru"
 AIR = (f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={LAT}"
        f"&longitude={LON}&current=european_aqi&timezone=Europe/Zurich")
 
@@ -530,6 +550,35 @@ def fetch_vario():
         return (None, None)
 
 
+def fetch_lake_temp():
+    """Wassertemperatur des Sees von schiffenen.guru:
+    {"temperature": 23.3, "time": "2026-09-05T09:10:25.735Z", "battery_v": 3.64}
+    oder None. Beiwerk — ein Ausfall darf den Lauf nie kippen."""
+    try:
+        r = requests.get(LAKE_TEMP, timeout=30, headers=UA)
+        r.raise_for_status()
+        rows = r.json()
+        if isinstance(rows, dict):
+            rows = [rows]
+        best = None
+        for row in rows:
+            p = row.get("Payload") or {}
+            if isinstance(p, str):
+                p = json.loads(p)
+            if p.get("TempC1") is None:
+                continue
+            cand = {"temperature": float(p["TempC1"]),
+                    "time": row.get("CreatedDate"),
+                    "battery_v": None if p.get("BatV") is None else float(p["BatV"])}
+            # Bei mehreren Eintraegen zaehlt der juengste
+            if best is None or (cand["time"] or "") > (best["time"] or ""):
+                best = cand
+        return best
+    except Exception as e:                                  # noqa: BLE001
+        print(f"Wassertemperatur nicht geholt ({e})", file=sys.stderr)
+        return None
+
+
 def read_archive() -> list:
     """Alle Zeilen als dicts, gelesen nach der Kopfzeile der DATEI — nicht nach
     HEAD. So bleiben aeltere Archive lesbar, wenn Spalten dazukommen."""
@@ -662,6 +711,7 @@ def main() -> int:
         aqi = fetch_current(AIR, "european_aqi").get("european_aqi")
         smn = fetch_smn()
         v_grid, v_all = fetch_vario()
+        lake = fetch_lake_temp()
 
         # Warnung nur holen, wenn der letzte Stand alt genug ist. Das ist
         # robuster als am Zeitplan zu haengen — GitHubs Cron ist unpuenktlich.
@@ -705,6 +755,7 @@ def main() -> int:
             "smn_rad": smn.get("rad"),
             "q2179": sense_s.get("flow"), "t2179": sense_s.get("temperature"),
             "vario_grid": v_grid, "vario_all": v_all,
+            "t_lake": None if lake is None else lake["temperature"],
         }, archive)
 
         payload["hydro"] = {
@@ -755,6 +806,20 @@ def main() -> int:
             "height": warm_s.get("height"),
             "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur",
         }
+        # Wassertemperatur des Sees, von schiffenen.guru. Scheitert der Abruf,
+        # bleibt der letzte Stand samt seinem Zeitstempel stehen — die Seite
+        # blendet ihn aus, sobald er zu alt ist (CONFIG.lakeTempMaxAgeH).
+        if lake:
+            payload["lake"] = {
+                "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
+                "source_url": LAKE_SITE,
+                "temperature": lake["temperature"],
+                "time": lake["time"],
+                "battery_v": lake["battery_v"],
+                "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch",
+            }
+        elif old.get("lake"):
+            payload["lake"] = old["lake"]
         # Oberhalb des Sees. Noch nichts fuer die Anzeige — wird gesammelt, um
         # den Zusammenhang zum Groupe-E-Band zu pruefen.
         payload["sense"] = {
@@ -778,6 +843,7 @@ def main() -> int:
         bal = (in_s.get("flow") or 0) - (out_s.get("flow") or 0)
         print(f"Sense {sense_s.get('flow')} m³/s · Wind Modell {om.get('wind_speed_10m')} / gemessen {smn.get('ff')} km/h · "
               f"UV {uv} · Luft {aqi} · Gümmenen {warm_s.get('temperature')} °C · "
+              f"See {lake['temperature'] if lake else None} °C · "
               f"Laupen {out_s.get('flow')} m³/s · Fribourg {in_s.get('height')} m ü. M. "
               f"/ {in_s.get('flow')} m³/s · Bilanz {bal:+.2f} m³/s "
               f"({'steigend' if bal > 0 else 'sinkend'})")
@@ -786,7 +852,7 @@ def main() -> int:
                   + ("" if st["enough"] else f", Wortangabe ab {MIN_SAMPLES}"))
     except Exception as e:                                  # noqa: BLE001
         print(f"BAFU nicht geholt ({e}) — alter Stand bleibt", file=sys.stderr)
-        for k in ("hydro", "sarine", "water", "air", "sense"):
+        for k in ("hydro", "sarine", "water", "air", "sense", "lake"):
             if k in old:
                 payload[k] = old[k]
 
