@@ -1428,7 +1428,10 @@ function renderAir(){
    appery.ch seit 05.09.2026. Nicht live aus dem Browser: deren API lässt nur
    ihre eigene Seite zu (CORS). Der halbstündliche Job holt sie und legt sie
    als `lake` in level.json ab; Wasser ändert seine Temperatur langsam genug.
-   Die Dankeszeile auf der Kachel ist in allen Sprachen dieselbe. */
+   Auf der Kachel ganze Grad wie bei „Luft" (ab .5 aufgerundet); der genaue
+   Wert mit einer Dezimale bleibt im Archiv und in level.json. Die dritte
+   Zeile nennt nur die Quelle, in allen Sprachen gleich — der Dank steht im
+   Fussbereich, auf der Kachel wäre er eine Zeile zu viel. */
 let lakeTemp = null, lakeTime = null;
 
 function renderLake(){
@@ -1444,8 +1447,8 @@ function renderLake(){
     return;                                  // Platzhalter „–" bleibt stehen
   }
   el.title = T('waterT', { t });
-  el.innerHTML = `<div class="v">${lakeTemp.toFixed(1)}°</div>`
-    + `<div class="k">${T('water')}</div><div class="q">Thx schiffenen.guru</div>`;
+  el.innerHTML = `<div class="v">${Math.round(lakeTemp)}°</div>`
+    + `<div class="k">${T('water')}</div><div class="q">schiffenen.guru</div>`;
 }
 
 async function loadHydro(){
