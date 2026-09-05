@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-05T16:08:24+00:00",
+  "fetched": "2026-09-05T16:52:19+00:00",
   "forecast": [
     {
       "date": "05.09.2026",
@@ -29,25 +29,67 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
+  "warning_checked": "2026-09-05T16:52:25+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.28,
-    "time": "2026-09-05T15:50:00+00:00",
+    "flow": 7.25,
+    "time": "2026-09-05T16:40:00+00:00",
     "stats": {
-      "n": 445,
-      "days": 14.0,
+      "n": 446,
+      "days": 14.1,
       "enough": true,
       "min": 7.16,
-      "p10": 7.33,
+      "p10": 7.32,
       "p25": 7.6,
       "median": 8.14,
-      "p75": 33.88,
-      "p90": 116.02,
+      "p75": 33.66,
+      "p90": 115.91,
       "max": 153.11
     }
+  },
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 0.9,
+    "european_aqi": 18.0,
+    "wind_model": 6.9,
+    "gust_model": 18.0,
+    "wind_dir_model": 351.0,
+    "wind_measured": 10.8,
+    "gust_measured": 17.3,
+    "wind_dir_measured": 3.0,
+    "temp_measured": 24.1,
+    "radiation_measured": 254.0,
+    "vario_grid": 10.74,
+    "vario_total": 27.39,
+    "vario_unit": "Rp/kWh",
+    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-09-05T16:52:26+00:00"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 20.63,
+    "height": 470.33,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
+  "lake": {
+    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
+    "source_url": "https://www.schiffenen.guru",
+    "temperature": 24.1,
+    "time": "2026-09-05T13:10:35.012Z",
+    "battery_v": 3.642,
+    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
+  },
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.34,
+    "temperature": 20.34,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
@@ -55,8 +97,8 @@
     "height": 531.95,
     "flow": 5.07,
     "stats": {
-      "n": 444,
-      "days": 13.3,
+      "n": 445,
+      "days": 13.4,
       "enough": true,
       "min": 4.78,
       "p10": 4.98,
@@ -67,47 +109,6 @@
       "max": 87.38
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 20.96,
-    "height": 470.33,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 1.7,
-    "european_aqi": 18.0,
-    "wind_model": 8.6,
-    "gust_model": 22.3,
-    "wind_dir_model": 345.0,
-    "wind_measured": 4.0,
-    "gust_measured": 14.8,
-    "wind_dir_measured": 347.0,
-    "temp_measured": 24.3,
-    "radiation_measured": 173.0,
-    "vario_grid": 7.55,
-    "vario_total": 24.2,
-    "vario_unit": "Rp/kWh",
-    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-05T16:04:17+00:00"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.35,
-    "temperature": 20.4,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
-  },
-  "lake": {
-    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
-    "source_url": "https://www.schiffenen.guru",
-    "temperature": 24.1,
-    "time": "2026-09-05T13:10:35.012Z",
-    "battery_v": 3.642,
-    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
