@@ -179,7 +179,9 @@ SMN = ("https://api.existenz.ch/apiv1/smn/latest"
 #
 # Nur der Job holt ihn, nie der Browser: Access-Control-Allow-Origin ist auf
 # www.schiffenen.guru beschraenkt. Halbstuendlich reicht — Wasser aendert
-# seine Temperatur langsam, und der Sensor selbst meldet etwa stuendlich.
+# seine Temperatur langsam, und der Sensor meldet seltener als wir holen:
+# am 05.09.2026 stand um 11:53 UTC noch der Wert von 09:10 an, der Takt
+# liegt also bei mindestens drei Stunden. Wie lang genau, zeigt t_lake.
 LAKE_TEMP = ("https://func-core-talaria-other-prod.azurewebsites.net"
              "/api/getLatestTemperature")
 LAKE_SITE = "https://www.schiffenen.guru"
