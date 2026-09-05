@@ -686,15 +686,18 @@ const CONFIG = {
     { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:true,
       groundRel:-0.37, stopLowRel:0.48, goLowRel:0.53, goHigh:532.50, stopHigh:532.50 },
 
-    // Tiefe 133 cm · rot unter 80 · grün ab 120. Die 100 cm vom 25.08. waren
-    // zu optimistisch — bei 133 cm lautete das Urteil "noch grün".
+    // Tiefe 133 cm · rot unter 90 · grün ab 120. Die 100 cm vom 25.08. waren
+    // zu optimistisch — bei 133 cm lautete das Urteil "noch grün". Rot lag bis
+    // 05.09.2026 bei 80 cm; auch das war zu optimistisch, Urteil des Besitzers.
     { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:true, regatta:true,
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
-      groundRel:-1.33, stopLowRel:-0.53, goLowRel:-0.13, goHigh:532.50, stopHigh:532.50 },
+      groundRel:-1.33, stopLowRel:-0.43, goLowRel:-0.13, goHigh:532.50, stopHigh:532.50 },
 
     // Grund 224 cm tiefer als Dock 2, am 25.08. zusammen mit Dock 2 gemessen
     // und deshalb verlässlich. Schwellen von Dock 2 übernommen: rot unter 80,
     // grün ab 120 — gleiche Beurteilung, am Dock 3 selbst nicht nachgeprüft.
+    // Dock 2 wurde am 05.09.2026 auf rot unter 90 verschärft; Dock 3 bewusst
+    // noch nicht, das ist offen.
     { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:true, regatta:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
       groundRel:-3.57, stopLowRel:-2.77, goLowRel:-2.37, goHigh:532.50, stopHigh:532.50 },
