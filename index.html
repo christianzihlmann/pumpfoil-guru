@@ -672,12 +672,11 @@ const CONFIG = {
   refLevel: 530.71,
   refLevelCalibrated: true,
 
-  // regatta:true → liegt im Betriebsbereich des Ruderclubs. Bei Ruderbetrieb
-  //                orange, nicht rot: der See ist belegt, aber nicht gesperrt.
-  //                Gilt für Dock 2, 3 und 4 — Dock 1 ist privat.
-  //                Beide Quellen, Kalender und manueller Schalter, wirken
-  //                gleich; früher sperrte der Schalter noch rot und liess
-  //                Dock 4 aus.
+  // Ruderbetrieb (Kalender oder manueller Schalter) färbt seit 06.09.2026
+  // KEINE Ampel mehr und schreibt nichts in die Dock-Karten. Die Farben
+  // zeigen den Pegel, sonst nichts. Einzige Wirkung ist der Hinweis mit dem
+  // gelben Dreieck in der Kopfzeile, siehe renderVerdict. Das frühere
+  // Merkmal regatta:true ist deshalb weg.
   // manual:true  → nur da, wenn manuell eingeschaltet
   // floating:true → Schwimmsteg, hat gar keine Pegelgrenzen
   //
@@ -692,7 +691,7 @@ const CONFIG = {
     // Tiefe 133 cm · rot unter 90 · grün ab 120. Die 100 cm vom 25.08. waren
     // zu optimistisch — bei 133 cm lautete das Urteil "noch grün". Rot lag bis
     // 05.09.2026 bei 80 cm; auch das war zu optimistisch, Urteil des Besitzers.
-    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:true, regatta:true,
+    { id:'d2', short:'D2', name:'Dock 2', place:'Main Rowing', calibrated:true,
       map:'https://maps.app.goo.gl/pCoPtRQBvD7twnuN6',   // 46.847258, 7.141409
       groundRel:-1.33, stopLowRel:-0.43, goLowRel:-0.13, goHigh:532.50, stopHigh:532.50 },
 
@@ -701,11 +700,11 @@ const CONFIG = {
     // grün ab 120 — gleiche Beurteilung, am Dock 3 selbst nicht nachgeprüft.
     // Dock 2 wurde am 05.09.2026 auf rot unter 90 verschärft; Dock 3 bewusst
     // noch nicht, das ist offen.
-    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:true, regatta:true,
+    { id:'d3', short:'D3', name:'Dock 3', place:'Rowing South', calibrated:true,
       map:'https://maps.app.goo.gl/DeNJkK4a7wVLe2yS8',   // 46.846452, 7.141960
       groundRel:-3.57, stopLowRel:-2.77, goLowRel:-2.37, goHigh:532.50, stopHigh:532.50 },
 
-    { id:'d4', short:'D4', name:'Dock 4', place:'Floating', manual:true, summary:false, floating:true, regatta:true,
+    { id:'d4', short:'D4', name:'Dock 4', place:'Floating', manual:true, summary:false, floating:true,
       map:'https://maps.app.goo.gl/fDbZoVYaNq99WqA36' }   // 46.847556, 7.142008
   ],
 
@@ -773,10 +772,12 @@ const rowingOn = iso => rowing.find(e => iso >= e.from && iso <= e.to) || null;
 /* Ruderbetrieb hat ZWEI Quellen, die dasselbe bewirken: den Vereinskalender
    und den manuellen Schalter in data/level.json. Der Schalter ist für Anlässe
    da, die nicht im Kalender des Clubs Aviron Vevey stehen — ein anderer Verein
-   etwa. Er gilt für alle angezeigten Tage, weil er kein Datum kennt, und zählt
-   immer als Wettkampf. */
+   etwa. Er kennt kein Datum und gilt deshalb NUR FÜR HEUTE: wer ihn umlegt,
+   meint den laufenden Tag, und morgen ist nicht automatisch auch Wettkampf.
+   Kalendereinträge haben ein Datum und gelten auf ihrem Tag. Der Schalter
+   zählt immer als Wettkampf. */
 const rowingNow = () =>
-  rowingDay || (manual.rowing_competition ? { kind:'race', name:'' } : null);
+  rowingDay || (dayIdx === 0 && manual.rowing_competition ? { kind:'race', name:'' } : null);
 
 /* Groupe E liefert mehrere Tage. dayIdx wählt, welcher gezeigt wird —
    Pegel, Ampeln und Wetter hängen alle daran. Abfluss gibt es nur für heute. */
@@ -847,15 +848,9 @@ function statusFor(dock){
   // Manuelle Sperren gehen dem Pegel vor
   if (dock.manual && !manual.dock4_installed)
     return { s:'stop', split:false, why:T('outOfOrder') };
-  // Ruderbetrieb: ORANGE, nicht rot. Der See ist belegt, gesperrt ist er
-  // nicht — die Einschätzung bleibt beim Fahrer. Gilt für Dock 2, 3 und 4;
-  // Dock 1 ist privat und nie betroffen.
-  //
-  // Steht bewusst VOR der Schwimmsteg-Regel, sonst käme Dock 4 nie hierher.
-  const rud = rowingNow();
-  if (dock.regatta && rud)
-    return { s:'warn', split:false,
-             note: rud.kind === 'training' ? T('training') : T('race') };
+  // Ruderbetrieb färbt hier bewusst NICHTS mehr (seit 06.09.2026). Die
+  // Ampel zeigt den Pegel; ob der See belegt ist, sagt der Hinweis in der
+  // Kopfzeile, siehe renderVerdict.
 
   // Schwimmsteg hebt und senkt sich mit dem Wasser — der Pegel ist ihm egal.
   // Er hat deshalb gar keine Schwellen und steht nicht an der Messlatte.
@@ -1020,8 +1015,8 @@ function renderVerdict(){
   else                                  txt = T('nothing');
   if (blocked.length) txt += ' ' + T('blockedS', { x:list(blocked.map(x => x.d.name)) });
 
-  // Ruderbetrieb gilt für den gewählten Tag, nicht nur für heute — man schaut
-  // ja gerade nach, ob morgen etwas geht.
+  // Ruderbetrieb: die einzige Stelle, an der er sichtbar wird. Kalender-
+  // einträge gelten für den gewählten Tag, der manuelle Schalter nur heute.
   let extra = '';
   const rud = rowingNow();
   if (rud){
