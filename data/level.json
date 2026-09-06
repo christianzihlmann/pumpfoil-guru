@@ -26,7 +26,7 @@
     }
   ],
   "manual": {
-    "rowing_competition": false,
+    "rowing_competition": true,
     "dock4_installed": false
   },
   "warning_checked": "2026-09-06T05:52:24+00:00",
