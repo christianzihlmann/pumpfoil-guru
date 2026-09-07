@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-07T18:52:19+00:00",
+  "fetched": "2026-09-07T19:08:22+00:00",
   "forecast": [
     {
       "date": "07.09.2026",
@@ -11,18 +11,18 @@
     },
     {
       "date": "08.09.2026",
-      "min": 530.98,
-      "max": 531.5
+      "min": 531.01,
+      "max": 531.52
     },
     {
       "date": "09.09.2026",
-      "min": 530.97,
-      "max": 531.54
+      "min": 531.0,
+      "max": 531.57
     },
     {
       "date": "10.09.2026",
-      "min": 531.01,
-      "max": 531.81
+      "min": 531.05,
+      "max": 531.84
     }
   ],
   "manual": {
@@ -35,39 +35,39 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 136.05,
-    "time": "2026-09-07T18:40:00+00:00",
+    "flow": 136.2,
+    "time": "2026-09-07T19:00:00+00:00",
     "stats": {
-      "n": 548,
+      "n": 549,
       "days": 16.2,
       "enough": true,
       "min": 7.13,
       "p10": 7.25,
       "p25": 7.42,
       "median": 8.11,
-      "p75": 35.05,
-      "p90": 121.11,
+      "p75": 36.38,
+      "p90": 124.54,
       "max": 153.11
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
-    "european_aqi": 27.0,
-    "wind_model": 2.1,
-    "gust_model": 4.3,
-    "wind_dir_model": 121.0,
-    "wind_measured": 4.0,
-    "gust_measured": 5.4,
-    "wind_dir_measured": 213.0,
-    "temp_measured": 24.9,
-    "radiation_measured": 4.0,
-    "vario_grid": 15.03,
-    "vario_total": 31.68,
+    "european_aqi": 26.0,
+    "wind_model": 2.3,
+    "gust_model": 4.7,
+    "wind_dir_model": 141.0,
+    "wind_measured": 1.8,
+    "gust_measured": 3.2,
+    "wind_dir_measured": 58.0,
+    "temp_measured": 23.9,
+    "radiation_measured": 5.0,
+    "vario_grid": 14.89,
+    "vario_total": 31.54,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-07T18:52:23+00:00"
+    "time": "2026-09-07T19:08:24+00:00"
   },
   "water": {
     "station": "2467",
@@ -88,7 +88,7 @@
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.28,
-    "temperature": 20.47,
+    "temperature": 20.35,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,14 +97,14 @@
     "height": 532.63,
     "flow": 68.91,
     "stats": {
-      "n": 547,
+      "n": 548,
       "days": 15.5,
       "enough": true,
       "min": 4.78,
       "p10": 5.0,
       "p25": 5.07,
-      "median": 5.57,
-      "p75": 65.92,
+      "median": 5.63,
+      "p75": 65.99,
       "p90": 68.65,
       "max": 87.38
     },
