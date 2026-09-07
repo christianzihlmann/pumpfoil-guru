@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-07T06:52:24+00:00",
+  "fetched": "2026-09-07T07:08:24+00:00",
   "forecast": [
     {
       "date": "07.09.2026",
@@ -21,15 +21,14 @@
     },
     {
       "date": "10.09.2026",
-      "min": 531.0,
-      "max": 531.68
+      "min": 530.99,
+      "max": 531.67
     }
   ],
   "manual": {
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-09-07T06:06:29+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
@@ -50,6 +49,32 @@
       "max": 153.11
     }
   },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 532.63,
+    "flow": 68.25,
+    "stats": {
+      "n": 524,
+      "days": 15.0,
+      "enough": true,
+      "min": 4.78,
+      "p10": 5.01,
+      "p25": 5.07,
+      "median": 5.83,
+      "p75": 66.22,
+      "p90": 68.65,
+      "max": 87.38
+    },
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 18.01,
+    "height": 471.38,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 1.1,
@@ -69,12 +94,12 @@
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
     "time": "2026-09-07T06:52:30+00:00"
   },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 18.01,
-    "height": 471.38,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.35,
+    "temperature": 16.99,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "lake": {
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
@@ -83,32 +108,6 @@
     "time": "2026-09-07T05:09:43.543Z",
     "battery_v": 3.648,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.35,
-    "temperature": 16.99,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
-  },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 532.63,
-    "flow": 68.25,
-    "stats": {
-      "n": 524,
-      "days": 15.0,
-      "enough": true,
-      "min": 4.78,
-      "p10": 5.01,
-      "p25": 5.07,
-      "median": 5.83,
-      "p75": 66.22,
-      "p90": 68.65,
-      "max": 87.38
-    },
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
