@@ -698,6 +698,44 @@ def main() -> int:
     if "measured" in old:
         payload["measured"] = old["measured"]
 
+    # Gewitterwarnung. Bewusst VOR dem BAFU-Block und ausserhalb von dessen
+    # try/except: sie hat mit BAFU nichts zu tun. Bis zum 08.09.2026 stand
+    # sie darin, und der Ausfallpfad uebernahm sie nicht — bei jedem
+    # BAFU-Ausfall (einer von 15 Laeufen) verschwand sie fuer einen Lauf aus
+    # level.json, an jenem Tag zweimal mitten in einer aktiven Warnung.
+    #
+    # Nur holen, wenn der letzte Stand alt genug ist. Das ist robuster als am
+    # Zeitplan zu haengen — GitHubs Cron ist unpuenktlich.
+    now = datetime.now(timezone.utc)
+    last = old.get("warning_checked")
+    stale = True
+    if last:
+        try:
+            stale = (now - datetime.fromisoformat(last)).total_seconds() > WARN_MAX_AGE_MIN * 60
+        except ValueError:
+            stale = True
+
+    if stale:
+        storm = fetch_thunderstorm()
+        payload["warning_checked"] = now.isoformat(timespec="seconds")
+    else:
+        storm = old.get("warning")          # letzten Stand weiterreichen
+        payload["warning_checked"] = last
+        # Der uebernommene Stand kann inzwischen abgelaufen sein
+        if storm and storm.get("expires"):
+            try:
+                if datetime.fromisoformat(storm["expires"]) < now:
+                    storm = None
+            except ValueError:
+                storm = None
+
+    # Nur setzen, wenn es wirklich eine Gewitterwarnung gibt. Fehlt der
+    # Block, zeigt die Seite gar nichts an — kein "keine Warnung".
+    if storm:
+        payload["warning"] = storm
+        print(f"GEWITTERWARNUNG: {storm['event']} ({storm['severity']}) "
+              f"bis {storm['expires']}")
+
     # BAFU ist Beiwerk: faellt es aus, bleibt der letzte Stand stehen
     try:
         h = fetch_hydro()
@@ -715,30 +753,6 @@ def main() -> int:
         v_grid, v_all = fetch_vario()
         lake = fetch_lake_temp()
 
-        # Warnung nur holen, wenn der letzte Stand alt genug ist. Das ist
-        # robuster als am Zeitplan zu haengen — GitHubs Cron ist unpuenktlich.
-        now = datetime.now(timezone.utc)
-        last = old.get("warning_checked")
-        stale = True
-        if last:
-            try:
-                stale = (now - datetime.fromisoformat(last)).total_seconds() > WARN_MAX_AGE_MIN * 60
-            except ValueError:
-                stale = True
-
-        if stale:
-            storm = fetch_thunderstorm()
-            payload["warning_checked"] = now.isoformat(timespec="seconds")
-        else:
-            storm = old.get("warning")          # letzten Stand weiterreichen
-            payload["warning_checked"] = last
-            # Der uebernommene Stand kann inzwischen abgelaufen sein
-            if storm and storm.get("expires"):
-                try:
-                    if datetime.fromisoformat(storm["expires"]) < now:
-                        storm = None
-                except ValueError:
-                    storm = None
         ts = out_s.get("timestamp") or in_s.get("timestamp")
         today = forecast[0]
         archive = read_archive()
@@ -769,18 +783,6 @@ def main() -> int:
             "time": datetime.fromtimestamp(ts, timezone.utc).isoformat(timespec="seconds"),
             "stats": flow_stats(rows, "q2215"),
         }
-        # Saane bei Guemmenen, unterhalb von Laupen. Einzige Station der Kette
-        # mit Wassertemperatur. Der Wert ist NICHT die Seetemperatur — es ist
-        # Tiefenwasser aus der Staumauer plus Erwaermung auf dem Weg. Wird
-        # gesammelt, um ihn spaeter gegen eine echte Oberflaechenmessung zu
-        # halten und den Zusammenhang zu bestimmen.
-        # Nur setzen, wenn es wirklich eine Gewitterwarnung gibt. Fehlt der
-        # Block, zeigt die Seite gar nichts an — kein "keine Warnung".
-        if storm:
-            payload["warning"] = storm
-            print(f"GEWITTERWARNUNG: {storm['event']} ({storm['severity']}) "
-                  f"bis {storm['expires']}")
-
         payload["air"] = {
             "source": "Open-Meteo (Modell) + MeteoSchweiz " + SMN_STATION + " (Messung)",
             "uv_index": uv,
@@ -801,6 +803,11 @@ def main() -> int:
             "measured_station": SMN_STATION + " Fribourg/Grangeneuve, 8.7 km",
             "time": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         }
+        # Saane bei Guemmenen, unterhalb von Laupen. Einzige Station der Kette
+        # mit Wassertemperatur. Der Wert ist NICHT die Seetemperatur — es ist
+        # Tiefenwasser aus der Staumauer plus Erwaermung auf dem Weg. Wird
+        # gesammelt, um ihn spaeter gegen eine echte Oberflaechenmessung zu
+        # halten und den Zusammenhang zu bestimmen.
         payload["water"] = {
             "station": WARM,
             "name": "Saane – Gümmenen",
