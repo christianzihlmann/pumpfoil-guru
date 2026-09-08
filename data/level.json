@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-08T18:52:25+00:00",
+  "fetched": "2026-09-08T18:58:08+00:00",
   "forecast": [
     {
       "date": "08.09.2026",
@@ -43,18 +43,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 136.5,
-    "time": "2026-09-08T18:40:00+00:00",
+    "flow": 137.55,
+    "time": "2026-09-08T18:50:00+00:00",
     "stats": {
-      "n": 599,
+      "n": 600,
       "days": 17.2,
       "enough": true,
       "min": 7.13,
       "p10": 7.25,
       "p25": 7.42,
       "median": 8.14,
-      "p75": 45.73,
-      "p90": 131.27,
+      "p75": 46.12,
+      "p90": 131.88,
       "max": 153.11
     }
   },
@@ -65,17 +65,17 @@
     "wind_model": 10.2,
     "gust_model": 55.4,
     "wind_dir_model": 252.0,
-    "wind_measured": 16.2,
-    "gust_measured": 24.8,
-    "wind_dir_measured": 230.0,
-    "temp_measured": 27.4,
-    "radiation_measured": 4.0,
+    "wind_measured": 29.5,
+    "gust_measured": 50.4,
+    "wind_dir_measured": 281.0,
+    "temp_measured": 25.9,
+    "radiation_measured": 7.0,
     "vario_grid": 13.54,
     "vario_total": 30.19,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-08T18:52:51+00:00"
+    "time": "2026-09-08T18:58:11+00:00"
   },
   "water": {
     "station": "2467",
@@ -95,23 +95,23 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 1.26,
-    "temperature": 20.86,
+    "flow": 1.25,
+    "temperature": 20.82,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
     "height": 532.63,
-    "flow": 68.38,
+    "flow": 68.51,
     "stats": {
-      "n": 598,
+      "n": 599,
       "days": 16.5,
       "enough": true,
       "min": 4.78,
       "p10": 4.98,
       "p25": 5.07,
-      "median": 12.65,
+      "median": 12.72,
       "p75": 68.25,
       "p90": 68.65,
       "max": 87.38
