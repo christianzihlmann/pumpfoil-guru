@@ -31,6 +31,7 @@ import json
 import os
 import re
 import sys
+import time
 from datetime import date, datetime, timezone
 from html import unescape
 
@@ -60,6 +61,16 @@ HYDRO = ("https://api.existenz.ch/apiv1/hydro/latest"
          f"?locations={LAKE_IN},{LAKE_OUT},{WARM},{SENSE}"
          "&parameters=height,flow,temperature"
          "&app=pumpfoil.guru&version=1.0")
+# Seit dem 05.09.2026 antwortet api.existenz.ch bei etwa jedem 15. Abruf mit
+# HTTP 415 "Unsupported Media Type" — auf eine GET-Anfrage, die gar keinen
+# Inhalt hat. Vom 29.08. bis 04.09. kam das kein einziges Mal vor, seither
+# zwei- bis fuenfmal am Tag, ueber den Tag verteilt, und der naechste Lauf
+# 30 Minuten spaeter klappt wieder. Ein Fehler auf deren Seite, wohl ein
+# einzelner kaputter Knoten. Jeder Ausfall kostete eine Archivzeile; deshalb
+# jetzt bis zu drei Versuche mit Pause. Der SMN-Endpunkt desselben Hosts hat
+# nie gestreikt.
+HYDRO_TRIES = 3
+HYDRO_PAUSE_S = 10
 
 DATA = os.path.join(os.path.dirname(__file__), "..", "data")
 OUT = os.path.join(DATA, "level.json")
@@ -355,16 +366,31 @@ def append_actuals(vals: dict, archive: list) -> int:
 
 
 def fetch_hydro() -> dict:
-    """{'2119': {'height': .., 'flow': .., 'timestamp': ..}, '2215': {...}}"""
-    r = requests.get(HYDRO, timeout=30, headers=UA)
-    r.raise_for_status()
-    out = {}
-    for row in r.json().get("payload", []):
-        loc, par = str(row.get("loc")), row.get("par")
-        if par in ("height", "flow", "temperature"):
-            out.setdefault(loc, {})[par] = float(row["val"])
-            out[loc]["timestamp"] = int(row["timestamp"])
-    return out
+    """{'2119': {'height': .., 'flow': .., 'timestamp': ..}, '2215': {...}}
+    Bis zu HYDRO_TRIES Versuche, siehe Kommentar dort. Scheitern alle, fliegt
+    der letzte Fehler — der Aufrufer behandelt ihn wie bisher."""
+    fehler = None
+    for versuch in range(1, HYDRO_TRIES + 1):
+        try:
+            r = requests.get(HYDRO, timeout=30,
+                             headers={**UA, "Accept": "application/json"})
+            r.raise_for_status()
+            out = {}
+            for row in r.json().get("payload", []):
+                loc, par = str(row.get("loc")), row.get("par")
+                if par in ("height", "flow", "temperature"):
+                    out.setdefault(loc, {})[par] = float(row["val"])
+                    out[loc]["timestamp"] = int(row["timestamp"])
+            if versuch > 1:
+                print(f"BAFU im {versuch}. Versuch geholt", file=sys.stderr)
+            return out
+        except Exception as e:                              # noqa: BLE001
+            fehler = e
+            if versuch < HYDRO_TRIES:
+                print(f"BAFU-Versuch {versuch} gescheitert ({e}), "
+                      f"neuer Versuch in {HYDRO_PAUSE_S} s", file=sys.stderr)
+                time.sleep(HYDRO_PAUSE_S)
+    raise fehler
 
 
 def fetch_current(url: str, *keys):
@@ -864,6 +890,14 @@ def main() -> int:
         for k in ("hydro", "sarine", "water", "air", "sense", "lake"):
             if k in old:
                 payload[k] = old[k]
+        # Den Fehler festhalten, damit er sich spaeter aus der Git-Historie
+        # von level.json ablesen laesst — die Logs der Laeufe sind ohne
+        # Anmeldung nicht erreichbar. Steht nur in Laeufen, die gescheitert
+        # sind; ein guter Lauf schreibt das Feld nicht.
+        payload["hydro_error"] = {
+            "time": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "error": str(e)[:300],
+        }
 
     # Tatsaechliche Tageswerte — die einzige echte Pegelmessung, die wir kennen
     # Ruderkalender: hoechstens einmal pro Woche, sonst den alten Stand behalten.
