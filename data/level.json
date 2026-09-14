@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-14T15:52:20+00:00",
+  "fetched": "2026-09-14T16:08:25+00:00",
   "forecast": [
     {
       "date": "14.09.2026",
@@ -12,7 +12,7 @@
     {
       "date": "15.09.2026",
       "min": 530.79,
-      "max": 531.07
+      "max": 531.06
     },
     {
       "date": "16.09.2026",
@@ -21,15 +21,15 @@
     },
     {
       "date": "17.09.2026",
-      "min": 530.96,
-      "max": 531.22
+      "min": 530.94,
+      "max": 531.2
     }
   ],
   "manual": {
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-09-14T15:08:27+00:00",
+  "warning_checked": "2026-09-14T16:08:25+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
@@ -111,7 +111,7 @@
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
   "hydro_error": {
-    "time": "2026-09-14T15:52:21+00:00",
+    "time": "2026-09-14T16:08:29+00:00",
     "error": "weder 2215 noch 2119 lieferten Werte"
   },
   "rowing": {
