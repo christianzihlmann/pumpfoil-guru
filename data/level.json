@@ -2,27 +2,27 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-17T19:05:06+00:00",
+  "fetched": "2026-09-17T19:08:22+00:00",
   "forecast": [
     {
       "date": "17.09.2026",
-      "min": 530.65,
+      "min": 530.71,
       "max": 531.01
     },
     {
       "date": "18.09.2026",
-      "min": 530.42,
-      "max": 530.79
+      "min": 530.48,
+      "max": 530.85
     },
     {
       "date": "19.09.2026",
-      "min": 530.42,
-      "max": 530.42
+      "min": 530.48,
+      "max": 530.48
     },
     {
       "date": "20.09.2026",
-      "min": 530.42,
-      "max": 530.42
+      "min": 530.48,
+      "max": 530.48
     }
   ],
   "manual": {
@@ -35,18 +35,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 144.97,
-    "time": "2026-09-17T18:50:00+00:00",
+    "flow": 145.43,
+    "time": "2026-09-17T19:00:00+00:00",
     "stats": {
-      "n": 986,
+      "n": 987,
       "days": 26.2,
       "enough": true,
       "min": 7.02,
       "p10": 7.22,
       "p25": 7.33,
       "median": 7.95,
-      "p75": 44.34,
-      "p90": 133.28,
+      "p75": 44.97,
+      "p90": 133.35,
       "max": 153.11
     }
   },
@@ -67,7 +67,7 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-17T19:05:09+00:00"
+    "time": "2026-09-17T19:08:26+00:00"
   },
   "water": {
     "station": "2467",
@@ -88,24 +88,24 @@
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.41,
-    "temperature": 16.3,
+    "temperature": 16.25,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.74,
-    "flow": 83.81,
+    "height": 532.69,
+    "flow": 77.36,
     "stats": {
-      "n": 985,
+      "n": 986,
       "days": 25.5,
       "enough": true,
       "min": 4.78,
       "p10": 5.01,
       "p25": 5.1,
-      "median": 11.74,
-      "p75": 64.14,
-      "p90": 68.73,
+      "median": 11.96,
+      "p75": 64.54,
+      "p90": 68.78,
       "max": 87.38
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
