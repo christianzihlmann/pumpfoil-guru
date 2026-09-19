@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-19T09:52:22+00:00",
+  "fetched": "2026-09-19T10:08:30+00:00",
   "forecast": [
     {
       "date": "19.09.2026",
@@ -36,19 +36,60 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.13,
-    "time": "2026-09-19T09:20:00+00:00",
+    "time": "2026-09-19T10:00:00+00:00",
     "stats": {
-      "n": 1067,
+      "n": 1068,
       "days": 27.8,
       "enough": true,
       "min": 7.02,
       "p10": 7.19,
       "p25": 7.31,
       "median": 7.92,
-      "p75": 37.39,
-      "p90": 132.88,
+      "p75": 37.15,
+      "p90": 132.85,
       "max": 153.11
     }
+  },
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 4.5,
+    "european_aqi": 24.0,
+    "wind_model": 4.4,
+    "gust_model": 10.8,
+    "wind_dir_model": 9.0,
+    "wind_measured": 2.9,
+    "gust_measured": 9.7,
+    "wind_dir_measured": 50.0,
+    "temp_measured": 17.9,
+    "radiation_measured": 622.0,
+    "vario_grid": -3.58,
+    "vario_total": 8.37,
+    "vario_unit": "Rp/kWh",
+    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-09-19T10:08:35+00:00"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 17.44,
+    "height": 470.31,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
+  "lake": {
+    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
+    "source_url": "https://www.schiffenen.guru",
+    "temperature": 19.8,
+    "time": "2026-09-19T09:06:31.134Z",
+    "battery_v": 3.654,
+    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
+  },
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.37,
+    "temperature": 14.88,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
@@ -56,7 +97,7 @@
     "height": 531.96,
     "flow": 5.18,
     "stats": {
-      "n": 1066,
+      "n": 1067,
       "days": 27.1,
       "enough": true,
       "min": 4.78,
@@ -68,51 +109,6 @@
       "max": 87.38
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 16.66,
-    "height": 470.31,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 4.05,
-    "european_aqi": 22.0,
-    "wind_model": 5.4,
-    "gust_model": 11.2,
-    "wind_dir_model": 4.0,
-    "wind_measured": 2.9,
-    "gust_measured": 8.3,
-    "wind_dir_measured": 82.0,
-    "temp_measured": 16.8,
-    "radiation_measured": 580.0,
-    "vario_grid": -2.98,
-    "vario_total": 13.67,
-    "vario_unit": "Rp/kWh",
-    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-19T09:30:40+00:00"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.37,
-    "temperature": 14.19,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
-  },
-  "lake": {
-    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
-    "source_url": "https://www.schiffenen.guru",
-    "temperature": 19.8,
-    "time": "2026-09-19T09:06:31.134Z",
-    "battery_v": 3.654,
-    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
-  },
-  "hydro_error": {
-    "time": "2026-09-19T09:52:24+00:00",
-    "error": "weder 2215 noch 2119 lieferten Werte"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
