@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-20T23:52:19+00:00",
+  "fetched": "2026-09-21T00:08:22+00:00",
   "forecast": [
     {
       "date": "21.09.2026",
@@ -35,17 +35,17 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.08,
-    "time": "2026-09-20T23:40:00+00:00",
+    "flow": 7.05,
+    "time": "2026-09-20T23:50:00+00:00",
     "stats": {
-      "n": 1148,
+      "n": 1149,
       "days": 29.4,
       "enough": true,
       "min": 7.02,
       "p10": 7.16,
       "p25": 7.25,
       "median": 7.8,
-      "p75": 28.34,
+      "p75": 28.18,
       "p90": 130.38,
       "max": 153.11
     }
@@ -57,22 +57,22 @@
     "wind_model": 3.9,
     "gust_model": 5.8,
     "wind_dir_model": 158.0,
-    "wind_measured": 0.7,
-    "gust_measured": 2.5,
-    "wind_dir_measured": 246.0,
-    "temp_measured": 12.1,
-    "radiation_measured": 6.0,
-    "vario_grid": 8.56,
-    "vario_total": 20.51,
+    "wind_measured": 0.4,
+    "gust_measured": 1.8,
+    "wind_dir_measured": 148.0,
+    "temp_measured": 11.8,
+    "radiation_measured": 4.0,
+    "vario_grid": 8.2,
+    "vario_total": 20.15,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-20T23:52:23+00:00"
+    "time": "2026-09-21T00:08:25+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 16.99,
+    "temperature": 16.96,
     "height": 470.3,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -88,7 +88,7 @@
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.25,
-    "temperature": 14.7,
+    "temperature": 14.64,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,7 +97,7 @@
     "height": 531.96,
     "flow": 5.18,
     "stats": {
-      "n": 1147,
+      "n": 1148,
       "days": 28.7,
       "enough": true,
       "min": 4.78,
