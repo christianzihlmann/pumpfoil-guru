@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-22T06:47:47+00:00",
+  "fetched": "2026-09-22T06:52:27+00:00",
   "forecast": [
     {
       "date": "22.09.2026",
@@ -35,18 +35,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.02,
-    "time": "2026-09-22T06:30:00+00:00",
+    "flow": 6.99,
+    "time": "2026-09-22T06:40:00+00:00",
     "stats": {
-      "n": 1211,
+      "n": 1212,
       "days": 30.7,
       "enough": true,
       "min": 6.97,
       "p10": 7.13,
       "p25": 7.25,
       "median": 7.74,
-      "p75": 25.29,
-      "p90": 126.24,
+      "p75": 25.28,
+      "p90": 126.12,
       "max": 153.11
     }
   },
@@ -67,13 +67,13 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-22T06:47:52+00:00"
+    "time": "2026-09-22T06:52:31+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 16.03,
-    "height": 470.29,
+    "temperature": 16.02,
+    "height": 470.3,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
@@ -88,21 +88,21 @@
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.27,
-    "temperature": 12.58,
+    "temperature": 12.57,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
     "height": 531.96,
-    "flow": 5.18,
+    "flow": 5.21,
     "stats": {
-      "n": 1210,
-      "days": 29.9,
+      "n": 1211,
+      "days": 30.0,
       "enough": true,
       "min": 4.78,
       "p10": 5.04,
-      "p25": 5.11,
+      "p25": 5.12,
       "median": 5.21,
       "p75": 57.92,
       "p90": 68.65,
