@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-23T23:09:43+00:00",
+  "fetched": "2026-09-23T23:52:20+00:00",
   "forecast": [
     {
       "date": "24.09.2026",
@@ -29,78 +29,52 @@
     "rowing_competition": false,
     "dock4_installed": true
   },
-  "warning_checked": "2026-09-23T22:52:21+00:00",
+  "warning_checked": "2026-09-23T23:52:20+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.28,
-    "time": "2026-09-23T22:55:00+00:00",
+    "flow": 7.05,
+    "time": "2026-09-23T23:40:00+00:00",
     "stats": {
-      "n": 1289,
-      "days": 32.3,
+      "n": 1290,
+      "days": 32.4,
       "enough": true,
       "min": 6.75,
       "p10": 7.11,
       "p25": 7.22,
       "median": 7.68,
-      "p75": 25.26,
-      "p90": 124.54,
+      "p75": 25.24,
+      "p90": 124.51,
       "max": 153.11
     }
-  },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 531.96,
-    "flow": 5.18,
-    "stats": {
-      "n": 1288,
-      "days": 31.6,
-      "enough": true,
-      "min": 4.78,
-      "p10": 5.04,
-      "p25": 5.13,
-      "median": 5.21,
-      "p75": 57.34,
-      "p90": 68.65,
-      "max": 87.38
-    },
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 17.7,
-    "height": 470.37,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 24.0,
-    "wind_model": 3.5,
-    "gust_model": 9.4,
-    "wind_dir_model": 204.0,
-    "wind_measured": 3.2,
-    "gust_measured": 5.0,
-    "wind_dir_measured": 251.0,
-    "temp_measured": 12.4,
-    "radiation_measured": 3.0,
-    "vario_grid": 11.29,
-    "vario_total": 23.24,
+    "wind_model": 5.2,
+    "gust_model": 9.0,
+    "wind_dir_model": 192.0,
+    "wind_measured": 2.2,
+    "gust_measured": 3.2,
+    "wind_dir_measured": 211.0,
+    "temp_measured": 11.1,
+    "radiation_measured": 5.0,
+    "vario_grid": 8.35,
+    "vario_total": 20.3,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-23T23:08:28+00:00"
+    "time": "2026-09-23T23:52:25+00:00"
   },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.19,
-    "temperature": 13.99,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 17.32,
+    "height": 470.33,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
@@ -110,9 +84,31 @@
     "battery_v": 3.654,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
-  "hydro_error": {
-    "time": "2026-09-23T23:09:44+00:00",
-    "error": "weder 2215 noch 2119 lieferten Werte"
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.19,
+    "temperature": 13.68,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 531.96,
+    "flow": 5.18,
+    "stats": {
+      "n": 1289,
+      "days": 31.7,
+      "enough": true,
+      "min": 4.78,
+      "p10": 5.04,
+      "p25": 5.13,
+      "median": 5.21,
+      "p75": 57.28,
+      "p90": 68.65,
+      "max": 87.38
+    },
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
