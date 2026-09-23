@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-23T03:08:24+00:00",
+  "fetched": "2026-09-23T03:52:21+00:00",
   "forecast": [
     {
       "date": "23.09.2026",
@@ -29,7 +29,7 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-09-23T02:52:22+00:00",
+  "warning_checked": "2026-09-23T03:52:21+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
@@ -111,8 +111,8 @@
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
   "hydro_error": {
-    "time": "2026-09-23T03:08:24+00:00",
-    "error": "weder 2215 noch 2119 lieferten Werte"
+    "time": "2026-09-23T03:54:12+00:00",
+    "error": "HTTPSConnectionPool(host='api.existenz.ch', port=443): Max retries exceeded with url: /apiv1/hydro/latest?locations=2119,2215,2467,2179&parameters=height,flow,temperature&app=pumpfoil.guru&version=1.0 (Caused by NewConnectionError(\"HTTPSConnection(host='api.existenz.ch', port=443): Failed to establi"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
