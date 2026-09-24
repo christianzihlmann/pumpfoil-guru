@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-24T06:45:57+00:00",
+  "fetched": "2026-09-24T06:52:21+00:00",
   "forecast": [
     {
       "date": "24.09.2026",
@@ -35,18 +35,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 39.15,
-    "time": "2026-09-24T06:30:00+00:00",
+    "flow": 32.92,
+    "time": "2026-09-24T06:40:00+00:00",
     "stats": {
-      "n": 1304,
+      "n": 1305,
       "days": 32.7,
       "enough": true,
       "min": 6.75,
       "p10": 7.11,
       "p25": 7.22,
       "median": 7.66,
-      "p75": 23.96,
-      "p90": 122.5,
+      "p75": 24.68,
+      "p90": 122.43,
       "max": 153.11
     }
   },
@@ -67,13 +67,13 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-24T06:46:03+00:00"
+    "time": "2026-09-24T06:52:24+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 15.89,
-    "height": 470.48,
+    "temperature": 15.92,
+    "height": 470.8,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
@@ -87,24 +87,24 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 1.24,
-    "temperature": 12.04,
+    "flow": 1.22,
+    "temperature": 12.05,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.88,
-    "flow": 105.01,
+    "height": 532.85,
+    "flow": 99.71,
     "stats": {
-      "n": 1303,
-      "days": 31.9,
+      "n": 1304,
+      "days": 32.0,
       "enough": true,
       "min": 4.78,
       "p10": 5.05,
       "p25": 5.13,
       "median": 5.21,
-      "p75": 56.96,
+      "p75": 57.18,
       "p90": 68.65,
       "max": 105.01
     },
