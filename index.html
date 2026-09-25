@@ -375,7 +375,7 @@ de: {
   nothing:'Es geht nichts. Pegel ausserhalb aller Fenster.',
   goes:'{x} geht.', goPl:'{x} gehen.', limit:'{x} am Limit.', blockedS:'{x} gesperrt.',
   swings:'Pegel schwankt', outOfOrder:'Out of order',
-  floats:'schwimmt mit — Pegel egal', race:'Ruderwettkampf', training:'Rudertraining',
+  floats:'In Betrieb', race:'Ruderwettkampf', training:'Rudertraining',
   depth:'Wassertiefe: Min. {a} cm, Max. {b} cm', depthNow:'Wassertiefe: {n} cm',
   measuredAt:'Gemessen {v} m ü. M. · {t}',
   mapOpen:'{n} auf Google Maps öffnen',
@@ -439,7 +439,7 @@ fr: {
   goes:'{x} est praticable.', goPl:'{x} sont praticables.',
   limit:'{x} à la limite.', blockedS:'{x} fermé.',
   swings:'Niveau variable', outOfOrder:'Hors service',
-  floats:'flotte — niveau sans importance', race:'Régate', training:'Entraînement d’aviron',
+  floats:'En service', race:'Régate', training:'Entraînement d’aviron',
   depth:'Profondeur de l’eau : min. {a} cm, max. {b} cm', depthNow:'Profondeur de l’eau : {n} cm',
   measuredAt:'Mesuré {v} m s. m. · {t}',
   mapOpen:'Ouvrir {n} dans Google Maps',
@@ -503,7 +503,7 @@ en: {
   nothing:'Nothing doing. Level outside every window.',
   goes:'{x} is good.', goPl:'{x} are good.', limit:'{x} borderline.', blockedS:'{x} closed.',
   swings:'Level swings', outOfOrder:'Out of order',
-  floats:'floats with the water — level irrelevant', race:'Rowing race', training:'Rowing training',
+  floats:'In service', race:'Rowing race', training:'Rowing training',
   depth:'Water depth: min. {a} cm, max. {b} cm', depthNow:'Water depth: {n} cm',
   measuredAt:'Measured {v} m a.s.l. · {t}',
   mapOpen:'Open {n} in Google Maps',
@@ -728,7 +728,7 @@ const CONFIG = {
 
   // Notfall-Vorgaben, falls data/level.json keinen manual-Block hat.
   // Im Betrieb wird dieser Block in data/level.json direkt auf GitHub umgeschaltet.
-  manual: { rowing_competition:false, dock4_installed:true },
+  manual: { rowing_competition:false, dock4_installed:false },
   weather: { lat:46.8261, lon:7.1256, place:'Pensier' },
   hydro:   { station:'2215', inflow:'2119', sense:'2179' },   // Laupen, Fribourg, Sense
 

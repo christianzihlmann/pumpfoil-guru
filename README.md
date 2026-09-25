@@ -97,8 +97,8 @@ Dock 1 braucht am meisten Wasser, Dock 3 am wenigsten.
 **Dock 4 ist ein Schwimmsteg und hat gar keine Pegelgrenzen** (`floating:true`).
 Er hebt und senkt sich mit dem Wasser, der Pegel ist ihm egal. Deshalb steht er
 nicht an der Messlatte, hat keine Kalibrierregler und seine Ampel hängt nur an
-`dock4_installed`: eingebaut → grün („schwimmt mit — Pegel egal"), ausgebaut →
-rot („Out of order.").
+`dock4_installed`: eingebaut → grün („In Betrieb"), ausgebaut → rot
+(„Out of order.").
 
 Er trägt zusätzlich `summary:false` und taucht deshalb **nicht im Satz zuoberst**
 auf — Karte und Ampel unten zeigt er normal.
