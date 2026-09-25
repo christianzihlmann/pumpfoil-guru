@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-25T01:52:20+00:00",
+  "fetched": "2026-09-25T01:55:00+00:00",
   "forecast": [
     {
       "date": "25.09.2026",
@@ -57,17 +57,17 @@
     "wind_model": 1.8,
     "gust_model": 3.2,
     "wind_dir_model": 79.0,
-    "wind_measured": 4.0,
-    "gust_measured": 5.4,
-    "wind_dir_measured": 194.0,
+    "wind_measured": 4.3,
+    "gust_measured": 5.8,
+    "wind_dir_measured": 209.0,
     "temp_measured": 8.7,
-    "radiation_measured": 6.0,
+    "radiation_measured": 5.0,
     "vario_grid": 7.65,
     "vario_total": 19.6,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-25T01:52:23+00:00"
+    "time": "2026-09-25T01:55:04+00:00"
   },
   "water": {
     "station": "2467",
