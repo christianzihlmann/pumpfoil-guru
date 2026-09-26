@@ -376,6 +376,7 @@ de: {
   goes:'{x} geht.', goPl:'{x} gehen.', limit:'{x} am Limit.', blockedS:'{x} gesperrt.',
   swings:'Pegel schwankt', outOfOrder:'Out of order',
   floats:'In Betrieb', race:'Ruderwettkampf', training:'Rudertraining',
+  murten:'Murtenlauf', murtenTip:'Anfahrt erschwert',
   depth:'Wassertiefe: Min. {a} cm, Max. {b} cm', depthNow:'Wassertiefe: {n} cm',
   measuredAt:'Gemessen {v} m ü. M. · {t}',
   mapOpen:'{n} auf Google Maps öffnen',
@@ -440,6 +441,7 @@ fr: {
   limit:'{x} à la limite.', blockedS:'{x} fermé.',
   swings:'Niveau variable', outOfOrder:'Hors service',
   floats:'En service', race:'Régate', training:'Entraînement d’aviron',
+  murten:'Course Morat-Fribourg', murtenTip:'Accès difficile',
   depth:'Profondeur de l’eau : min. {a} cm, max. {b} cm', depthNow:'Profondeur de l’eau : {n} cm',
   measuredAt:'Mesuré {v} m s. m. · {t}',
   mapOpen:'Ouvrir {n} dans Google Maps',
@@ -504,6 +506,7 @@ en: {
   goes:'{x} is good.', goPl:'{x} are good.', limit:'{x} borderline.', blockedS:'{x} closed.',
   swings:'Level swings', outOfOrder:'Out of order',
   floats:'In service', race:'Rowing race', training:'Rowing training',
+  murten:'Murten–Fribourg run', murtenTip:'Access restricted',
   depth:'Water depth: min. {a} cm, max. {b} cm', depthNow:'Water depth: {n} cm',
   measuredAt:'Measured {v} m a.s.l. · {t}',
   mapOpen:'Open {n} in Google Maps',
@@ -729,6 +732,10 @@ const CONFIG = {
   // Notfall-Vorgaben, falls data/level.json keinen manual-Block hat.
   // Im Betrieb wird dieser Block in data/level.json direkt auf GitHub umgeschaltet.
   manual: { rowing_competition:false, dock4_installed:false },
+
+  // Anlässe, die nur die Anfahrt erschweren — Hinweis in der Kopfzeile wie
+  // beim Rudern, die Ampeln bleiben unberührt. Datum JJJJ-MM-TT, key → I18N.
+  events: [ { date:'2026-10-04', key:'murten' } ],   // Murtenlauf, Strassen gesperrt
   weather: { lat:46.8261, lon:7.1256, place:'Pensier' },
   hydro:   { station:'2215', inflow:'2119', sense:'2179' },   // Laupen, Fribourg, Sense
 
@@ -784,7 +791,7 @@ let docks = CONFIG.docks.map(d => ({
 let levelMin = null, levelMax = null, measured = null, levelStamp = null;
 /* Anlässe des Ruderclubs Vevey in Schiffenen, aus data/level.json.
    rowingDay hält den Anlass des gerade gewählten Tages, sonst null. */
-let rowing = [], rowingDay = null;
+let rowing = [], rowingDay = null, eventDay = null;
 const rowingOn = iso => rowing.find(e => iso >= e.from && iso <= e.to) || null;
 
 /* Ruderbetrieb hat ZWEI Quellen, die dasselbe bewirken: den Vereinskalender
@@ -1043,6 +1050,11 @@ function renderVerdict(){
     extra += ` <span class="storm"${rud.name ? ` title="${rud.name.replace(/"/g,'')}"` : ''}>`
            + `${WARNSIGN}${heute}${wort}.</span>`;
   }
+  if (eventDay){
+    const heute = dayIdx === 0 ? DAYS()[0] + ' ' : '';
+    extra += ` <span class="storm" title="${T(eventDay.key + 'Tip')}">`
+           + `${WARNSIGN}${heute}${T(eventDay.key)}.</span>`;
+  }
   if (storm && dayIdx === 0){
     const t = s => s ? new Date(s).toLocaleTimeString(LOCALE[lang],
       { hour:'2-digit', minute:'2-digit' }) : '';
@@ -1095,7 +1107,9 @@ function applyDay(){
   levelMax = f ? f.max : null;
   // TT.MM.JJJJ aus der Prognose in JJJJ-MM-TT, damit sich Zeichenketten
   // vergleichen lassen — kein Date-Objekt, keine Zeitzonenfallen.
-  rowingDay = f ? rowingOn(`${f.date.slice(6)}-${f.date.slice(3,5)}-${f.date.slice(0,2)}`) : null;
+  const iso = f ? `${f.date.slice(6)}-${f.date.slice(3,5)}-${f.date.slice(0,2)}` : null;
+  rowingDay = iso ? rowingOn(iso) : null;
+  eventDay  = iso ? CONFIG.events.find(e => e.date === iso) || null : null;
   measured = dayIdx === 0 ? measuredRaw : null;   // Sensormessung gilt nur für heute
   renderTabs(); renderAll(); renderWeather();
 }
