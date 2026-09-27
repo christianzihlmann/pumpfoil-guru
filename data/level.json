@@ -2,27 +2,27 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-27T06:52:19+00:00",
+  "fetched": "2026-09-27T07:08:23+00:00",
   "forecast": [
     {
       "date": "27.09.2026",
-      "min": 531.25,
+      "min": 531.26,
       "max": 531.26
     },
     {
       "date": "28.09.2026",
       "min": 531.24,
-      "max": 531.25
+      "max": 531.26
     },
     {
       "date": "29.09.2026",
-      "min": 531.22,
+      "min": 531.23,
       "max": 531.24
     },
     {
       "date": "30.09.2026",
       "min": 531.21,
-      "max": 531.22
+      "max": 531.23
     }
   ],
   "manual": {
@@ -36,38 +36,38 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 6.99,
-    "time": "2026-09-27T06:40:00+00:00",
+    "time": "2026-09-27T07:00:00+00:00",
     "stats": {
-      "n": 1453,
+      "n": 1454,
       "days": 35.7,
       "enough": true,
       "min": 6.75,
       "p10": 7.05,
       "p25": 7.16,
-      "median": 7.51,
-      "p75": 17.47,
-      "p90": 116.39,
+      "median": 7.5,
+      "p75": 17.43,
+      "p90": 116.35,
       "max": 153.11
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.7,
+    "uv_index": 0.95,
     "european_aqi": 18.0,
-    "wind_model": 3.0,
+    "wind_model": 2.6,
     "gust_model": 5.8,
-    "wind_dir_model": 194.0,
-    "wind_measured": 1.1,
+    "wind_dir_model": 196.0,
+    "wind_measured": 1.4,
     "gust_measured": 2.5,
-    "wind_dir_measured": 269.0,
-    "temp_measured": 9.2,
-    "radiation_measured": 124.0,
-    "vario_grid": 6.79,
-    "vario_total": 23.44,
+    "wind_dir_measured": 34.0,
+    "temp_measured": 9.9,
+    "radiation_measured": 188.0,
+    "vario_grid": 6.05,
+    "vario_total": 22.7,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-27T06:52:23+00:00"
+    "time": "2026-09-27T07:08:27+00:00"
   },
   "water": {
     "station": "2467",
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 5.07,
     "stats": {
-      "n": 1452,
+      "n": 1453,
       "days": 35.0,
       "enough": true,
       "min": 4.78,
