@@ -2,27 +2,27 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-09-30T06:00:25+00:00",
+  "fetched": "2026-09-30T06:08:24+00:00",
   "forecast": [
     {
       "date": "30.09.2026",
-      "min": 531.23,
-      "max": 531.25
+      "min": 531.24,
+      "max": 531.27
     },
     {
       "date": "01.10.2026",
-      "min": 531.2,
-      "max": 531.23
+      "min": 531.24,
+      "max": 531.27
     },
     {
       "date": "02.10.2026",
-      "min": 531.18,
-      "max": 531.2
+      "min": 531.21,
+      "max": 531.24
     },
     {
       "date": "03.10.2026",
-      "min": 531.15,
-      "max": 531.19
+      "min": 531.18,
+      "max": 531.22
     }
   ],
   "manual": {
@@ -35,18 +35,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 6.91,
-    "time": "2026-09-30T05:50:00+00:00",
+    "flow": 6.94,
+    "time": "2026-09-30T06:00:00+00:00",
     "stats": {
-      "n": 1598,
+      "n": 1599,
       "days": 38.6,
       "enough": true,
       "min": 6.75,
       "p10": 7.02,
       "p25": 7.11,
-      "median": 7.38,
-      "p75": 12.36,
-      "p90": 111.58,
+      "median": 7.36,
+      "p75": 12.34,
+      "p90": 111.54,
       "max": 153.11
     }
   },
@@ -57,17 +57,17 @@
     "wind_model": 3.9,
     "gust_model": 4.7,
     "wind_dir_model": 214.0,
-    "wind_measured": 4.7,
-    "gust_measured": 7.6,
-    "wind_dir_measured": 52.0,
-    "temp_measured": 13.0,
-    "radiation_measured": 14.0,
+    "wind_measured": 7.9,
+    "gust_measured": 11.2,
+    "wind_dir_measured": 48.0,
+    "temp_measured": 12.6,
+    "radiation_measured": 12.0,
     "vario_grid": 15.18,
     "vario_total": 31.83,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-09-30T06:00:29+00:00"
+    "time": "2026-09-30T06:08:26+00:00"
   },
   "water": {
     "station": "2467",
@@ -95,9 +95,9 @@
     "station": "2119",
     "name": "Sarine – Fribourg",
     "height": 531.94,
-    "flow": 4.62,
+    "flow": 4.59,
     "stats": {
-      "n": 1597,
+      "n": 1598,
       "days": 37.9,
       "enough": true,
       "min": 4.59,
