@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-01T16:08:25+00:00",
+  "fetched": "2026-10-01T16:52:23+00:00",
   "forecast": [
     {
       "date": "01.10.2026",
@@ -29,78 +29,52 @@
     "rowing_competition": false,
     "dock4_installed": true
   },
-  "warning_checked": "2026-10-01T15:52:20+00:00",
+  "warning_checked": "2026-10-01T16:52:23+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.08,
-    "time": "2026-10-01T15:40:00+00:00",
+    "flow": 7.13,
+    "time": "2026-10-01T16:40:00+00:00",
     "stats": {
-      "n": 1668,
-      "days": 40.0,
+      "n": 1669,
+      "days": 40.1,
       "enough": true,
       "min": 6.75,
       "p10": 6.99,
       "p25": 7.08,
       "median": 7.36,
-      "p75": 11.83,
-      "p90": 109.68,
+      "p75": 11.82,
+      "p90": 109.66,
       "max": 153.11
     }
   },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 531.94,
-    "flow": 4.7,
-    "stats": {
-      "n": 1667,
-      "days": 39.3,
-      "enough": true,
-      "min": 4.57,
-      "p10": 4.78,
-      "p25": 5.07,
-      "median": 5.16,
-      "p75": 38.45,
-      "p90": 68.65,
-      "max": 217.43
-    },
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 0.0,
+    "european_aqi": 27.0,
+    "wind_model": 7.2,
+    "gust_model": 15.8,
+    "wind_dir_model": 252.0,
+    "wind_measured": 1.8,
+    "gust_measured": 3.2,
+    "wind_dir_measured": 191.0,
+    "temp_measured": 16.2,
+    "radiation_measured": 8.0,
+    "vario_grid": 14.8,
+    "vario_total": 31.45,
+    "vario_unit": "Rp/kWh",
+    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-10-01T16:52:27+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 18.51,
+    "temperature": 18.33,
     "height": 470.31,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.05,
-    "european_aqi": 28.0,
-    "wind_model": 5.5,
-    "gust_model": 14.0,
-    "wind_dir_model": 212.0,
-    "wind_measured": 9.0,
-    "gust_measured": 14.4,
-    "wind_dir_measured": 230.0,
-    "temp_measured": 16.3,
-    "radiation_measured": 44.0,
-    "vario_grid": 13.73,
-    "vario_total": 30.38,
-    "vario_unit": "Rp/kWh",
-    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-01T15:52:25+00:00"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.27,
-    "temperature": 16.62,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "lake": {
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
@@ -110,9 +84,31 @@
     "battery_v": 3.648,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
-  "hydro_error": {
-    "time": "2026-10-01T16:08:26+00:00",
-    "error": "weder 2215 noch 2119 lieferten Werte"
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.27,
+    "temperature": 16.49,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 531.94,
+    "flow": 4.7,
+    "stats": {
+      "n": 1668,
+      "days": 39.4,
+      "enough": true,
+      "min": 4.57,
+      "p10": 4.78,
+      "p25": 5.07,
+      "median": 5.16,
+      "p75": 38.37,
+      "p90": 68.65,
+      "max": 217.43
+    },
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
