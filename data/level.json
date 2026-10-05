@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-05T01:52:19+00:00",
+  "fetched": "2026-10-05T02:00:46+00:00",
   "forecast": [
     {
       "date": "05.10.2026",
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.28,
-    "time": "2026-10-05T01:40:00+00:00",
+    "time": "2026-10-05T01:50:00+00:00",
     "stats": {
-      "n": 1836,
+      "n": 1837,
       "days": 43.5,
       "enough": true,
       "min": 6.75,
@@ -54,25 +54,25 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 35.0,
-    "wind_model": 3.3,
-    "gust_model": 5.8,
-    "wind_dir_model": 174.0,
-    "wind_measured": 2.9,
-    "gust_measured": 4.3,
-    "wind_dir_measured": 199.0,
+    "wind_model": 2.9,
+    "gust_model": 5.4,
+    "wind_dir_model": 173.0,
+    "wind_measured": 1.4,
+    "gust_measured": 2.5,
+    "wind_dir_measured": 190.0,
     "temp_measured": 11.6,
     "radiation_measured": 4.0,
-    "vario_grid": 6.29,
-    "vario_total": 18.24,
+    "vario_grid": 6.47,
+    "vario_total": 18.42,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-05T01:52:24+00:00"
+    "time": "2026-10-05T02:00:50+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 16.35,
+    "temperature": 16.33,
     "height": 470.31,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -87,8 +87,8 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 1.52,
-    "temperature": 14.33,
+    "flow": 1.54,
+    "temperature": 14.29,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,14 +97,14 @@
     "height": 531.95,
     "flow": 4.84,
     "stats": {
-      "n": 1835,
-      "days": 42.7,
+      "n": 1836,
+      "days": 42.8,
       "enough": true,
       "min": 4.57,
       "p10": 4.78,
       "p25": 5.01,
       "median": 5.16,
-      "p75": 25.43,
+      "p75": 25.41,
       "p90": 68.65,
       "max": 217.43
     },
