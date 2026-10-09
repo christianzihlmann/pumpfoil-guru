@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-09T22:52:18+00:00",
+  "fetched": "2026-10-09T23:08:21+00:00",
   "forecast": [
     {
       "date": "10.10.2026",
@@ -35,18 +35,18 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 10.35,
-    "time": "2026-10-09T22:40:00+00:00",
+    "flow": 10.31,
+    "time": "2026-10-09T22:55:00+00:00",
     "stats": {
-      "n": 2079,
+      "n": 2080,
       "days": 48.3,
       "enough": true,
       "min": 6.75,
       "p10": 7.02,
       "p25": 7.13,
       "median": 7.39,
-      "p75": 10.06,
-      "p90": 90.25,
+      "p75": 10.07,
+      "p90": 90.22,
       "max": 153.11
     }
   },
@@ -54,20 +54,20 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 22.0,
-    "wind_model": 7.7,
-    "gust_model": 13.7,
-    "wind_dir_model": 217.0,
-    "wind_measured": 9.0,
-    "gust_measured": 14.0,
-    "wind_dir_measured": 212.0,
+    "wind_model": 8.5,
+    "gust_model": 15.1,
+    "wind_dir_model": 216.0,
+    "wind_measured": 7.6,
+    "gust_measured": 13.0,
+    "wind_dir_measured": 210.0,
     "temp_measured": 10.7,
-    "radiation_measured": 4.0,
-    "vario_grid": 12.01,
-    "vario_total": 23.96,
+    "radiation_measured": 5.0,
+    "vario_grid": 13.56,
+    "vario_total": 25.51,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-09T22:52:28+00:00"
+    "time": "2026-10-09T23:08:24+00:00"
   },
   "water": {
     "station": "2467",
@@ -87,8 +87,8 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 4.1,
-    "temperature": 12.71,
+    "flow": 4.07,
+    "temperature": 12.7,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 4.87,
     "stats": {
-      "n": 2078,
+      "n": 2079,
       "days": 47.6,
       "enough": true,
       "min": 4.57,
