@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-13T05:52:21+00:00",
+  "fetched": "2026-10-13T06:08:23+00:00",
   "forecast": [
     {
       "date": "13.10.2026",
@@ -22,7 +22,7 @@
     {
       "date": "16.10.2026",
       "min": 531.44,
-      "max": 531.46
+      "max": 531.47
     }
   ],
   "manual": {
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 8.02,
-    "time": "2026-10-13T05:00:00+00:00",
+    "time": "2026-10-13T06:00:00+00:00",
     "stats": {
-      "n": 2247,
+      "n": 2248,
       "days": 51.6,
       "enough": true,
       "min": 6.75,
@@ -46,9 +46,50 @@
       "p25": 7.16,
       "median": 7.48,
       "p75": 9.88,
-      "p90": 86.46,
+      "p90": 86.4,
       "max": 153.11
     }
+  },
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 0.0,
+    "european_aqi": 23.0,
+    "wind_model": 4.3,
+    "gust_model": 7.9,
+    "wind_dir_model": 185.0,
+    "wind_measured": 0.7,
+    "gust_measured": 2.2,
+    "wind_dir_measured": 356.0,
+    "temp_measured": 4.2,
+    "radiation_measured": 9.0,
+    "vario_grid": 16.23,
+    "vario_total": 32.88,
+    "vario_unit": "Rp/kWh",
+    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-10-13T06:08:25+00:00"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 13.65,
+    "height": 470.32,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
+  "lake": {
+    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
+    "source_url": "https://www.schiffenen.guru",
+    "temperature": 17.7,
+    "time": "2026-10-13T04:59:33.763Z",
+    "battery_v": 3.66,
+    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
+  },
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 2.27,
+    "temperature": 9.6,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
@@ -56,7 +97,7 @@
     "height": 531.94,
     "flow": 4.67,
     "stats": {
-      "n": 2246,
+      "n": 2247,
       "days": 50.9,
       "enough": true,
       "min": 4.57,
@@ -68,51 +109,6 @@
       "max": 217.43
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 13.72,
-    "height": 470.32,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.0,
-    "european_aqi": 22.0,
-    "wind_model": 4.0,
-    "gust_model": 6.8,
-    "wind_dir_model": 185.0,
-    "wind_measured": 1.8,
-    "gust_measured": 3.2,
-    "wind_dir_measured": 27.0,
-    "temp_measured": 4.2,
-    "radiation_measured": 5.0,
-    "vario_grid": 14.54,
-    "vario_total": 31.19,
-    "vario_unit": "Rp/kWh",
-    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-13T05:08:28+00:00"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 2.28,
-    "temperature": 9.74,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
-  },
-  "lake": {
-    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
-    "source_url": "https://www.schiffenen.guru",
-    "temperature": 17.7,
-    "time": "2026-10-13T04:59:33.763Z",
-    "battery_v": 3.66,
-    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
-  },
-  "hydro_error": {
-    "time": "2026-10-13T05:52:40+00:00",
-    "error": "weder 2215 noch 2119 lieferten Werte"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
