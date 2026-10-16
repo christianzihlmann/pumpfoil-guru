@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-16T14:08:22+00:00",
+  "fetched": "2026-10-16T14:20:17+00:00",
   "forecast": [
     {
       "date": "16.10.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.42,
-    "time": "2026-10-16T14:00:00+00:00",
+    "flow": 7.45,
+    "time": "2026-10-16T14:10:00+00:00",
     "stats": {
-      "n": 2389,
+      "n": 2390,
       "days": 55.0,
       "enough": true,
       "min": 6.75,
@@ -46,33 +46,33 @@
       "p25": 7.16,
       "median": 7.51,
       "p75": 9.54,
-      "p90": 77.74,
+      "p90": 77.62,
       "max": 153.11
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 1.55,
+    "uv_index": 1.35,
     "european_aqi": 29.0,
     "wind_model": 2.1,
-    "gust_model": 7.2,
+    "gust_model": 6.8,
     "wind_dir_model": 31.0,
     "wind_measured": 1.4,
     "gust_measured": 2.5,
-    "wind_dir_measured": 46.0,
-    "temp_measured": 17.6,
-    "radiation_measured": 233.0,
-    "vario_grid": 3.74,
-    "vario_total": 15.69,
+    "wind_dir_measured": 49.0,
+    "temp_measured": 17.7,
+    "radiation_measured": 236.0,
+    "vario_grid": 4.75,
+    "vario_total": 16.7,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-16T14:08:25+00:00"
+    "time": "2026-10-16T14:20:21+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 16.75,
+    "temperature": 16.73,
     "height": 470.32,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -97,14 +97,14 @@
     "height": 531.94,
     "flow": 4.7,
     "stats": {
-      "n": 2388,
+      "n": 2389,
       "days": 54.3,
       "enough": true,
       "min": 4.57,
       "p10": 4.7,
       "p25": 4.87,
       "median": 5.1,
-      "p75": 6.33,
+      "p75": 6.32,
       "p90": 68.25,
       "max": 217.43
     },
