@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-16T00:46:01+00:00",
+  "fetched": "2026-10-16T00:52:18+00:00",
   "forecast": [
     {
       "date": "16.10.2026",
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.42,
-    "time": "2026-10-16T00:30:00+00:00",
+    "time": "2026-10-16T00:40:00+00:00",
     "stats": {
-      "n": 2360,
+      "n": 2361,
       "days": 54.4,
       "enough": true,
       "min": 6.75,
@@ -46,7 +46,7 @@
       "p25": 7.16,
       "median": 7.54,
       "p75": 9.6,
-      "p90": 79.74,
+      "p90": 79.63,
       "max": 153.11
     }
   },
@@ -67,12 +67,12 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-16T00:46:12+00:00"
+    "time": "2026-10-16T00:52:22+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 14.98,
+    "temperature": 14.95,
     "height": 470.31,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -88,7 +88,7 @@
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.72,
-    "temperature": 12.12,
+    "temperature": 12.08,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,14 +97,14 @@
     "height": 531.94,
     "flow": 4.67,
     "stats": {
-      "n": 2359,
+      "n": 2360,
       "days": 53.7,
       "enough": true,
       "min": 4.57,
       "p10": 4.7,
       "p25": 4.87,
       "median": 5.1,
-      "p75": 7.29,
+      "p75": 7.26,
       "p90": 68.25,
       "max": 217.43
     },
