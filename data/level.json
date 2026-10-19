@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-19T04:08:23+00:00",
+  "fetched": "2026-10-19T04:52:23+00:00",
   "forecast": [
     {
       "date": "19.10.2026",
@@ -29,78 +29,52 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-10-19T03:52:19+00:00",
+  "warning_checked": "2026-10-19T04:52:23+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.92,
-    "time": "2026-10-19T03:40:00+00:00",
+    "flow": 7.86,
+    "time": "2026-10-19T04:40:00+00:00",
     "stats": {
-      "n": 2526,
-      "days": 57.5,
+      "n": 2527,
+      "days": 57.6,
       "enough": true,
       "min": 6.75,
       "p10": 7.05,
       "p25": 7.19,
       "median": 7.51,
       "p75": 9.33,
-      "p90": 65.69,
+      "p90": 65.51,
       "max": 153.11
     }
-  },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 531.94,
-    "flow": 4.67,
-    "stats": {
-      "n": 2525,
-      "days": 56.8,
-      "enough": true,
-      "min": 4.57,
-      "p10": 4.67,
-      "p25": 4.81,
-      "median": 5.07,
-      "p75": 5.33,
-      "p90": 66.52,
-      "max": 217.43
-    },
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 14.24,
-    "height": 470.32,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 27.0,
-    "wind_model": 3.9,
-    "gust_model": 7.6,
-    "wind_dir_model": 56.0,
-    "wind_measured": 0.7,
-    "gust_measured": 2.2,
-    "wind_dir_measured": 353.0,
+    "wind_model": 6.4,
+    "gust_model": 11.9,
+    "wind_dir_model": 43.0,
+    "wind_measured": 4.0,
+    "gust_measured": 5.0,
+    "wind_dir_measured": 337.0,
     "temp_measured": 8.4,
     "radiation_measured": 5.0,
-    "vario_grid": 9.39,
-    "vario_total": 21.34,
+    "vario_grid": 13.85,
+    "vario_total": 25.8,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-19T03:52:23+00:00"
+    "time": "2026-10-19T04:52:29+00:00"
   },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 2.14,
-    "temperature": 11.06,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 14.29,
+    "height": 470.32,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
@@ -110,9 +84,31 @@
     "battery_v": 3.66,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
-  "hydro_error": {
-    "time": "2026-10-19T04:08:24+00:00",
-    "error": "weder 2215 noch 2119 lieferten Werte"
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 2.12,
+    "temperature": 11.03,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 531.94,
+    "flow": 4.67,
+    "stats": {
+      "n": 2526,
+      "days": 56.9,
+      "enough": true,
+      "min": 4.57,
+      "p10": 4.67,
+      "p25": 4.81,
+      "median": 5.07,
+      "p75": 5.32,
+      "p90": 66.52,
+      "max": 217.43
+    },
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
