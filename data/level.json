@@ -2,27 +2,27 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-20T17:52:21+00:00",
+  "fetched": "2026-10-20T18:08:23+00:00",
   "forecast": [
     {
       "date": "20.10.2026",
-      "min": 531.45,
+      "min": 531.46,
       "max": 531.55
     },
     {
       "date": "21.10.2026",
       "min": 531.35,
-      "max": 531.45
+      "max": 531.46
     },
     {
       "date": "22.10.2026",
-      "min": 531.3,
+      "min": 531.31,
       "max": 531.46
     },
     {
       "date": "23.10.2026",
-      "min": 531.22,
-      "max": 531.4
+      "min": 531.23,
+      "max": 531.41
     }
   ],
   "manual": {
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 44.66,
-    "time": "2026-10-20T17:40:00+00:00",
+    "flow": 45.48,
+    "time": "2026-10-20T18:00:00+00:00",
     "stats": {
-      "n": 2607,
+      "n": 2608,
       "days": 59.1,
       "enough": true,
       "min": 6.75,
@@ -46,7 +46,7 @@
       "p25": 7.19,
       "median": 7.51,
       "p75": 9.3,
-      "p90": 55.73,
+      "p90": 55.68,
       "max": 153.11
     }
   },
@@ -54,26 +54,26 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 30.0,
-    "wind_model": 2.3,
-    "gust_model": 4.3,
-    "wind_dir_model": 219.0,
-    "wind_measured": 3.6,
-    "gust_measured": 4.3,
-    "wind_dir_measured": 21.0,
-    "temp_measured": 12.0,
+    "wind_model": 2.6,
+    "gust_model": 3.6,
+    "wind_dir_model": 214.0,
+    "wind_measured": 0.7,
+    "gust_measured": 2.5,
+    "wind_dir_measured": 8.0,
+    "temp_measured": 11.8,
     "radiation_measured": 5.0,
-    "vario_grid": 14.48,
-    "vario_total": 31.13,
+    "vario_grid": 13.84,
+    "vario_total": 30.49,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-20T17:52:37+00:00"
+    "time": "2026-10-20T18:08:26+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 15.62,
-    "height": 470.72,
+    "temperature": 15.91,
+    "height": 470.93,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
@@ -87,17 +87,17 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 1.75,
-    "temperature": 12.71,
+    "flow": 1.74,
+    "temperature": 12.68,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 531.92,
-    "flow": 4.22,
+    "height": 531.93,
+    "flow": 4.38,
     "stats": {
-      "n": 2606,
+      "n": 2607,
       "days": 58.4,
       "enough": true,
       "min": 4.22,
@@ -105,7 +105,7 @@
       "p25": 4.76,
       "median": 5.07,
       "p75": 5.24,
-      "p90": 65.39,
+      "p90": 65.35,
       "max": 217.43
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
