@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-20T15:08:23+00:00",
+  "fetched": "2026-10-20T15:22:29+00:00",
   "forecast": [
     {
       "date": "20.10.2026",
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.42,
-    "time": "2026-10-20T15:00:00+00:00",
+    "time": "2026-10-20T15:10:00+00:00",
     "stats": {
-      "n": 2601,
+      "n": 2602,
       "days": 59.0,
       "enough": true,
       "min": 6.75,
@@ -46,28 +46,28 @@
       "p25": 7.19,
       "median": 7.51,
       "p75": 9.3,
-      "p90": 56.01,
+      "p90": 55.96,
       "max": 153.11
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.7,
+    "uv_index": 0.55,
     "european_aqi": 29.0,
-    "wind_model": 7.9,
+    "wind_model": 7.0,
     "gust_model": 14.0,
-    "wind_dir_model": 254.0,
-    "wind_measured": 4.7,
-    "gust_measured": 6.5,
-    "wind_dir_measured": 259.0,
+    "wind_dir_model": 258.0,
+    "wind_measured": 6.1,
+    "gust_measured": 7.6,
+    "wind_dir_measured": 265.0,
     "temp_measured": 13.5,
-    "radiation_measured": 124.0,
-    "vario_grid": 11.53,
-    "vario_total": 28.18,
+    "radiation_measured": 94.0,
+    "vario_grid": 12.32,
+    "vario_total": 28.97,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-20T15:08:26+00:00"
+    "time": "2026-10-20T15:22:33+00:00"
   },
   "water": {
     "station": "2467",
@@ -97,7 +97,7 @@
     "height": 531.92,
     "flow": 4.22,
     "stats": {
-      "n": 2600,
+      "n": 2601,
       "days": 58.3,
       "enough": true,
       "min": 4.22,
@@ -105,7 +105,7 @@
       "p25": 4.76,
       "median": 5.07,
       "p75": 5.24,
-      "p90": 65.6,
+      "p90": 65.59,
       "max": 217.43
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
