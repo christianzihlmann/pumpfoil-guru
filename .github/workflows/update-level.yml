@@ -143,3 +143,16 @@ jobs:
           git add data/
           git diff --staged --quiet || git commit -m "Pegel $(date -u +%Y-%m-%dT%H:%MZ)"
           git push
+
+      # Ein Ausfall bei Groupe E bricht den Lauf seit dem 22.10.2026 nicht
+      # mehr ab: BAFU, VARIO und der Rest sind oben schon archiviert und
+      # committet. Rot wird der Lauf erst hier, damit die Fehlermail von
+      # GitHub weiterhin kommt. Der Grund steht als Annotation am Lauf —
+      # lesbar ohne Anmeldung, anders als das Log.
+      - name: Groupe E nicht erreichbar — Lauf rot melden
+        if: steps.fetch.outputs.forecast_failed == 'true'
+        env:
+          FEHLER: ${{ steps.fetch.outputs.forecast_error }}
+        run: |
+          echo "::error title=Groupe E nicht erreichbar::$FEHLER"
+          exit 1

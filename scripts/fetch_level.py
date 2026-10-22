@@ -23,7 +23,9 @@ steigt oder faellt — mehr raus als rein heisst sinkend.
 Die Datei ist append-only, waechst ~500 kB im Jahr und wird nie gekuerzt.
 
 Faellt BAFU aus, bleibt der letzte bekannte Stand erhalten und der Prognoseteil
-laeuft normal weiter. Nur ein Fehler bei Groupe E ist fatal.
+laeuft normal weiter. Faellt Groupe E aus, bleibt die letzte Prognose stehen und
+alles andere wird trotzdem geholt und archiviert; der Workflow meldet den Lauf
+danach als fehlgeschlagen, damit die Fehlermail kommt (seit 22.10.2026).
 
 Laeuft stuendlich als GitHub Action. Keine Abhaengigkeiten ausser requests.
 """
@@ -691,16 +693,32 @@ def flow_stats(rows: list, col: str = "q2215"):
 
 
 def main() -> int:
-    forecast = fetch_forecast()
-    if not forecast:
-        print("Keine Prognosezeilen gefunden — Seitenstruktur geaendert?", file=sys.stderr)
-        return 1
-
     try:
         with open(OUT) as f:
             old = json.load(f)
     except (FileNotFoundError, json.JSONDecodeError):
         old = {}
+
+    # Groupe E ist nicht mehr fatal. Bis zum 22.10.2026 brach ein Fehler hier
+    # den ganzen Lauf ab und nahm BAFU, MeteoSchweiz, VARIO und die
+    # Wassertemperatur mit, obwohl die alle liefen. Am 21./22.10.2026 zeigte
+    # die Website ueber 13 Stunden nur eine Wartungsseite (HTTP 503), und
+    # jeder Lauf verlor seine Archivzeile — VARIO endgueltig.
+    #
+    # Jetzt bleibt die alte Prognose stehen und der Rest laeuft normal.
+    # `forecast` bleibt dabei leer: was ein FRISCHES Band braucht (gE_min und
+    # gE_max im Archiv, Kalibrier- und Dock-2-Meldung), entfaellt. Rot wird
+    # der Lauf trotzdem, aber erst im Workflow nach dem Commit.
+    forecast, forecast_error = [], ""
+    try:
+        forecast = fetch_forecast()
+        if not forecast:
+            raise ValueError("Keine Prognosezeilen gefunden — Seitenstruktur geaendert?")
+    except Exception as e:                                  # noqa: BLE001
+        # Eine Zeile, damit es als Step-Ausgabe nach GITHUB_OUTPUT passt
+        forecast_error = " ".join(str(e).split())[:300]
+        print(f"Groupe E nicht geholt ({forecast_error}) — alte Prognose bleibt",
+              file=sys.stderr)
 
     # Wie lange ist der letzte erfolgreiche Lauf her?
     stale_h, stale_since = None, ""
@@ -716,8 +734,16 @@ def main() -> int:
         "source_url": URL,
         "kind": "forecast_band",
         "fetched": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "forecast": forecast,
+        # Ohne frische Prognose die letzte — lieber das Band von gestern als keines
+        "forecast": forecast or old.get("forecast") or [],
     }
+    if forecast_error:
+        # Wie hydro_error: steht nur in gescheiterten Laeufen und laesst sich
+        # so aus der Git-Historie von level.json ablesen.
+        payload["forecast_error"] = {
+            "time": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "error": forecast_error,
+        }
 
     # Manuelle Schalter und Sensormessung nie ueberschreiben
     payload["manual"] = {**MANUAL_DEFAULTS, **(old.get("manual") or {})}
@@ -780,12 +806,14 @@ def main() -> int:
         lake = fetch_lake_temp()
 
         ts = out_s.get("timestamp") or in_s.get("timestamp")
-        today = forecast[0]
+        # Ohne frische Prognose bleibt das Band leer: die Zeile soll zeigen,
+        # was Groupe E in diesem Lauf sagte, nicht was es gestern sagte
+        today = forecast[0] if forecast else {}
         archive = read_archive()
         migrate(archive)
         rows = append_archive(ts, {
             "timestamp": ts,
-            "gE_min": today["min"], "gE_max": today["max"],
+            "gE_min": today.get("min"), "gE_max": today.get("max"),
             "h2119": in_s.get("height"), "q2119": in_s.get("flow"),
             "h2215": out_s.get("height"), "q2215": out_s.get("flow"),
             "h2467": warm_s.get("height"), "t2467": warm_s.get("temperature"),
@@ -931,10 +959,13 @@ def main() -> int:
         json.dump(payload, f, indent=2, ensure_ascii=False)
         f.write("\n")
 
-    today = forecast[0]
-    band_cm = round((today["max"] - today["min"]) * 100)
-    print(f"{len(forecast)} Tage geschrieben, heute "
-          f"{today['min']:.2f}–{today['max']:.2f} m ü. M. (Spanne {band_cm} cm)")
+    # Kalibrier- und Dock-2-Meldung nur auf einem frischen Band. Ist Groupe E
+    # ausgefallen, ist `forecast` leer und die Dock-2-Schleife laeuft ins Leere.
+    today = forecast[0] if forecast else None
+    band_cm = round((today["max"] - today["min"]) * 100) if today else None
+    if today:
+        print(f"{len(forecast)} Tage geschrieben, heute "
+              f"{today['min']:.2f}–{today['max']:.2f} m ü. M. (Spanne {band_cm} cm)")
 
     # Wird das Wasser fuer Dock 2 ueber mehrere Tage knapp? Dann muss der
     # Schwimmsteg raus. Geprueft wird gegen gE_min, also den Tagestiefstand.
@@ -957,10 +988,11 @@ def main() -> int:
     out = os.environ.get("GITHUB_OUTPUT")
     if out:
         with open(out, "a") as f:
-            f.write(f"band_cm={band_cm}\n")
-            f.write(f"narrow={'true' if band_cm <= NARROW_BAND_CM else 'false'}\n")
-            f.write(f"lo={today['min']:.2f}\n")
-            f.write(f"hi={today['max']:.2f}\n")
+            if today:
+                f.write(f"band_cm={band_cm}\n")
+                f.write(f"narrow={'true' if band_cm <= NARROW_BAND_CM else 'false'}\n")
+                f.write(f"lo={today['min']:.2f}\n")
+                f.write(f"hi={today['max']:.2f}\n")
             f.write(f"dock2_alert={'true' if dock2_alert else 'false'}\n")
             f.write(f"dock2_days={len(dry_days)}\n")
             f.write(f"dock2_from={dry_days[0] if dry_days else ''}\n")
@@ -969,12 +1001,18 @@ def main() -> int:
             f.write(f"stale={'true' if luecke else 'false'}\n")
             f.write(f"stale_hours={round(stale_h) if stale_h else ''}\n")
             f.write(f"stale_since={stale_since}\n")
+            # Der Workflow committet trotzdem und meldet den Lauf danach rot
+            f.write(f"forecast_failed={'true' if forecast_error else 'false'}\n")
+            f.write(f"forecast_error={forecast_error}\n")
     if dock2_alert:
         print(f"DOCK-2-ALARM: {len(dry_days)} Tage unter {d2} — {', '.join(dry_days)}")
-    if band_cm <= NARROW_BAND_CM:
+    if today and band_cm <= NARROW_BAND_CM:
         print(f"KALIBRIERFENSTER: nur {band_cm} cm Spanne heute")
     if stale_h is not None and stale_h >= STALE_HOURS:
         print(f"LUECKE: {stale_h:.1f} h seit dem letzten Lauf ({stale_since})")
+    if forecast_error:
+        print(f"GROUPE E AUSGEFALLEN: {forecast_error} — Rest archiviert, "
+              "alte Prognose bleibt")
 
     return 0
 
