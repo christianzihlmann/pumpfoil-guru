@@ -34,7 +34,7 @@ import os
 import re
 import sys
 import time
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from html import unescape
 
 import requests
@@ -176,6 +176,20 @@ SMN_STATION = "GRA"
 SMN = ("https://api.existenz.ch/apiv1/smn/latest"
        f"?locations={SMN_STATION}&parameters=ff,fx,dd,tt,rad"
        "&app=pumpfoil.guru&version=1.0")
+# Regen in Grangeneuve, 10-Minuten-Summen in mm, seit 24.10.2026. Gebraucht
+# fuer die Pegelschaetzung im Winter: die ungemessenen Seitenzufluesse haengen
+# vermutlich am Regen. Eigene Datei statt einer Spalte in hydro.csv — der Bot
+# laeuft halbstuendlich, ein Wert pro Lauf verpasste zwei Drittel des Regens,
+# und Summen ueber unregelmaessige Laeufe zaehlten doppelt oder gar nicht.
+# Jeder Lauf holt deshalb ein Fenster und haengt nur fehlende Zeitstempel an;
+# Luecken bis RAIN_MAX_DAYS fuellen sich so von selbst. Aelteres gibt es bei
+# MeteoSchweiz Open Data (opendatadocs.meteoswiss.ch).
+RAIN = ("https://api.existenz.ch/apiv1/smn/daterange"
+        f"?locations={SMN_STATION}&parameters=rr"
+        "&startdate={start}&enddate={end}&app=pumpfoil.guru&version=1.0")
+RAIN_MAX_DAYS = 30           # so weit haelt existenz.ch zurueck (geprueft 24.10.2026)
+RAIN_OVERLAP_S = 3 * 3600    # so weit vor dem letzten Wert neu fragen, fuer Nachzuegler
+RAIN_HEAD = "timestamp,smn_rr\n"
 # Wassertemperatur DES SEES — von schiffenen.guru (appery.ch, Duedingen), mit
 # deren Erlaubnis seit 05.09.2026. Am 23.08.2026 schon einmal eingebaut und am
 # selben Tag wieder ausgebaut, weil die Erlaubnis noch fehlte.
@@ -533,6 +547,41 @@ def fetch_rowing():
     except Exception as e:                                  # noqa: BLE001
         print(f"Ruderkalender nicht geholt ({e})", file=sys.stderr)
         return None
+
+
+def update_rain(path=None) -> int:
+    """Haengt fehlende 10-Minuten-Regenwerte an rain.csv an und gibt die
+    Zahl der neuen Zeilen zurueck. Append-only wie hydro.csv: nie kuerzen.
+    Wirft bei Fehlern — der Aufrufer faengt ab, der naechste Lauf holt nach."""
+    path = path or os.path.join(DATA, "rain.csv")
+    have = set()
+    if os.path.exists(path):
+        with open(path) as f:
+            for line in f.read().splitlines()[1:]:
+                ts = line.split(",", 1)[0]
+                if ts.isdigit():
+                    have.add(int(ts))
+    now = datetime.now(timezone.utc)
+    start = now - timedelta(days=RAIN_MAX_DAYS)
+    if have:
+        start = max(start, datetime.fromtimestamp(max(have) - RAIN_OVERLAP_S, timezone.utc))
+    fmt = "%Y-%m-%dT%H:%M:%SZ"
+    r = requests.get(RAIN.format(start=start.strftime(fmt), end=now.strftime(fmt)),
+                     timeout=60, headers=UA)
+    r.raise_for_status()
+    neu = sorted((int(x["timestamp"]), float(x["val"]))
+                 for x in r.json().get("payload", [])
+                 if x.get("par") == "rr" and x.get("val") is not None
+                 and int(x["timestamp"]) not in have)
+    if not neu:
+        return 0
+    leer = not os.path.exists(path) or os.path.getsize(path) == 0
+    with open(path, "a") as f:
+        if leer:
+            f.write(RAIN_HEAD)
+        for ts, v in neu:
+            f.write(f"{ts},{v:g}\n")
+    return len(neu)
 
 
 def fetch_smn():
@@ -953,6 +1002,20 @@ def main() -> int:
         payload["actual_daily"] = actuals
         n = append_actuals(actuals, read_archive())
         print(f"Tageswerte: {actuals}" + (f"  ({n} neu ins Archiv)" if n else ""))
+
+    # Regen in Grangeneuve, eigene Datei. Beiwerk wie BAFU: faellt der Abruf
+    # aus, holt der naechste Lauf die Luecke nach. Der Fehler steht wie
+    # hydro_error nur in gescheiterten Laeufen in level.json.
+    try:
+        n = update_rain()
+        if n:
+            print(f"Regen: {n} neue 10-Minuten-Werte")
+    except Exception as e:                                  # noqa: BLE001
+        print(f"Regen nicht geholt ({e}) — der naechste Lauf holt nach", file=sys.stderr)
+        payload["rain_error"] = {
+            "time": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "error": str(e)[:300],
+        }
 
     os.makedirs(DATA, exist_ok=True)
     with open(OUT, "w") as f:
