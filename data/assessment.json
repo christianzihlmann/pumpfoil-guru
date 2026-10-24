@@ -1,23 +1,18 @@
 {
-  "error": {
-    "time": "2026-10-24T17:37:50+00:00",
-    "slot": "2026-10-24-evening",
-    "error": "APIConnectionError: Connection error."
-  },
-  "slot_done": "2026-10-24T17:08:32+00:00",
+  "slot_done": "2026-10-24T18:35:58+00:00",
   "days": {
     "2026-10-24": {},
     "2026-10-25": {
-      "headline": "Too windy today.",
-      "subline": "Rain 11:00–16:00.",
-      "source": "fallback",
-      "written": "2026-10-24T17:08:32+00:00",
+      "headline": "Gale day, stay ashore",
+      "subline": "Stormy 09:00–17:00, gusts to 72 km/h, rain 11:00–16:00.",
+      "source": "model",
+      "written": "2026-10-24T18:35:58+00:00",
       "slot": "2026-10-24-evening",
       "sig": "[\"poor\", [\"GALE\", \"m\", \"e\"], [\"RAIN\", \"d\", \"a\"]]",
       "points": [
         {
           "theme": "GALE",
-          "text": "Stormy 09:00–17:00: 33–37 km/h, gusts to 72.",
+          "text": "Stormy 09:00–17:00: 33–38 km/h, gusts to 72.",
           "from": "09:00",
           "to": "17:00"
         },
@@ -37,26 +32,26 @@
       "facts": {
         "window": "07:03–17:26",
         "mood": "poor",
-        "tmin": 11.1,
+        "tmin": 11.0,
         "tmax": 13.3,
         "wind": [
-          26,
-          37
+          25,
+          38
         ],
         "gust_max": 72,
-        "uv_max": 0.6,
-        "aqi_max": null,
+        "uv_max": 0.8,
+        "aqi_max": 26,
         "lake": 16.1,
         "ok_share": 0.27,
         "sun_share": 0.0
       },
-      "model": null
+      "model": "claude-opus-5-5"
     },
     "2026-10-26": {
-      "headline": "Ready for a session in the fog?",
-      "subline": "Dead flat all day: wind under 5 km/h.",
-      "source": "fallback",
-      "written": "2026-10-24T17:08:32+00:00",
+      "headline": "Dead Flat Water. Go Pumping!",
+      "subline": "Maybe patchy fog 08:00–09:00, then wind under 5 km/h all day.",
+      "source": "model",
+      "written": "2026-10-24T18:35:58+00:00",
       "slot": "2026-10-24-evening",
       "sig": "[\"good\", [\"FOG\", \"m\", \"m\"], [\"FLAT\", \"m\", \"e\"]]",
       "points": [
@@ -90,15 +85,14 @@
         ],
         "gust_max": 12,
         "uv_max": 3.1,
-        "aqi_max": null,
+        "aqi_max": 25,
         "lake": 16.1,
         "ok_share": 0.91,
         "sun_share": 0.0
       },
-      "model": null
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-10-24T17:37:50+00:00",
-  "slot_try_id": "2026-10-24-evening",
-  "slot_tries": 1
+  "updated": "2026-10-24T18:35:58+00:00",
+  "slot": "2026-10-24-evening"
 }
