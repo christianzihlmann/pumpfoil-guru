@@ -287,7 +287,9 @@ async function load(){
   const s = [];
   if (state.updated) s.push(`Stand <b>${esc(stamp(state.updated))}</b>`);
   if (state.slot) s.push(`letztes Fenster <b>${esc(slotName(state.slot))} ${esc(dayName(state.slot.slice(0, 10)))}</b>`);
-  if (state.error) s.push(`<span class="err">Fehler ${esc(stamp(state.error.time))}: ${esc(state.error.error)}</span>`);
+  // Fehler des letzten Modellaufrufs und der Abrufe; jedes Feld steht nur, solange es zutrifft
+  for (const [k, was] of [['error', 'Modell'], ['fetch_error', 'Prognose'], ['aq_error', 'Luftqualität']])
+    if (state[k]) s.push(`<span class="err">${was} ${esc(stamp(state[k].time))}: ${esc(state[k].error)}</span>`);
   $('#status').innerHTML = s.join(' · ') || 'Noch kein Stand — der Bot hat das Assessment noch nicht geschrieben.';
   const k = $('#key');
   k.className = 'key ' + (KEY ? 'on' : 'off');

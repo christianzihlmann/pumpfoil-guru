@@ -31,6 +31,7 @@ import os
 import re
 import sys
 from datetime import date, datetime, time, timedelta, timezone
+from time import sleep
 from zoneinfo import ZoneInfo
 
 import requests
@@ -58,6 +59,12 @@ FORECAST = (f"https://api.open-meteo.com/v1/forecast?latitude={LAT}&longitude={L
 AIRQ = (f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={LAT}"
         f"&longitude={LON}&hourly=european_aqi&timezone=Europe/Zurich"
         "&timeformat=unixtime&forecast_days=4")
+
+# Abrufe bei Open-Meteo: bis zu so viele Versuche, wie HYDRO_TRIES in
+# fetch_level.py. Am 24.10.2026 kam die Luftqualitaet im ersten Lauf nicht
+# an, waehrend fetch_level.py acht Sekunden vorher denselben Dienst erreichte.
+FETCH_TRIES = 3
+FETCH_PAUSE_S = 5
 
 MODEL = "claude-opus-5-5"
 EFFORT = "medium"
@@ -205,9 +212,15 @@ def read_json(path: str):
 
 
 def get_json(url: str) -> dict:
-    r = requests.get(url, timeout=30, headers=UA)
-    r.raise_for_status()
-    return r.json()
+    for i in range(FETCH_TRIES):
+        try:
+            r = requests.get(url, timeout=30, headers=UA)
+            r.raise_for_status()
+            return r.json()
+        except (requests.RequestException, ValueError):
+            if i == FETCH_TRIES - 1:
+                raise
+            sleep(FETCH_PAUSE_S)
 
 
 def sector(dd: float) -> str:
@@ -694,11 +707,33 @@ def main(argv=None) -> int:
         with open(log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry, ensure_ascii=False, separators=(",", ":")) + "\n")
 
-    fc = get_json(FORECAST)           # ohne Prognose kein Assessment
+    # Abruffehler stehen im Stand, nicht nur im Log des Laufs: die Logs sind
+    # ohne Anmeldung nicht lesbar, die Testseite zeigt den Stand. Wie
+    # hydro_error in level.json steht das Feld nur, solange es zutrifft.
+    def note(key, err):
+        if err:
+            state[key] = {"time": iso(now), "error": err[:300]}
+            print(err, file=sys.stderr)
+        else:
+            state.pop(key, None)
+
+    try:
+        fc = get_json(FORECAST)
+    except Exception as e:                                  # noqa: BLE001
+        # Ohne Prognose kein neuer Text; der alte Stand bleibt stehen
+        note("fetch_error", f"Prognose nicht geholt: {e}")
+        if not args.dry:
+            with open(state_path, "w", encoding="utf-8") as f:
+                json.dump(state, f, indent=2, ensure_ascii=False)
+                f.write("\n")
+        return 1
+    had = (state.get("fetch_error"), state.get("aq_error"))
+    note("fetch_error", None)
     try:
         aq = get_json(AIRQ)
+        note("aq_error", None)
     except Exception as e:                                  # noqa: BLE001
-        print(f"Luftqualitaet nicht geholt ({e}) — ohne AQI-Override", file=sys.stderr)
+        note("aq_error", f"Luftqualitaet nicht geholt, ohne AQI-Override: {e}")
         aq = None
 
     hours, suns = build_hours(fc, aq), sun_times(fc)
@@ -727,7 +762,7 @@ def main(argv=None) -> int:
                          slot=None, sig=None, points=a["points"], facts=a["facts"])
                 changed = True
         days[key] = e
-    if set(days) != set(old_days):
+    if set(days) != set(old_days) or had != (state.get("fetch_error"), state.get("aq_error")):
         changed = True
 
     slot = due_slot(now, suns, today)
