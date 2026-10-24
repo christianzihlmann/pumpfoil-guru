@@ -584,10 +584,37 @@ def clean(s, limit):
     return s if 0 < len(s) <= limit else None
 
 
+NOKEY = "kein ANTHROPIC_API_KEY"
+BADKEY = ("ANTHROPIC_API_KEY beginnt nicht mit sk-ant- — im Secret steht vermutlich "
+          "der Name oder die Kennung (apikey_…) statt des Schluessels")
+
+
+def api_key() -> str:
+    """Der Key aus dem Secret, ohne Leerraum und Anfuehrungszeichen.
+
+    Am 24.10.2026 scheiterte der erste echte Aufruf mit "APIConnectionError:
+    Connection error." — so meldet sich das SDK, wenn im Key ein Zeilenumbruch
+    steckt, etwa vom Einfuegen. Ein Key enthaelt nie Leerraum, also darf alles
+    weg, auch mitten drin.
+    """
+    return "".join((os.environ.get("ANTHROPIC_API_KEY") or "").split()).strip("\"'")
+
+
+def why(e: Exception) -> str:
+    """Fehlertext fuer den oeffentlichen Stand: Meldung des SDK, dazu nur die
+    KLASSEN der Ursachen — deren Meldungen koennten Teile des Keys enthalten."""
+    causes, c = [], e.__cause__ or e.__context__
+    while c is not None and len(causes) < 3:
+        causes.append(type(c).__name__)
+        c = c.__cause__ or c.__context__
+    return (f"{type(e).__name__}: {e}"[:200]
+            + (f" (Ursache: {' < '.join(causes)})" if causes else ""))
+
+
 def ask_model(days: list, analyses: dict, today: date, recent: list):
     import anthropic
 
-    client = anthropic.Anthropic(timeout=180, max_retries=2)
+    client = anthropic.Anthropic(api_key=api_key(), timeout=180, max_retries=2)
     r = client.beta.messages.create(
         model=MODEL,
         max_tokens=16000,
@@ -620,8 +647,10 @@ def write_texts(days: list, analyses: dict, today: date, recent: list, dry: bool
     if dry:
         print("--- Anfrage ans Modell ---\n" + render(days, analyses, today, recent) + "\n---")
         return texts, {"dry": True}
-    if not os.environ.get("ANTHROPIC_API_KEY"):
-        return texts, {"error": "kein ANTHROPIC_API_KEY", "final": True}
+    if not api_key():
+        return texts, {"error": NOKEY, "final": True}
+    if not api_key().startswith("sk-ant-"):
+        return texts, {"error": BADKEY, "final": True}
     try:
         import anthropic
     except ImportError:
@@ -631,9 +660,9 @@ def write_texts(days: list, analyses: dict, today: date, recent: list, dry: bool
     except (anthropic.AuthenticationError, anthropic.PermissionDeniedError,
             anthropic.NotFoundError, anthropic.BadRequestError) as e:
         # Schluessel oder Anfrage falsch: ein neuer Versuch aendert nichts
-        return texts, {"error": f"{type(e).__name__}: {e}"[:300], "final": True}
+        return texts, {"error": why(e), "final": True}
     except (anthropic.APIStatusError, anthropic.APIConnectionError) as e:
-        return texts, {"error": f"{type(e).__name__}: {e}"[:300], "final": False}
+        return texts, {"error": why(e), "final": False}
     except (ValueError, KeyError, StopIteration) as e:
         return texts, {"error": f"Antwort unbrauchbar: {e}"[:300], "final": False}
     missing = []
@@ -690,6 +719,8 @@ def main(argv=None) -> int:
                     help="nichts schreiben, das Modell nicht fragen, die Anfrage zeigen")
     ap.add_argument("--now", help="Ortszeit vortaeuschen, z. B. 2026-10-25T05:40")
     ap.add_argument("--data", default=DATA, help="Verzeichnis mit level.json")
+    ap.add_argument("--force", action="store_true",
+                    help="aktuelles Fenster sofort neu schreiben, fuer alle Tage")
     args = ap.parse_args(argv)
 
     now = datetime.now(timezone.utc)
@@ -765,11 +796,18 @@ def main(argv=None) -> int:
     if set(days) != set(old_days) or had != (state.get("fetch_error"), state.get("aq_error")):
         changed = True
 
-    # Kam der Key erst nach dem Fenster dazu, das Fenster gleich nachholen —
-    # sonst stuenden bis zum naechsten Fenster die festen Saetze da
-    if (os.environ.get("ANTHROPIC_API_KEY")
-            and (state.get("error") or {}).get("error") == "kein ANTHROPIC_API_KEY"):
+    # Kam der Key erst nach dem Fenster dazu oder war er unbrauchbar, das
+    # Fenster nachholen, sobald er taugt — sonst stuenden bis zum naechsten
+    # Fenster die festen Saetze da
+    if (api_key().startswith("sk-ant-")
+            and (state.get("error") or {}).get("error") in (NOKEY, BADKEY)):
         state.pop("slot", None)
+    # Knopf im Workflow ("Assessment sofort neu schreiben"), etwa nach einer
+    # Aenderung an assessment_prompt.md: das aktuelle Fenster jetzt, alle Tage
+    force = args.force or os.environ.get("ASSESS_FORCE") == "true"
+    if force:
+        for k in ("slot", "slot_tries", "slot_try_id"):
+            state.pop(k, None)
 
     slot = due_slot(now, suns, today)
     if slot and slot[0] != state.get("slot"):
@@ -777,9 +815,10 @@ def main(argv=None) -> int:
         offsets = (1, 2) if name == "evening" else (0, 1, 2)
         targets = [sday + timedelta(days=i) for i in offsets]
         targets = [d for d in targets if d in show and analyses.get(d)]
-        need = [d for d in targets
-                if days[d.isoformat()].get("source") != "model"
-                or days[d.isoformat()].get("sig") != analyses[d]["sig"]]
+        need = targets if force else [
+            d for d in targets
+            if days[d.isoformat()].get("source") != "model"
+            or days[d.isoformat()].get("sig") != analyses[d]["sig"]]
         tries = state.get("slot_tries", 0) if state.get("slot_try_id") == sid else 0
         done, meta = True, {}
         if need:

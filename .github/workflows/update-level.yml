@@ -25,6 +25,13 @@ on:
   # Aktualisierung LAUTLOS auf. Dagegen prueft die Seite das Alter von
   # data/level.json und sagt es an — siehe CONFIG.stale in index.html.
   workflow_dispatch:
+    # Nur für den Start von Hand (Actions → Run workflow). Der Cron-Dienst
+    # schickt keine Eingaben; für ihn bleibt alles beim Alten.
+    inputs:
+      assess_now:
+        description: "Assessment sofort neu schreiben (Testseite), z. B. nach einer Änderung am Prompt"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -60,6 +67,7 @@ jobs:
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ASSESS_FORCE: ${{ inputs.assess_now }}
         run: |
           pip install --quiet "anthropic>=2.3,<3"
           python scripts/assess.py
