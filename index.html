@@ -1186,6 +1186,21 @@ function renderFC(list){
   }).join('');
 }
 
+/* Open-Meteo rechnet alle Zeiten einer Abfrage mit EINEM UTC-Versatz, dem
+   des Abfragezeitpunkts (utc_offset_seconds). Liegt eine Zeitumstellung im
+   Prognosezeitraum, stimmen die Ortszeiten danach um eine Stunde nicht: am
+   24.10.2026 stand für Montag Sonnenaufgang 08:04 statt 07:04. Deshalb jede
+   Zeit zuerst mit diesem Versatz zurück nach UTC und dann mit der echten
+   Zeitzone formatieren. Die Umstellungsregeln kennt der Browser — das gilt
+   im Herbst wie im Frühling, jedes Jahr, ohne Zutun. */
+const ZH = new Intl.DateTimeFormat('en-GB', { timeZone:'Europe/Zurich', year:'numeric',
+  month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit', hourCycle:'h23' });
+function omZeit(s){
+  const d = new Date(Date.parse(s + 'Z') - (wx.utc_offset_seconds || 0) * 1000);
+  const p = Object.fromEntries(ZH.formatToParts(d).map(x => [x.type, x.value]));
+  return { d, datum:`${p.year}-${p.month}-${p.day}`, std:+p.hour, hm:`${p.hour}:${p.minute}` };
+}
+
 async function loadWeather(){
   const { lat, lon } = CONFIG.weather;
   const u = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}`
@@ -1220,11 +1235,11 @@ function tile(value, label, qual, opts){
 function abschnitte(dateStr){
   if (!wx || !wx.hourly) return [];
   const h = wx.hourly;
+  const zeit = h.time.map(omZeit);
   return ABSCHNITTE.map(([von, bis], nr) => {
     const lab = T('parts')[nr];
-    const idx = h.time.map((t, i) => [t, i])
-      .filter(([t]) => t.slice(0, 10) === dateStr
-                    && +t.slice(11, 13) >= von && +t.slice(11, 13) < bis)
+    const idx = zeit.map((z, i) => [z, i])
+      .filter(([z]) => z.datum === dateStr && z.std >= von && z.std < bis)
       .map(([, i]) => i);
     if (!idx.length) return null;
     const temps = idx.map(i => h.temperature_2m[i]).filter(v => v != null);
@@ -1244,7 +1259,7 @@ function abschnitte(dateStr){
 function regen3h(){
   if (!wx || !wx.hourly) return null;
   const h = wx.hourly, jetzt = new Date();
-  const ab = h.time.findIndex(t => new Date(t) >= jetzt);
+  const ab = h.time.findIndex(t => omZeit(t).d >= jetzt);
   if (ab < 0) return null;
   const w = h.precipitation_probability.slice(ab, ab + 3).filter(v => v != null);
   return w.length ? Math.max(...w) : null;
@@ -1258,7 +1273,7 @@ function renderWeather(){
   $('#wxhead').textContent  = T('wxIn', { d:DAYS()[i].toLowerCase(), p:ort });
   $('#nowhead').textContent = i === 0 ? T('nowIn', { p:ort }) : `${DAYS()[i]} · ${ort}`;
 
-  const sr = dy.sunrise[i].slice(11), ss = dy.sunset[i].slice(11);
+  const sr = omZeit(dy.sunrise[i]).hm, ss = omZeit(dy.sunset[i]).hm;
 
   // Heute: Momentanwerte. Morgen/Übermorgen: Tageswerte aus der Prognose.
   const code = i === 0 ? c.weather_code    : dy.weather_code[i];

@@ -765,6 +765,12 @@ def main(argv=None) -> int:
     if set(days) != set(old_days) or had != (state.get("fetch_error"), state.get("aq_error")):
         changed = True
 
+    # Kam der Key erst nach dem Fenster dazu, das Fenster gleich nachholen —
+    # sonst stuenden bis zum naechsten Fenster die festen Saetze da
+    if (os.environ.get("ANTHROPIC_API_KEY")
+            and (state.get("error") or {}).get("error") == "kein ANTHROPIC_API_KEY"):
+        state.pop("slot", None)
+
     slot = due_slot(now, suns, today)
     if slot and slot[0] != state.get("slot"):
         sid, name, _, sday = slot
