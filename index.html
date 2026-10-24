@@ -701,13 +701,19 @@ const CONFIG = {
   // manual:true  → nur da, wenn manuell eingeschaltet
   // floating:true → Schwimmsteg, hat gar keine Pegelgrenzen
   //
-  // groundRel             : Seegrund relativ zu refLevel = minus gemessene Tiefe
-  // stopLowRel / goLowRel : Meter relativ zu refLevel, aus dem Messband
-  // goHigh / stopHigh     : absolut, hängen am Stauziel 532.00, nicht an der Messung
+  // groundRel               : Seegrund relativ zu refLevel = minus gemessene Tiefe
+  // stopLowRel / goLowRel   : Meter relativ zu refLevel, aus dem Messband
+  // goHigh / stopHigh       : absolut, hängen am Stauziel 532.00, nicht an der Messung
+  // goHighRel / stopHighRel : statt dessen, wo die Obergrenze an der Steghöhe
+  //                           hängt — verschiebt sich dann mit refLevel mit
   docks: [
-    // Tiefe 37 cm · rot unter 85 · grün ab 90
+    // Tiefe 37 cm · rot unter 85 · grün ab 90 · orange über 145 · rot über
+    // 155 cm, dann steht der Steg unter Wasser. Obergrenze vom Besitzer,
+    // 10.10.2026: bei 109–110 cm Tiefe "45 cm higher, dock 1 is under water,
+    // should then be red"; Lesart und orange Vorstufe am 24.10.2026 bestätigt.
+    // Absolut 531.79 / 531.89, knapp unter dem Stauziel 532.00.
     { id:'d1', short:'D1', name:'Dock 1', place:'Clubhouse', calibrated:true,
-      groundRel:-0.37, stopLowRel:0.48, goLowRel:0.53, goHigh:532.50, stopHigh:532.50 },
+      groundRel:-0.37, stopLowRel:0.48, goLowRel:0.53, goHighRel:1.08, stopHighRel:1.18 },
 
     // Tiefe 133 cm · rot unter 90 · grün ab 120. Die 100 cm vom 25.08. waren
     // zu optimistisch — bei 133 cm lautete das Urteil "noch grün". Rot lag bis
@@ -785,8 +791,10 @@ const CONFIG = {
    refLevel, verschieben sich alle Docks gemeinsam — ihre Abstände bleiben. */
 let docks = CONFIG.docks.map(d => ({
   ...d,
-  stopLow: d.stopLowRel == null ? undefined : +(CONFIG.refLevel + d.stopLowRel).toFixed(2),
-  goLow:   d.goLowRel   == null ? undefined : +(CONFIG.refLevel + d.goLowRel).toFixed(2)
+  stopLow:  d.stopLowRel  == null ? undefined  : +(CONFIG.refLevel + d.stopLowRel).toFixed(2),
+  goLow:    d.goLowRel    == null ? undefined  : +(CONFIG.refLevel + d.goLowRel).toFixed(2),
+  goHigh:   d.goHighRel   == null ? d.goHigh   : +(CONFIG.refLevel + d.goHighRel).toFixed(2),
+  stopHigh: d.stopHighRel == null ? d.stopHigh : +(CONFIG.refLevel + d.stopHighRel).toFixed(2)
 }));
 let levelMin = null, levelMax = null, measured = null, levelStamp = null;
 /* Anlässe des Ruderclubs Vevey in Schiffenen, aus data/level.json.
