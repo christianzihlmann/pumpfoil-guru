@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Labor für das Tages-Assessment. Nirgends verlinkt und für Suchmaschinen
+     gesperrt, aber nicht geheim: das Repo ist öffentlich. Benoten kann nur,
+     wer den Schlüssel im Link hat (#key=…), siehe unten bei KEY. -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Assessment-Labor</title>
+<style>
+@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:500 800;font-display:swap;src:url(../fonts/bricolage-grotesque-latin.woff2) format("woff2")}
+@font-face{font-family:"Public Sans";font-style:normal;font-weight:400 600;font-display:swap;src:url(../fonts/public-sans-latin.woff2) format("woff2")}
+@font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:400 700;font-display:swap;src:url(../fonts/jetbrains-mono-latin.woff2) format("woff2")}
+
+/* Dieselben Farben wie die Hauptseite */
+:root{
+  --abyss:#071A1E; --deep:#0B2A2E; --water:#0D4F4F; --water-lit:#1E9B8A;
+  --molasse:#C9A063; --bone:#EDE6D8; --muted:#7A9498;
+  --go:#52C88A; --warn:#E6B245; --stop:#DC5B4A;
+  --rule:rgba(201,160,99,.22);
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Public Sans",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--abyss);color:var(--bone);font:16px/1.5 var(--body)}
+.wrap{max-width:640px;margin:0 auto;padding:28px 16px 64px}
+.eyebrow{font:500 .75rem/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--molasse)}
+h1{font:800 2.2rem/1.05 var(--display);margin:.4rem 0 .6rem}
+h2{font:700 1.25rem/1.2 var(--display);margin:2.4rem 0 .8rem;color:var(--molasse)}
+.lead{color:var(--muted);font-size:.92rem}
+.status{margin-top:.8rem;font:.78rem/1.6 var(--mono);color:var(--muted)}
+.status b{color:var(--bone);font-weight:500}
+.status .err{color:var(--stop)}
+.key{display:inline-block;margin-top:.6rem;padding:.25rem .6rem;border-radius:99px;font:500 .75rem/1.4 var(--mono)}
+.key.on{background:rgba(82,200,138,.14);color:var(--go)}
+.key.off{background:rgba(122,148,152,.14);color:var(--muted)}
+
+.card{background:var(--deep);border:1px solid var(--rule);border-radius:14px;padding:18px 16px;margin-top:16px}
+.day{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font:500 .8rem/1.4 var(--mono);color:var(--molasse)}
+.src{color:var(--muted)}
+.head{font:700 1.5rem/1.2 var(--display);margin:.5rem 0 .25rem;overflow-wrap:anywhere}
+.sub{color:var(--bone);opacity:.85;overflow-wrap:anywhere}
+.none{color:var(--muted);font-style:italic;margin-top:.5rem}
+.ov{margin:.6rem 0 .2rem;padding:.6rem .75rem;border-left:3px solid var(--warn);background:rgba(230,178,69,.08);border-radius:4px}
+.ov b{color:var(--warn)}
+.behind{margin-top:.5rem;color:var(--muted);font-size:.85rem}
+
+details{margin-top:.9rem}
+summary{cursor:pointer;color:var(--water-lit);font-size:.88rem}
+.pts{list-style:none;margin:.6rem 0 0}
+.pts li{padding:.3rem 0;border-top:1px solid var(--rule);font-size:.88rem;overflow-wrap:anywhere}
+.tag{display:inline-block;min-width:5.6em;font:500 .7rem/1 var(--mono);color:var(--molasse)}
+.facts{margin-top:.5rem;font:.72rem/1.5 var(--mono);color:var(--muted);overflow-wrap:anywhere}
+
+form{margin-top:1rem;padding-top:.9rem;border-top:1px solid var(--rule)}
+fieldset{border:0;display:flex;align-items:center;gap:6px;margin-bottom:.6rem;flex-wrap:wrap}
+legend{float:left;width:6.2em;font-size:.88rem;color:var(--muted)}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg span{display:inline-block;min-width:3.6em;text-align:center;padding:.45rem .7rem;border:1px solid var(--rule);border-radius:8px;font-size:.88rem;cursor:pointer}
+.seg input:checked + span{background:var(--water);border-color:var(--water-lit)}
+.seg input:focus-visible + span{outline:2px solid var(--water-lit);outline-offset:2px}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.6rem}
+.row label,.note{display:flex;flex-direction:column;gap:3px;font-size:.78rem;color:var(--muted)}
+input[type=time],input[type=number],select,textarea{background:var(--abyss);color:var(--bone);border:1px solid var(--rule);border-radius:8px;padding:.45rem .5rem;font:16px var(--body)}
+input[type=number]{width:6em}
+textarea{width:100%;resize:vertical}
+.hint{font-size:.72rem;color:var(--muted);margin-top:2px}
+button{margin-top:.7rem;background:var(--water-lit);color:var(--abyss);border:0;border-radius:8px;padding:.6rem 1.1rem;font:600 .95rem var(--body);cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+.msg{display:block;margin-top:.5rem;font-size:.85rem;color:var(--muted)}
+.msg.ok{color:var(--go)} .msg.bad{color:var(--stop)}
+
+.hday{margin-top:1.4rem;font:500 .8rem/1.4 var(--mono);color:var(--molasse)}
+.ver{padding:.6rem 0;border-top:1px solid var(--rule)}
+.ver .meta{font:.72rem/1.5 var(--mono);color:var(--muted)}
+.ver .h{font:600 1.02rem/1.3 var(--display);margin-top:.15rem;overflow-wrap:anywhere}
+.ver .s{font-size:.88rem;opacity:.85;overflow-wrap:anywhere}
+.grade{margin-top:.35rem;font-size:.82rem;color:var(--bone);overflow-wrap:anywhere}
+.grade .g{font-family:var(--mono);color:var(--water-lit)}
+.toggle{background:none;color:var(--water-lit);padding:0;margin-top:.3rem;font-size:.82rem;text-decoration:underline}
+footer{margin-top:3rem;font-size:.75rem;color:var(--muted)}
+footer code{font-family:var(--mono)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <p class="eyebrow">Pumpfoil Guru · Labor</p>
+    <h1>Assessment</h1>
+    <p class="lead">Hier entsteht die Zeile, bevor sie auf die Hauptseite darf. Der Code rechnet die Aussagen, das Modell formuliert sie.</p>
+    <p class="status" id="status">Lade…</p>
+    <span class="key" id="key"></span>
+  </header>
+
+  <section id="days" aria-live="polite"></section>
+
+  <section>
+    <h2>Verlauf</h2>
+    <div id="history"></div>
+  </section>
+
+  <footer>
+    Alles hier liegt öffentlich im Repo:
+    <code>data/assessment.json</code>, <code>data/assessment_log.jsonl</code>,
+    <code>data/assessment_grades.csv</code>. Wetter: Open-Meteo.
+    Text: Claude (Anthropic).
+  </footer>
+</main>
+
+<script>
+'use strict';
+const REPO = 'christianzihlmann/pumpfoil-guru';
+const ZONE = 'Europe/Zurich';
+
+/* Der Schlüssel steht im Lesezeichen hinter dem #. Was dort steht, schickt
+   der Browser beim Laden nicht mit; es liegt weder im Repo noch auf dem
+   Server. Er geht ausschliesslich an api.github.com, um den Workflow
+   grade.yml auszulösen — ein fein granuliertes Token, das nur Actions darf.
+   Kein localStorage (Projektregel): ohne den Link kein Schlüssel. */
+const KEY = new URLSearchParams(location.hash.slice(1)).get('key') || '';
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g,
+  c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const isoDay = d => new Intl.DateTimeFormat('en-CA', { timeZone:ZONE }).format(d);
+const clock = s => new Date(s).toLocaleTimeString('de-CH', { timeZone:ZONE, hour:'2-digit', minute:'2-digit' });
+const stamp = s => new Date(s).toLocaleString('de-CH', { timeZone:ZONE, weekday:'short',
+  day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
+const dayName = iso => new Date(iso + 'T12:00:00Z').toLocaleDateString('de-CH',
+  { weekday:'short', day:'2-digit', month:'2-digit', timeZone:'UTC' });
+const SLOT = { morning:'Morgen', midday:'Mittag', evening:'Abend' };
+const slotName = id => SLOT[(id || '').split('-').pop()] || '–';
+const SOURCE = { model:'Modell', fallback:'fester Satz', placeholder:'Platzhalter' };
+const MOOD = { good:'gut', mixed:'gemischt', poor:'schlecht' };
+const NOTE = { yes:'ja', partly:'teils', no:'nein' };
+const REL = ['Heute', 'Morgen', 'Übermorgen'];
+
+async function getText(path){
+  try{
+    const r = await fetch(`${path}?t=${Date.now()}`, { cache:'no-store' });
+    return r.ok ? await r.text() : '';
+  }catch(e){ return ''; }
+}
+
+/* CSV mit Anführungszeichen — Notizen dürfen Kommas enthalten */
+function parseCSV(text){
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){
+      if (c === '"'){ if (text[i+1] === '"'){ f += '"'; i++; } else q = false; }
+      else f += c;
+    } else if (c === '"') q = true;
+    else if (c === ','){ row.push(f); f = ''; }
+    else if (c === '\n'){ row.push(f); rows.push(row); row = []; f = ''; }
+    else if (c !== '\r') f += c;
+  }
+  if (f || row.length){ row.push(f); rows.push(row); }
+  const [head, ...rest] = rows;
+  return head ? rest.filter(r => r.length > 1).map(r => Object.fromEntries(head.map((h, i) => [h, r[i] ?? '']))) : [];
+}
+
+function gradeLine(g){
+  const parts = [];
+  if (g.accurate) parts.push(`<span class="g">stimmt: ${esc(NOTE[g.accurate] || g.accurate)}</span>`);
+  if (g.liked)    parts.push(`<span class="g">gefällt: ${esc(NOTE[g.liked] || g.liked)}</span>`);
+  if (g.seen_at)  parts.push(`vor Ort ${esc(g.seen_at)}`);
+  if (g.dock)     parts.push(`Dock ${esc(g.dock.replace('d',''))}${g.depth_cm ? ' ' + esc(g.depth_cm) + ' cm' : ''}`);
+  else if (g.depth_cm) parts.push(`${esc(g.depth_cm)} cm`);
+  if (g.note)     parts.push(`„${esc(g.note)}“`);
+  return `<p class="grade">${parts.join(' · ')}</p>`;
+}
+
+function seg(name, label){
+  return `<fieldset><legend>${label}</legend>`
+    + ['yes','partly','no'].map(v => `<label class="seg"><input type="radio" name="${name}" value="${v}"><span>${NOTE[v]}</span></label>`).join('')
+    + `</fieldset>`;
+}
+
+function form(day, version, today){
+  const now = day === today ? clock(new Date()) : '';
+  return `<form data-day="${esc(day)}" data-version="${esc(version)}">
+    ${seg('accurate', 'Stimmt’s?')}
+    ${seg('liked', 'Gefällt’s?')}
+    <div class="row">
+      <label>vor Ort um <input type="time" name="seen_at" value="${now}"></label>
+      <label>Dock <select name="dock"><option value="">–</option><option value="d1">1</option><option value="d2">2</option><option value="d3">3</option></select></label>
+      <label>Tiefe <input type="number" name="depth_cm" inputmode="numeric" min="0" max="999" placeholder="cm"></label>
+    </div>
+    <label class="note">Notiz <textarea name="note" rows="2" maxlength="500"></textarea></label>
+    <p class="hint">Landet öffentlich im Repo — keine Namen, nichts Privates.</p>
+    <button type="submit">Benotung senden</button>
+    <span class="msg" role="status"></span>
+  </form>`;
+}
+
+async function send(f){
+  const msg = f.querySelector('.msg'), btn = f.querySelector('button');
+  const d = new FormData(f);
+  const inputs = {
+    day: f.dataset.day, version: f.dataset.version,
+    seen_at: d.get('seen_at') || '', accurate: d.get('accurate') || '',
+    liked: d.get('liked') || '', dock: d.get('dock') || '',
+    depth_cm: d.get('depth_cm') || '', note: (d.get('note') || '').trim(),
+  };
+  if (!inputs.accurate && !inputs.liked && !inputs.note && !inputs.depth_cm){
+    msg.className = 'msg bad'; msg.textContent = 'Bitte mindestens eine Note, eine Tiefe oder eine Notiz.'; return;
+  }
+  btn.disabled = true; msg.className = 'msg'; msg.textContent = 'Sende…';
+  try{
+    const r = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/grade.yml/dispatches`, {
+      method:'POST',
+      headers:{ 'Authorization':`Bearer ${KEY}`, 'Accept':'application/vnd.github+json',
+                'X-GitHub-Api-Version':'2022-11-28', 'Content-Type':'application/json' },
+      body: JSON.stringify({ ref:'main', inputs }),
+    });
+    if (r.ok){
+      msg.className = 'msg ok'; msg.textContent = 'Gesendet. In ein bis zwei Minuten steht es im Verlauf.';
+      f.reset();
+    } else {
+      msg.className = 'msg bad';
+      msg.textContent = `Fehler ${r.status}` + (r.status === 401 || r.status === 403 || r.status === 404
+        ? ' — Schlüssel abgelaufen oder ohne Actions-Recht?' : '');
+    }
+  }catch(e){ msg.className = 'msg bad'; msg.textContent = 'Keine Verbindung.'; }
+  btn.disabled = false;
+}
+
+function card(day, e, rel, grades, today){
+  const top = `<p class="day"><span>${esc(rel)} · ${esc(dayName(day))}</span>`
+    + (e && e.headline ? `<span class="src">${esc(SOURCE[e.source] || e.source)} · ${esc(slotName(e.slot))} ${e.written ? esc(clock(e.written)) : ''}</span>` : '')
+    + `</p>`;
+  if (!e || !e.headline) return `<article class="card">${top}<p class="none">Kein Text — der Tag ist vorbei oder noch nicht dran.</p></article>`;
+  const ov = e.override;
+  const text = ov
+    ? `<div class="ov"><b>${esc(ov.headline)}</b> ${esc(ov.subline)}</div>
+       <p class="behind">Modelltext dahinter: ${esc(e.headline)} — ${esc(e.subline)}</p>`
+    : `<h3 class="head">${esc(e.headline)}</h3><p class="sub">${esc(e.subline)}</p>`;
+  const f = e.facts || {};
+  const facts = [
+    f.window && `Fenster ${f.window}`, f.mood && `Stimmung ${MOOD[f.mood] || f.mood}`,
+    f.tmin != null && `Luft ${Math.round(f.tmin)}–${Math.round(f.tmax)} °C`,
+    f.wind && `Wind ${f.wind[0]}–${f.wind[1]} km/h`, f.gust_max != null && `Böen bis ${f.gust_max}`,
+    f.uv_max != null && `UV ${f.uv_max}`, f.aqi_max != null && `Luftqualität ${f.aqi_max}`,
+    f.lake != null && `See ${f.lake} °C`, e.model && e.model,
+  ].filter(Boolean).join(' · ');
+  const pts = (e.points || []).map(p => `<li><span class="tag">${esc(p.theme)}</span>${esc(p.text)}</li>`).join('');
+  const mine = grades.filter(g => g.day === day && g.version === e.written).map(gradeLine).join('');
+  return `<article class="card">${top}${text}
+    <details><summary>Was der Code gerechnet hat</summary><ul class="pts">${pts}</ul><p class="facts">${esc(facts)}</p></details>
+    ${mine}
+    ${KEY ? form(day, e.written, today) : ''}
+  </article>`;
+}
+
+function renderHistory(log, grades, today){
+  const texts = log.filter(x => x.type === 'text');
+  const days = [...new Set(texts.map(x => x.day))].sort().reverse().slice(0, 21);
+  if (!days.length) return '<p class="lead">Noch nichts im Log.</p>';
+  return days.map(day => {
+    const vers = texts.filter(x => x.day === day).sort((a, b) => b.time.localeCompare(a.time));
+    const loose = grades.filter(g => g.day === day && !vers.some(v => v.time === g.version));
+    return `<p class="hday">${esc(dayName(day))}</p>`
+      + vers.map(v => `<div class="ver">
+          <p class="meta">${esc(stamp(v.time))} · ${esc(slotName(v.slot))} · ${esc(SOURCE[v.source] || v.source)}</p>
+          <p class="h">${esc(v.headline)}</p><p class="s">${esc(v.subline)}</p>
+          ${grades.filter(g => g.day === day && g.version === v.time).map(gradeLine).join('')}
+          ${KEY ? `<button class="toggle" type="button" data-day="${esc(day)}" data-version="${esc(v.time)}">benoten</button><div></div>` : ''}
+        </div>`).join('')
+      + loose.map(gradeLine).join('');
+  }).join('');
+}
+
+async function load(){
+  const [st, logText, csv] = await Promise.all([
+    getText('../data/assessment.json'), getText('../data/assessment_log.jsonl'), getText('../data/assessment_grades.csv')]);
+  let state = {};
+  try{ state = JSON.parse(st || '{}'); }catch(e){}
+  const log = logText.split('\n').filter(Boolean).map(l => { try{ return JSON.parse(l); }catch(e){ return null; } }).filter(Boolean);
+  const grades = parseCSV(csv);
+  const today = isoDay(new Date());
+
+  const s = [];
+  if (state.updated) s.push(`Stand <b>${esc(stamp(state.updated))}</b>`);
+  if (state.slot) s.push(`letztes Fenster <b>${esc(slotName(state.slot))} ${esc(dayName(state.slot.slice(0, 10)))}</b>`);
+  if (state.error) s.push(`<span class="err">Fehler ${esc(stamp(state.error.time))}: ${esc(state.error.error)}</span>`);
+  $('#status').innerHTML = s.join(' · ') || 'Noch kein Stand — der Bot hat das Assessment noch nicht geschrieben.';
+  const k = $('#key');
+  k.className = 'key ' + (KEY ? 'on' : 'off');
+  k.textContent = KEY ? 'Benoten aktiv — dieser Link ist dein Schlüssel, nicht teilen'
+                      : 'Nur lesen — zum Benoten den Link mit #key=… öffnen';
+
+  const days = [0, 1, 2].map(i => {
+    const d = new Date(today + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + i);
+    return d.toISOString().slice(0, 10);
+  });
+  $('#days').innerHTML = days.map((d, i) => card(d, (state.days || {})[d], REL[i], grades, today)).join('');
+  $('#history').innerHTML = renderHistory(log, grades, today);
+}
+
+document.addEventListener('submit', e => {
+  if (e.target.matches('form')){ e.preventDefault(); if (KEY) send(e.target); }
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('.toggle');
+  if (!b) return;
+  const box = b.nextElementSibling;
+  box.innerHTML = box.innerHTML ? '' : form(b.dataset.day, b.dataset.version, isoDay(new Date()));
+});
+load();
+</script>
+</body>
+</html>

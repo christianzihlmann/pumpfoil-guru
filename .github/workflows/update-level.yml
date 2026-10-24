@@ -49,6 +49,21 @@ jobs:
       - id: fetch
         run: python scripts/fetch_level.py
 
+      # Tages-Assessment für die Testseite pumpfoilguru.ch/test/: der Code
+      # rechnet, das Modell formuliert. Das Modell wird nur in drei Fenstern
+      # am Tag gefragt (05:30, 12:00, Sonnenuntergang + 30 min), sonst rechnet
+      # der Schritt nur die Overrides nach. Er darf scheitern, ohne den
+      # Datenlauf aufzuhalten — das Archiv geht vor, VARIO gibt es nicht
+      # rückwirkend. Deshalb auch das Paket hier und nicht oben: fällt seine
+      # Installation aus, trifft es nur diesen Schritt.
+      - name: Assessment
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          pip install --quiet "anthropic>=2.3,<3"
+          python scripts/assess.py
+
       - name: Kalibrierfenster melden
         if: steps.fetch.outputs.narrow == 'true'
         env:
@@ -142,6 +157,11 @@ jobs:
           git config user.email "actions@github.com"
           git add data/
           git diff --staged --quiet || git commit -m "Pegel $(date -u +%Y-%m-%dT%H:%MZ)"
+          # Seit 24.10.2026 committet auch die Benotung von der Testseite
+          # (grade.yml). Kam sie dazwischen, würde der Push abgewiesen und die
+          # Archivzeile dieses Laufs ginge verloren. Merge, nie Rebase; die
+          # beiden berühren verschiedene Dateien, ein Konflikt ist nicht möglich.
+          git pull --no-rebase --no-edit
           git push
 
       # Ein Ausfall bei Groupe E bricht den Lauf seit dem 22.10.2026 nicht

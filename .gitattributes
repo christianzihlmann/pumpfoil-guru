@@ -1,0 +1,4 @@
+# Benotungen kommen aus einem eigenen Workflow und koennen gleichzeitig
+# eintreffen. Beide haengen eine Zeile an — union behaelt beide, statt einen
+# Konflikt zu melden. Reihenfolge egal, jede Zeile traegt ihren Zeitstempel.
+data/assessment_grades.csv merge=union

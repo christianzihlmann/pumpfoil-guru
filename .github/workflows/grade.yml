@@ -1,0 +1,58 @@
+name: Assessment benoten
+
+# Ausgelöst von der Testseite pumpfoilguru.ch/test/. Das Token dafür ist
+# fein granuliert und darf nur Actions — dasselbe Recht wie das Token des
+# Cron-Dienstes, aber ein eigenes, damit sich beide getrennt sperren lassen.
+# Es steckt im Lesezeichen des Besitzers hinter dem #, nie im Repo.
+on:
+  workflow_dispatch:
+    inputs:
+      day:      { description: "Tag des Assessments (JJJJ-MM-TT)", required: true, type: string }
+      version:  { description: "Textversion: Zeitstempel aus assessment.json", required: false, type: string }
+      seen_at:  { description: "Vor Ort um (HH:MM)", required: false, type: string }
+      accurate: { description: "Stimmt's? yes / partly / no", required: false, type: string }
+      liked:    { description: "Gefällt's? yes / partly / no", required: false, type: string }
+      dock:     { description: "Dock: d1 / d2 / d3", required: false, type: string }
+      depth_cm: { description: "Wassertiefe in cm", required: false, type: string }
+      note:     { description: "Notiz", required: false, type: string }
+
+permissions:
+  contents: write
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Eingaben nur über env, nie als ${{ }} im Befehl: eine Notiz mit
+      # Anführungszeichen oder $(...) könnte sonst Code ausführen.
+      - name: Note anhängen
+        env:
+          DAY: ${{ inputs.day }}
+          VERSION: ${{ inputs.version }}
+          SEEN_AT: ${{ inputs.seen_at }}
+          ACCURATE: ${{ inputs.accurate }}
+          LIKED: ${{ inputs.liked }}
+          DOCK: ${{ inputs.dock }}
+          DEPTH_CM: ${{ inputs.depth_cm }}
+          NOTE: ${{ inputs.note }}
+        run: python3 scripts/grade.py
+
+      # Merge statt Rebase, wie überall in diesem Repo. Kam der Pegel-Bot oder
+      # eine zweite Note dazwischen, hilft ein neuer Versuch; gleichzeitige
+      # Zeilen in der CSV führt .gitattributes (merge=union) zusammen.
+      - name: Commit
+        env:
+          DAY: ${{ inputs.day }}
+        run: |
+          git config user.name  "pegel-bot"
+          git config user.email "actions@github.com"
+          git add data/assessment_grades.csv
+          git diff --staged --quiet && exit 0
+          git commit -m "Note $DAY"
+          for i in 1 2 3; do
+            git pull --no-rebase --no-edit && git push && exit 0
+            sleep 10
+          done
+          exit 1
