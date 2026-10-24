@@ -1,10 +1,9 @@
 {
   "error": {
-    "time": "2026-10-24T17:08:32+00:00",
+    "time": "2026-10-24T17:37:50+00:00",
     "slot": "2026-10-24-evening",
-    "error": "kein ANTHROPIC_API_KEY"
+    "error": "APIConnectionError: Connection error."
   },
-  "slot": "2026-10-24-evening",
   "slot_done": "2026-10-24T17:08:32+00:00",
   "days": {
     "2026-10-24": {},
@@ -99,5 +98,7 @@
       "model": null
     }
   },
-  "updated": "2026-10-24T17:08:32+00:00"
+  "updated": "2026-10-24T17:37:50+00:00",
+  "slot_try_id": "2026-10-24-evening",
+  "slot_tries": 1
 }
