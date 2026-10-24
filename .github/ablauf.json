@@ -1,0 +1,14 @@
+[
+  {
+    "name": "GitHub-Token zum Benoten",
+    "expires": "2027-01-22",
+    "used_for": "Benoten auf pumpfoilguru.ch/test/ — steckt im Lesezeichen hinter #key=",
+    "renew": "Neues fein granuliertes Token auf https://github.com/settings/personal-access-tokens/new: nur pumpfoil-guru, nur Actions: Read and write. Dann das Lesezeichen pumpfoilguru.ch/test/#key=… mit dem neuen Token neu anlegen."
+  },
+  {
+    "name": "Claude-API-Key",
+    "expires": "2027-10-19",
+    "used_for": "Tages-Assessment, Secret ANTHROPIC_API_KEY",
+    "renew": "Neuen Key auf platform.claude.com erstellen und den ganzen sk-ant-…-Schlüssel kopieren. Im Repo unter Settings → Secrets and variables → Actions bei ANTHROPIC_API_KEY ersetzen. Danach Actions → Pegel aktualisieren → Run workflow mit Häkchen „Assessment sofort neu schreiben“."
+  }
+]

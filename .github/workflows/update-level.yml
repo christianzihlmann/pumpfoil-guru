@@ -159,6 +159,15 @@ jobs:
           } > /tmp/dock2.md
           gh issue create --title "$MARK ($TAGE Tage)" --body-file /tmp/dock2.md
 
+      # Schlüssel laufen ab: eine Woche vorher ein Issue, GitHub schickt dazu
+      # eine Mail. Die Daten stehen in .github/ablauf.json und werden beim
+      # Erneuern dort nachgeführt. Darf den Datenlauf nie aufhalten.
+      - name: Schlüssel laufen bald ab
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python scripts/ablauf.py
+
       - name: Commit, falls sich etwas geändert hat
         run: |
           git config user.name  "pegel-bot"
