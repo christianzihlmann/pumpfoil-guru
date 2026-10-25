@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-10-25T13:52:55+00:00",
+  "slot_done": "2026-10-25T17:08:37+00:00",
   "days": {
     "2026-10-25": {
       "headline": "Gale this afternoon, stay ashore",
@@ -53,18 +53,24 @@
       "model": "claude-opus-5-5"
     },
     "2026-10-26": {
-      "headline": "Purée de pois, puis lac d’huile",
-      "subline": "Brouillard jusqu’à 09:00, puis plat toute la journée, vent sous 5 km/h.",
+      "headline": "Brouillard d’abord, la glisse ensuite",
+      "subline": "Dès 10:00, lac plat, vent sous 5 km/h. Y a pas le feu au lac.",
       "source": "model",
-      "written": "2026-10-25T13:52:55+00:00",
-      "slot": "2026-10-25-midday",
-      "sig": "[\"good\", [\"FOG\", \"m\", \"m\"], [\"FLAT\", \"m\", \"e\"]]",
+      "written": "2026-10-25T17:08:37+00:00",
+      "slot": "2026-10-25-evening",
+      "sig": "[\"mixed\", [\"FOG\", \"m\", \"m\"], [\"BEST\", \"m\", \"e\"], [\"FLAT\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "FOG",
-          "text": "Fog until 09:00, visibility down to 1.4 km.",
+          "text": "Fog until 10:00, visibility down to 0.6 km.",
           "from": "07:04",
-          "to": "09:00"
+          "to": "10:00"
+        },
+        {
+          "theme": "BEST",
+          "text": "Best window from 10:00.",
+          "from": "10:00",
+          "to": "17:25"
         },
         {
           "theme": "FLAT",
@@ -74,25 +80,25 @@
         },
         {
           "theme": "TEMP",
-          "text": "Air 2–11 °C. Lake 16 °C.",
+          "text": "Air 2–12 °C. Lake 16 °C.",
           "from": null,
           "to": null
         }
       ],
       "facts": {
         "window": "07:04–17:25",
-        "mood": "good",
-        "tmin": 2.4,
-        "tmax": 11.0,
+        "mood": "mixed",
+        "tmin": 2.2,
+        "tmax": 11.8,
         "wind": [
-          1,
-          3
+          0,
+          4
         ],
-        "gust_max": 9,
+        "gust_max": 8,
         "uv_max": 3.0,
         "aqi_max": 23,
         "lake": 15.9,
-        "ok_share": 0.82,
+        "ok_share": 0.73,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5",
@@ -138,6 +144,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-10-25T13:52:55+00:00",
-  "slot": "2026-10-25-midday"
+  "updated": "2026-10-25T17:08:37+00:00",
+  "slot": "2026-10-25-evening"
 }
