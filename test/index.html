@@ -42,6 +42,7 @@ h2{font:700 1.25rem/1.2 var(--display);margin:2.4rem 0 .8rem;color:var(--molasse
 .card{background:var(--deep);border:1px solid var(--rule);border-radius:14px;padding:18px 16px;margin-top:16px}
 .day{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font:500 .8rem/1.4 var(--mono);color:var(--molasse)}
 .src{color:var(--muted)}
+.lng{color:var(--water-lit);font-weight:500}
 .head{font:700 1.5rem/1.2 var(--display);margin:.5rem 0 .25rem;overflow-wrap:anywhere}
 .sub{color:var(--bone);opacity:.85;overflow-wrap:anywhere}
 .none{color:var(--muted);font-style:italic;margin-top:.5rem}
@@ -91,7 +92,7 @@ footer code{font-family:var(--mono)}
   <header>
     <p class="eyebrow">Pumpfoil Guru · Labor</p>
     <h1>Assessment</h1>
-    <p class="lead">Hier entsteht die Zeile, bevor sie auf die Hauptseite darf. Der Code rechnet die Aussagen, das Modell formuliert sie.</p>
+    <p class="lead">Hier entsteht die Zeile, bevor sie auf die Hauptseite darf. Der Code rechnet die Aussagen, das Modell formuliert sie. Jeder Tag hat seine Sprache, aus dem Datum gewürfelt: Englisch, Deutsch oder Französisch, je ein Drittel.</p>
     <p class="status" id="status">Lade…</p>
     <span class="key" id="key"></span>
   </header>
@@ -138,6 +139,10 @@ const SOURCE = { model:'Modell', fallback:'fester Satz', placeholder:'Platzhalte
 const MOOD = { good:'gut', mixed:'gemischt', poor:'schlecht' };
 const NOTE = { yes:'ja', partly:'teils', no:'nein' };
 const REL = ['Heute', 'Morgen', 'Übermorgen'];
+/* Sprache des Tages: Kürzel und lang-Attribut. Ohne Angabe ist der Text
+   von vor dem 25.10.2026, da war alles englisch. */
+const LANG = { en:['EN','en'], de:['DE','de-CH'], fr:['FR','fr-CH'] };
+const lng = c => LANG[c] || LANG.en;
 
 async function getText(path){
   try{
@@ -231,15 +236,16 @@ async function send(f){
 }
 
 function card(day, e, rel, grades, today){
-  const top = `<p class="day"><span>${esc(rel)} · ${esc(dayName(day))}</span>`
-    + (e && e.headline ? `<span class="src">${esc(SOURCE[e.source] || e.source)} · ${esc(slotName(e.slot))} ${e.written ? esc(clock(e.written)) : ''}</span>` : '')
+  const has = e && e.headline, [code, lang] = lng(has && e.lang);
+  const top = `<p class="day"><span>${esc(rel)} · ${esc(dayName(day))}${has ? ` · <span class="lng">${code}</span>` : ''}</span>`
+    + (has ? `<span class="src">${esc(SOURCE[e.source] || e.source)} · ${esc(slotName(e.slot))} ${e.written ? esc(clock(e.written)) : ''}</span>` : '')
     + `</p>`;
-  if (!e || !e.headline) return `<article class="card">${top}<p class="none">Kein Text — der Tag ist vorbei oder noch nicht dran.</p></article>`;
+  if (!has) return `<article class="card">${top}<p class="none">Kein Text — der Tag ist vorbei oder noch nicht dran.</p></article>`;
   const ov = e.override;
   const text = ov
-    ? `<div class="ov"><b>${esc(ov.headline)}</b> ${esc(ov.subline)}</div>
-       <p class="behind">Modelltext dahinter: ${esc(e.headline)} — ${esc(e.subline)}</p>`
-    : `<h3 class="head">${esc(e.headline)}</h3><p class="sub">${esc(e.subline)}</p>`;
+    ? `<div class="ov" lang="${lang}"><b>${esc(ov.headline)}</b> ${esc(ov.subline)}</div>
+       <p class="behind">Modelltext dahinter: <span lang="${lang}">${esc(e.headline)} — ${esc(e.subline)}</span></p>`
+    : `<h3 class="head" lang="${lang}">${esc(e.headline)}</h3><p class="sub" lang="${lang}">${esc(e.subline)}</p>`;
   const f = e.facts || {};
   const facts = [
     f.window && `Fenster ${f.window}`, f.mood && `Stimmung ${MOOD[f.mood] || f.mood}`,
@@ -266,8 +272,8 @@ function renderHistory(log, grades, today){
     const loose = grades.filter(g => g.day === day && !vers.some(v => v.time === g.version));
     return `<p class="hday">${esc(dayName(day))}</p>`
       + vers.map(v => `<div class="ver">
-          <p class="meta">${esc(stamp(v.time))} · ${esc(slotName(v.slot))} · ${esc(SOURCE[v.source] || v.source)}</p>
-          <p class="h">${esc(v.headline)}</p><p class="s">${esc(v.subline)}</p>
+          <p class="meta">${esc(stamp(v.time))} · ${esc(slotName(v.slot))} · ${esc(SOURCE[v.source] || v.source)} · <span class="lng">${lng(v.lang)[0]}</span></p>
+          <p class="h" lang="${lng(v.lang)[1]}">${esc(v.headline)}</p><p class="s" lang="${lng(v.lang)[1]}">${esc(v.subline)}</p>
           ${grades.filter(g => g.day === day && g.version === v.time).map(gradeLine).join('')}
           ${KEY ? `<button class="toggle" type="button" data-day="${esc(day)}" data-version="${esc(v.time)}">benoten</button><div></div>` : ''}
         </div>`).join('')

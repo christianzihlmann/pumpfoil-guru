@@ -4,8 +4,10 @@
 Der Code rechnet, das Modell formuliert. Dieses Skript ordnet Wind, Wetter
 und Temperatur der Open-Meteo-Prognose ein, bestimmt die Overrides und legt
 pro Tag eine Liste fertiger Aussagen an ("points"). Das Sprachmodell macht
-daraus nur noch Titel und Zusatz, auf Englisch. Rechnen darf es nichts:
-jede Zahl und jede Uhrzeit im Text muss aus diesen Aussagen stammen.
+daraus nur noch Titel und Zusatz, in der Sprache des Tages: Englisch,
+Deutsch oder Franzoesisch der Schweiz, aus dem Datum gewuerfelt (day_lang).
+Rechnen darf es nichts: jede Zahl und jede Uhrzeit im Text muss aus diesen
+Aussagen stammen.
 
 Laeuft im Workflow nach fetch_level.py, jede halbe Stunde:
   - Overrides (Gewitterwarnung, UV, Luftqualitaet) bei jedem Lauf neu
@@ -26,6 +28,7 @@ Testen, ohne etwas zu schreiben oder das Modell zu fragen:
     python scripts/assess.py --dry --now 2026-10-25T05:40
 """
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -134,7 +137,20 @@ SLOT_EVENING_AFTER = timedelta(minutes=30)  # nach Sonnenuntergang
 SLOT_TRIES = 3         # so oft probieren, wenn die API streikt, dann fester Satz
 RECENT_DAYS = 3        # so lange soll sich ein Titel nicht wiederholen
 
-HEAD_MAX, SUB_MAX = 60, 110                 # Zeichen; laenger heisst unbrauchbar
+# Zeichen fuer Titel und Zusatz; laenger heisst unbrauchbar. Deutsch und
+# Franzoesisch brauchen fuer denselben Zusatz gut ein Fuenftel mehr.
+LIMITS = {"en": (60, 110), "de": (60, 130), "fr": (60, 130)}
+
+# Sprache der Zeile. Jeder Tag hat genau eine, gewuerfelt aus dem Datum
+# selbst (day_lang): derselbe Tag spricht immer dieselbe Sprache, ob er als
+# Uebermorgen, Morgen oder Heute dran ist, und kein Lauf wuerfelt neu. Jede
+# Sprache je ein Drittel, unabhaengig vom Vortag — zweimal hintereinander
+# Franzoesisch ist erlaubt (Besitzer, 25.10.2026). LANG_SALT und die
+# Reihenfolge in LANGS nie aendern, sonst wechseln auch vergangene Tage.
+LANGS = ("en", "de", "fr")
+LANG_SALT = "pumpfoilguru"
+LANG_NAME = {"en": "en (English)", "de": "de-CH (Swiss Standard German)",
+             "fr": "fr-CH (Swiss French)"}
 
 FOG_CODES = {45, 48}
 STORM_CODES = {95, 96, 99}
@@ -144,25 +160,81 @@ SUN_CODES = {0, 1}
 # "still doable since offshore, but you feel it when pumping back".
 PUMPABLE = {"flat", "off", "off_strong"}
 
-# Feste Saetze aus der Regeltabelle (assessment.md). Sie stehen da, wenn das
-# Modell nicht erreichbar ist; das Modell darf sie aufgreifen.
+# Feste Saetze aus der Regeltabelle (assessment.md), je Sprache. Sie stehen
+# da, wenn das Modell nicht erreichbar ist; das Modell darf sie aufgreifen.
+# Deutsch und Franzoesisch sind keine Uebersetzungen, sondern das, was man
+# hier sagen wuerde. Die Typografie (’, schmale Leerzeichen) setzt polish().
 SIGNATURE = {
-    "STORM": "Thunderstorms possible.",
-    "GALE": "Too windy today.",
-    "ICE": "Ice, ice baby.",
-    "WING": "Go winging instead!",
-    "FOG": "Ready for a session in the fog?",
-    "RAIN": "Rain on and off.",
-    "SNOW": "Snow on the lake.",
-    "CHOP": "Onshore wind. A bit choppy.",
-    "CROSS": "Sideways chop.",
-    "OFFSHORE": "Offshore wind.",
-    "PARADISE": "Another day in paradise.",
-    "FLAT": "Dead Flat Water. Go Pumping!",
-    "HOT": "It's gettin' hot in here.",
-    "DEFAULT": "See you at the docks!",
+    "en": {
+        "STORM": "Thunderstorms possible.",
+        "GALE": "Too windy today.",
+        "ICE": "Ice, ice baby.",
+        "WING": "Go winging instead!",
+        "FOG": "Ready for a session in the fog?",
+        "RAIN": "Rain on and off.",
+        "SNOW": "Snow on the lake.",
+        "CHOP": "Onshore wind. A bit choppy.",
+        "CROSS": "Sideways chop.",
+        "OFFSHORE": "Offshore wind.",
+        "PARADISE": "Another day in paradise.",
+        "FLAT": "Dead Flat Water. Go Pumping!",
+        "HOT": "It's gettin' hot in here.",
+        "DEFAULT": "See you at the docks!",
+    },
+    "de": {
+        "STORM": "Gewitter möglich.",
+        "GALE": "Heute zu stürmisch.",
+        "ICE": "Hühnerhaut garantiert.",
+        "WING": "Hopp, Wing auspacken!",
+        "FOG": "Wer traut sich in die Nebelsuppe?",
+        "RAIN": "Ab und zu ein Schauer.",
+        "SNOW": "Schnee auf dem See.",
+        "CHOP": "Die Bise macht Wellen.",
+        "CROSS": "Wellen von der Seite.",
+        "OFFSHORE": "Ablandiger Wind.",
+        "PARADISE": "Bilderbuchwetter am See.",
+        "FLAT": "Spiegelglatt. Hopp, pumpen!",
+        "HOT": "Heiss, heisser, Schiffenen.",
+        "DEFAULT": "Bis bald am Steg!",
+    },
+    "fr": {
+        "STORM": "Risque d'orages.",
+        "GALE": "Trop de vent aujourd'hui.",
+        "ICE": "Quelle cramine !",
+        "WING": "T'as meilleur temps de sortir le wing !",
+        "FOG": "Une session dans la purée de pois ?",
+        "RAIN": "Des averses par moments.",
+        "SNOW": "Il neige sur le lac.",
+        "CHOP": "La bise lève du clapot.",
+        "CROSS": "Clapot de travers.",
+        "OFFSHORE": "Vent de terre.",
+        "PARADISE": "Un temps de carte postale.",
+        "FLAT": "Lac d'huile. À vos pompes !",
+        "HOT": "Ça chauffe au bord du lac.",
+        "DEFAULT": "À tout bientôt au ponton !",
+    },
 }
 OVERRIDE_THEMES = {"WARNING", "UV", "AQI"}
+# Die Overrides je Sprache: Titel und Zusatz, {w} ist die Zeitangabe aus WHEN.
+# Wortwahl wie in den Warnhinweisen der Hauptseite.
+OVERRIDE_TEXT = {
+    "storm": {"en": ("Thunderstorm warning.", "{w}. Stay off the water."),
+              "de": ("Gewitterwarnung.", "{w}. Nicht aufs Wasser."),
+              "fr": ("Alerte orage.", "{w}. Restez à terre.")},
+    "uv": {"en": ("Extreme UV index.", "Outdoor activities not recommended."),
+           "de": ("Extremer UV-Index.", "Aktivitäten im Freien nicht empfohlen."),
+           "fr": ("Indice UV extrême.", "Activités en plein air déconseillées.")},
+    "aqi": {"en": ("Bad air quality.", "Outdoor activities not recommended."),
+            "de": ("Schlechte Luftqualität.", "Aktivitäten im Freien nicht empfohlen."),
+            "fr": ("Mauvaise qualité de l’air.", "Activités en plein air déconseillées.")},
+}
+# Zeitangaben: ganzer Tag, Rest des Tages, bis, ab. Englisch auch in den
+# Aussagen fuers Modell.
+WHEN = {
+    "en": ("all day", "for the rest of the day", "until {}", "from {}"),
+    "de": ("den ganzen Tag", "für den Rest des Tages", "bis {}", "ab {}"),
+    "fr": ("toute la journée", "pour le reste de la journée", "jusqu’à {}", "dès {}"),
+}
 
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -201,6 +273,12 @@ def hhmm(ts: float) -> str:
 
 def local_date(ts: float) -> date:
     return datetime.fromtimestamp(ts, TZ).date()
+
+
+def day_lang(d: date) -> str:
+    """Die Sprache des Tages, ein fuer alle Mal aus dem Datum gewuerfelt."""
+    h = hashlib.sha256(f"{LANG_SALT}:{d.isoformat()}".encode()).digest()
+    return LANGS[int.from_bytes(h[:8], "big") % len(LANGS)]
 
 
 def read_json(path: str):
@@ -308,8 +386,10 @@ def lake_temp(level: dict, now: datetime):
     return None
 
 
-def analyse(day: date, hours: list, sun, now: datetime, today: date, lake, warning):
-    """Aussagen fuer einen Tag, oder None, wenn dort kein Tageslicht mehr ist."""
+def analyse(day: date, hours: list, sun, now: datetime, today: date, lake, warning,
+            lang: str = "en"):
+    """Aussagen fuer einen Tag, oder None, wenn dort kein Tageslicht mehr ist.
+    Die Aussagen sind englisch; lang gilt fuer den Override-Satz."""
     if not sun or not hours:
         return None
     sr, ss = sun
@@ -327,14 +407,15 @@ def analyse(day: date, hours: list, sun, now: datetime, today: date, lake, warni
         for r in hs:
             r["wing"] = False
 
-    def when(a, b):
+    def when(a, b, lang="en"):
+        whole, remain, until, since = WHEN[lang]
         a, b = max(a, start), min(b, end)
         if a <= start + 900 and b >= end - 900:
-            return "for the rest of the day" if rest else "all day"
+            return remain if rest else whole
         if a <= start + 900:
-            return f"until {hhmm(b)}"
+            return until.format(hhmm(b))
         if b >= end - 900:
-            return f"from {hhmm(a)}"
+            return since.format(hhmm(a))
         return f"{hhmm(a)}–{hhmm(b)}"
 
     def runs(pred):
@@ -380,7 +461,7 @@ def analyse(day: date, hours: list, sun, now: datetime, today: date, lake, warni
                     "from": hhmm(max(rs[0][0], start)) if rs else None,
                     "to": hhmm(min(rs[-1][1], end)) if rs else None})
 
-    ov = override(start, end, when, warning, uv_max, aqi_max)
+    ov = override(start, end, when, warning, uv_max, aqi_max, lang)
     if ov:
         add(ov["theme"], ov["point"])
 
@@ -498,6 +579,7 @@ def analyse(day: date, hours: list, sun, now: datetime, today: date, lake, warni
     return {
         "points": pts,
         "mood": mood,
+        "lang": lang,
         "rest": rest,
         "sig": sig,
         "override": {k: ov[k] for k in ("kind", "headline", "subline", "event", "severity")
@@ -518,8 +600,14 @@ def analyse(day: date, hours: list, sun, now: datetime, today: date, lake, warni
     }
 
 
-def override(start, end, when, warning, uv_max, aqi_max):
-    """Gewitterwarnung, UV oder Luftqualitaet: fester, sachlicher Satz."""
+def override(start, end, when, warning, uv_max, aqi_max, lang="en"):
+    """Gewitterwarnung, UV oder Luftqualitaet: fester, sachlicher Satz in der
+    Sprache des Tages. "point" bleibt englisch, er geht ans Modell."""
+    def text(kind, w=""):
+        head, sub = OVERRIDE_TEXT[kind][lang]
+        return {"headline": polish(head, lang),
+                "subline": polish(sub.format(w=w[:1].upper() + w[1:]), lang)}
+
     if warning:
         try:
             on = datetime.fromisoformat(warning["onset"]).timestamp() if warning.get("onset") else start
@@ -527,32 +615,31 @@ def override(start, end, when, warning, uv_max, aqi_max):
         except ValueError:
             on, ex = start, end
         if on < end and ex > start:
-            w = when(on, ex)
-            return {"kind": "storm", "theme": "WARNING",
-                    "headline": "Thunderstorm warning.",
-                    "subline": f"{w[0].upper()}{w[1:]}. Stay off the water.",
-                    "point": f"Official thunderstorm warning {w}.",
+            return {"kind": "storm", "theme": "WARNING", **text("storm", when(on, ex, lang)),
+                    "point": f"Official thunderstorm warning {when(on, ex)}.",
                     "event": warning.get("event"), "severity": warning.get("severity")}
     if uv_max >= UV_MAX:
-        return {"kind": "uv", "theme": "UV", "headline": "Extreme UV index.",
-                "subline": "Outdoor activities not recommended.",
+        return {"kind": "uv", "theme": "UV", **text("uv"),
                 "point": f"UV index up to {uv_max:.0f}: extreme."}
     if aqi_max is not None and aqi_max >= AQI_MAX:
-        return {"kind": "aqi", "theme": "AQI", "headline": "Bad air quality.",
-                "subline": "Outdoor activities not recommended.",
+        return {"kind": "aqi", "theme": "AQI", **text("aqi"),
                 "point": f"Air quality index up to {aqi_max:.0f}: very poor."}
     return None
 
 
 def fallback(a: dict):
-    """Der feste Satz: Leitsatz des wichtigsten Themas, dazu die naechste Aussage."""
+    """Der feste Satz in der Sprache des Tages: Leitsatz des wichtigsten
+    Themas, dazu die naechste Aussage. Die Aussagen gibt es nur englisch —
+    an einem deutschen oder franzoesischen Tag bleibt der Zusatz deshalb leer,
+    statt mitten in der Zeile die Sprache zu wechseln."""
+    lang = a.get("lang", "en")
+    sig = SIGNATURE[lang]
     pts = [p for p in a["points"] if p["theme"] not in OVERRIDE_THEMES]
-    head = SIGNATURE.get(pts[0]["theme"], SIGNATURE["DEFAULT"]) if pts else SIGNATURE["DEFAULT"]
+    head = sig.get(pts[0]["theme"], sig["DEFAULT"]) if pts else sig["DEFAULT"]
     sub = ""
-    for p in pts[1:]:
-        sub = p["text"].split(". ")[0].rstrip(".") + "."
-        break
-    return head, sub
+    if lang == "en" and len(pts) > 1:
+        sub = pts[1]["text"].split(". ")[0].rstrip(".") + "."
+    return polish(head, lang), sub
 
 
 def load_prompt() -> str:
@@ -562,10 +649,11 @@ def load_prompt() -> str:
 
 def render(days: list, analyses: dict, today: date, recent: list) -> str:
     """Die Anfrage ans Modell: pro Tag die fertigen Aussagen."""
-    lines = ["Write the assessment for each day below. Return one entry per day, "
-             "with the date exactly as given."]
+    lines = ["Write the assessment for each day below, each day in its own language. "
+             "Return one entry per day, with the date exactly as given."]
     if recent:
-        lines += ["", "Headlines of the last days — don't reuse these word for word:"]
+        lines += ["", "Headlines of the last days — don't reuse these word for word, "
+                      "nor as a translation:"]
         lines += [f"- {h}" for h in recent]
     for d in days:
         a = analyses[d]
@@ -573,6 +661,7 @@ def render(days: list, analyses: dict, today: date, recent: list) -> str:
         span = "from now until sunset" if a["rest"] else "sunrise to sunset"
         lines += ["",
                   f"DAY {d.isoformat()}: {WEEKDAYS[d.weekday()]} {d.day} {MONTHS[d.month - 1]} ({rel})",
+                  f"Language: {LANG_NAME[a['lang']]}",
                   f"Window: {a['facts']['window']} ({span}). Mood: {a['mood']}.",
                   "Points, most important first:"]
         lines += [f"{i}. [{p['theme']}] {p['text']}" for i, p in enumerate(a["points"], 1)]
@@ -582,6 +671,28 @@ def render(days: list, analyses: dict, today: date, recent: list) -> str:
 def clean(s, limit):
     s = " ".join(str(s or "").split()).strip().strip('"“”')
     return s if 0 < len(s) <= limit else None
+
+
+def polish(s: str, lang: str) -> str:
+    """Typografie je Sprache. Erst nach clean(), das jeden Leerraum zu einem
+    gewoehnlichen Leerzeichen macht.
+
+    Apostroph typografisch wie auf der Hauptseite. Schweizer Hochdeutsch
+    kennt kein ß und setzt «Guillemets». Franzoesisch der Schweiz setzt ein
+    schmales geschuetztes Leerzeichen vor ! ? ; und in « », ein geschuetztes
+    vor den Doppelpunkt — in Uhrzeiten wie 09:00 natuerlich nicht. So
+    rutscht auf dem Telefon nie ein Ausrufezeichen allein auf die neue Zeile.
+    """
+    s = s.replace("'", "’")
+    if lang == "de":
+        s = s.replace("ß", "ss").replace("ẞ", "SS")
+        s = re.sub(r"„([^“”]*)[“”]", r"«\1»", s)
+    elif lang == "fr":
+        s = re.sub(r"\s*([!?;]+)", " \\1", s)
+        s = re.sub(r"(?<=\S)\s?:(?=\s|$)", " :", s)
+        s = re.sub(r"«\s*", "« ", s)
+        s = re.sub(r"\s*»", " »", s)
+    return s
 
 
 NOKEY = "kein ANTHROPIC_API_KEY"
@@ -630,11 +741,15 @@ def ask_model(days: list, analyses: dict, today: date, recent: list):
     if r.stop_reason != "end_turn":
         raise ValueError(f"stop_reason {r.stop_reason}")
     text = next(b.text for b in r.content if b.type == "text")
-    out = {}
+    out, asked = {}, {d.isoformat(): analyses[d]["lang"] for d in days}
     for e in json.loads(text).get("days", []):
-        h, s = clean(e.get("headline"), HEAD_MAX), clean(e.get("subline"), SUB_MAX)
+        lang = asked.get(e.get("date"))
+        if lang is None:
+            continue
+        head_max, sub_max = LIMITS[lang]
+        h, s = clean(e.get("headline"), head_max), clean(e.get("subline"), sub_max)
         if h and s is not None:
-            out[e.get("date")] = (h, s)
+            out[e.get("date")] = (polish(h, lang), polish(s, lang))
     meta = {"model": r.model, "request_id": r._request_id,
             "in": r.usage.input_tokens, "out": r.usage.output_tokens}
     return out, meta
@@ -678,7 +793,9 @@ def write_texts(days: list, analyses: dict, today: date, recent: list, dry: bool
 
 
 def recent_headlines(path: str, now: datetime) -> list:
-    """Titel der letzten Tage, damit sich keiner zu bald wiederholt."""
+    """Titel der letzten Tage mit ihrer Sprache, damit sich keiner zu bald
+    wiederholt — auch nicht uebersetzt. Ohne Sprache im Log: vor dem
+    25.10.2026, da war alles englisch."""
     cutoff = now - timedelta(days=RECENT_DAYS)
     out = []
     try:
@@ -687,9 +804,10 @@ def recent_headlines(path: str, now: datetime) -> list:
                 try:
                     e = json.loads(line)
                     if (e.get("type") == "text" and e.get("source") == "model"
-                            and datetime.fromisoformat(e["time"]) >= cutoff
-                            and e.get("headline") not in out):
-                        out.append(e["headline"])
+                            and datetime.fromisoformat(e["time"]) >= cutoff):
+                        h = f"[{e.get('lang', 'en')}] {e['headline']}"
+                        if h not in out:
+                            out.append(h)
                 except (ValueError, KeyError, TypeError):
                     continue
     except FileNotFoundError:
@@ -772,7 +890,8 @@ def main(argv=None) -> int:
     show = [today + timedelta(days=i) for i in range(3)]
     lake = lake_temp(level, now)
     warning = level.get("warning")
-    analyses = {d: analyse(d, hours.get(d, []), suns.get(d), now, today, lake, warning)
+    analyses = {d: analyse(d, hours.get(d, []), suns.get(d), now, today, lake, warning,
+                           day_lang(d))
                 for d in show}
 
     old_days = state.get("days") or {}
@@ -783,14 +902,16 @@ def main(argv=None) -> int:
         if a is not None:
             if e.get("override") != a["override"]:
                 e["override"] = a["override"]
-                log({"type": "override", "time": iso(now), "day": key, "override": a["override"]})
+                log({"type": "override", "time": iso(now), "day": key, "lang": a["lang"],
+                     "override": a["override"]})
                 changed = True
             if "headline" not in e:
                 # Neuer Tag zwischen zwei Fenstern: fester Satz als Platzhalter,
                 # das naechste Fenster schreibt ihn neu. Nicht ins Log.
                 h, s = fallback(a)
-                e.update(headline=h, subline=s, source="placeholder", written=iso(now),
-                         slot=None, sig=None, points=a["points"], facts=a["facts"])
+                e.update(headline=h, subline=s, source="placeholder", lang=a["lang"],
+                         written=iso(now), slot=None, sig=None, points=a["points"],
+                         facts=a["facts"])
                 changed = True
         days[key] = e
     if set(days) != set(old_days) or had != (state.get("fetch_error"), state.get("aq_error")):
@@ -810,15 +931,23 @@ def main(argv=None) -> int:
             state.pop(k, None)
 
     slot = due_slot(now, suns, today)
-    if slot and slot[0] != state.get("slot"):
-        sid, name, _, sday = slot
-        offsets = (1, 2) if name == "evening" else (0, 1, 2)
-        targets = [sday + timedelta(days=i) for i in offsets]
+    targets = []
+    if slot:
+        offsets = (1, 2) if slot[1] == "evening" else (0, 1, 2)
+        targets = [slot[3] + timedelta(days=i) for i in offsets]
         targets = [d for d in targets if d in show and analyses.get(d)]
-        need = targets if force else [
+    # Text in der falschen Sprache — geschrieben, bevor jeder Tag seine
+    # eigene hatte (bis 25.10.2026 war alles englisch): fuer diese Tage das
+    # laufende Fenster gleich nachholen, nicht erst das naechste abwarten
+    wrong = [d for d in targets if days[d.isoformat()].get("lang", "en") != analyses[d]["lang"]]
+    if slot and (slot[0] != state.get("slot") or wrong):
+        sid = slot[0]
+        redo = sid == state.get("slot")      # Fenster schon gelaufen, nur die Sprache
+        need = targets if force else wrong if redo else [
             d for d in targets
             if days[d.isoformat()].get("source") != "model"
-            or days[d.isoformat()].get("sig") != analyses[d]["sig"]]
+            or days[d.isoformat()].get("sig") != analyses[d]["sig"]
+            or d in wrong]
         tries = state.get("slot_tries", 0) if state.get("slot_try_id") == sid else 0
         done, meta = True, {}
         if need:
@@ -836,23 +965,26 @@ def main(argv=None) -> int:
                 for d in need:
                     h, s, src = texts[d]
                     e = days[d.isoformat()]
-                    # Versagt das Modell, bleibt ein frueherer Modelltext stehen —
-                    # als Prognose ist er noch brauchbar. Nur ohne ihn der feste Satz.
-                    if src == "fallback" and e.get("source") == "model":
-                        continue
                     a = analyses[d]
+                    # Versagt das Modell, bleibt ein frueherer Modelltext stehen —
+                    # als Prognose ist er noch brauchbar, aber nur in der Sprache
+                    # des Tages. Sonst der feste Satz.
+                    if (src == "fallback" and e.get("source") == "model"
+                            and e.get("lang", "en") == a["lang"]):
+                        continue
                     # Derselbe feste Satz wie zuvor ist kein neuer Text: nur
                     # nachfuehren, nicht ins Log (laeuft so, solange der Key fehlt)
                     same = (src == "fallback" and e.get("source") == "fallback"
-                            and (e.get("headline"), e.get("subline")) == (h, s))
+                            and (e.get("headline"), e.get("subline"), e.get("lang", "en"))
+                            == (h, s, a["lang"]))
                     if same:
                         e.update(sig=a["sig"], points=a["points"], facts=a["facts"], slot=sid)
                         continue
-                    e.update(headline=h, subline=s, source=src, written=iso(now), slot=sid,
-                             sig=a["sig"], points=a["points"], facts=a["facts"],
+                    e.update(headline=h, subline=s, source=src, lang=a["lang"], written=iso(now),
+                             slot=sid, sig=a["sig"], points=a["points"], facts=a["facts"],
                              model=meta.get("model") if src == "model" else None)
                     log({"type": "text", "time": iso(now), "slot": sid, "day": d.isoformat(),
-                         "source": src, "headline": h, "subline": s,
+                         "lang": a["lang"], "source": src, "headline": h, "subline": s,
                          "points": a["points"], "facts": a["facts"],
                          "model": e["model"], "request_id": meta.get("request_id"),
                          "tokens": [meta.get("in"), meta.get("out")] if src == "model" else None})
@@ -874,7 +1006,7 @@ def main(argv=None) -> int:
         if "headline" not in e:
             print(f"{key}: kein Text (Tag vorbei)")
             continue
-        print(f"{key}: [{e['source']}] {e['headline']} — {e['subline']}"
+        print(f"{key}: [{e['source']}, {e.get('lang', 'en')}] {e['headline']} — {e['subline']}"
               + (f"  OVERRIDE: {ov['headline']} {ov['subline']}" if ov else ""))
 
     state["days"] = days
