@@ -1,57 +1,6 @@
 {
   "slot_done": "2026-10-25T17:08:37+00:00",
   "days": {
-    "2026-10-25": {
-      "headline": "Gale this afternoon, stay ashore",
-      "subline": "Stormy 13:00–17:00, gusts to 69 km/h. Rain until 16:00.",
-      "source": "model",
-      "written": "2026-10-25T11:08:31+00:00",
-      "slot": "2026-10-25-midday",
-      "sig": "[\"poor\", [\"GALE\", \"d\", \"e\"], [\"OFFSHORE\", \"d\", \"e\"], [\"RAIN\", \"d\", \"a\"]]",
-      "points": [
-        {
-          "theme": "GALE",
-          "text": "Stormy 13:00–17:00: 29–36 km/h, gusts to 69.",
-          "from": "13:00",
-          "to": "17:00"
-        },
-        {
-          "theme": "OFFSHORE",
-          "text": "Strong offshore wind until 13:00 and from 17:00, 22–30 km/h, gusts to 56: flat at the dock, tough pumping back.",
-          "from": "12:08",
-          "to": "17:26"
-        },
-        {
-          "theme": "RAIN",
-          "text": "Rain until 16:00.",
-          "from": "12:08",
-          "to": "16:00"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 11–12 °C. Lake 16 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–17:26",
-        "mood": "poor",
-        "tmin": 11.0,
-        "tmax": 12.2,
-        "wind": [
-          22,
-          36
-        ],
-        "gust_max": 69,
-        "uv_max": 0.3,
-        "aqi_max": 24,
-        "lake": 15.9,
-        "ok_share": 0.17,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-10-26": {
       "headline": "Brouillard d’abord, la glisse ensuite",
       "subline": "Dès 10:00, lac plat, vent sous 5 km/h. Y a pas le feu au lac.",
@@ -142,8 +91,65 @@
         "sun_share": 0.82
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-10-28": {
+      "headline": "Onshore wind. A bit choppy.",
+      "subline": "Best window 09:00–12:00.",
+      "source": "placeholder",
+      "lang": "en",
+      "written": "2026-10-25T23:08:37+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "CHOP",
+          "text": "Bise (onshore) from 12:00, 5–12 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "12:00",
+          "to": "17:22"
+        },
+        {
+          "theme": "BEST",
+          "text": "Best window 09:00–12:00.",
+          "from": "09:00",
+          "to": "12:00"
+        },
+        {
+          "theme": "FLAT",
+          "text": "Flat water until 12:00: 3–6 km/h, no chop at the dock.",
+          "from": "07:07",
+          "to": "12:00"
+        },
+        {
+          "theme": "RAIN",
+          "text": "Rain until 09:00.",
+          "from": "07:07",
+          "to": "09:00"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 10–12 °C. Lake 16 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:07–17:22",
+        "mood": "mixed",
+        "tmin": 10.2,
+        "tmax": 12.2,
+        "wind": [
+          3,
+          12
+        ],
+        "gust_max": 26,
+        "uv_max": 0.3,
+        "aqi_max": 26,
+        "lake": 15.8,
+        "ok_share": 0.27,
+        "sun_share": 0.0
+      }
     }
   },
-  "updated": "2026-10-25T17:08:37+00:00",
+  "updated": "2026-10-25T23:08:37+00:00",
   "slot": "2026-10-25-evening"
 }
