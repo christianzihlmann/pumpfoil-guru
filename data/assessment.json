@@ -1,38 +1,26 @@
 {
-  "slot_done": "2026-10-27T17:08:32+00:00",
+  "slot_done": "2026-10-28T04:52:44+00:00",
   "days": {
     "2026-10-28": {
-      "headline": "Foggy start, glassy morning",
-      "subline": "Pump 09:00–12:00 while it’s dead flat; Bise and rain arrive at 12:00.",
+      "headline": "Bise kicks in at 11:00",
+      "subline": "Dead flat until 11:00, then 7–13 km/h chop and rain 12:00–13:00.",
       "source": "model",
       "lang": "en",
-      "written": "2026-10-27T17:08:32+00:00",
-      "slot": "2026-10-27-evening",
-      "sig": "[\"mixed\", [\"FOG\", \"m\", \"m\"], [\"BEST\", \"m\", \"d\"], [\"CHOP\", \"d\", \"e\"], [\"FLAT\", \"m\", \"d\"], [\"RAIN\", \"d\", \"d\"]]",
+      "written": "2026-10-28T04:52:44+00:00",
+      "slot": "2026-10-28-morning",
+      "sig": "[\"mixed\", [\"CHOP\", \"d\", \"e\"], [\"FLAT\", \"m\", \"d\"], [\"RAIN\", \"d\", \"d\"]]",
       "points": [
         {
-          "theme": "FOG",
-          "text": "Patchy fog possible until 09:00.",
-          "from": "07:07",
-          "to": "09:00"
-        },
-        {
-          "theme": "BEST",
-          "text": "Best window 09:00–12:00.",
-          "from": "09:00",
-          "to": "12:00"
-        },
-        {
           "theme": "CHOP",
-          "text": "Bise (onshore) from 12:00, 9–14 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "12:00",
+          "text": "Bise (onshore) from 11:00, 7–13 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "11:00",
           "to": "17:22"
         },
         {
           "theme": "FLAT",
-          "text": "Dead flat until 12:00: wind under 5 km/h.",
+          "text": "Dead flat until 11:00: wind under 5 km/h.",
           "from": "07:07",
-          "to": "12:00"
+          "to": "11:00"
         },
         {
           "theme": "RAIN",
@@ -42,7 +30,7 @@
         },
         {
           "theme": "TEMP",
-          "text": "Air 8–12 °C. Lake 16 °C.",
+          "text": "Air 10–11 °C. Lake 15 °C.",
           "from": null,
           "to": null
         }
@@ -50,17 +38,17 @@
       "facts": {
         "window": "07:07–17:22",
         "mood": "mixed",
-        "tmin": 8.1,
-        "tmax": 12.3,
+        "tmin": 9.9,
+        "tmax": 11.3,
         "wind": [
-          1,
-          14
+          2,
+          13
         ],
-        "gust_max": 26,
-        "uv_max": 0.5,
+        "gust_max": 28,
+        "uv_max": 0.6,
         "aqi_max": 23,
-        "lake": 16.0,
-        "ok_share": 0.27,
+        "lake": 15.4,
+        "ok_share": 0.36,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
@@ -112,23 +100,23 @@
       "model": "claude-opus-5-5"
     },
     "2026-10-30": {
-      "headline": "La bise lève du clapot.",
-      "subline": "",
-      "source": "placeholder",
+      "headline": "Bise toute la journée, ça clapote",
+      "subline": "Bise à 6–10 km/h : trop pour pomper, trop peu pour le wing.",
+      "source": "model",
       "lang": "fr",
-      "written": "2026-10-27T23:08:31+00:00",
-      "slot": null,
-      "sig": null,
+      "written": "2026-10-28T04:52:44+00:00",
+      "slot": "2026-10-28-morning",
+      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) all day, 6–9 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) all day, 6–10 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
           "from": "07:10",
           "to": "17:19"
         },
         {
           "theme": "TEMP",
-          "text": "Air 5–8 °C. Lake 16 °C.",
+          "text": "Air 5–9 °C. Lake 15 °C.",
           "from": null,
           "to": null
         }
@@ -136,21 +124,22 @@
       "facts": {
         "window": "07:10–17:19",
         "mood": "poor",
-        "tmin": 5.3,
-        "tmax": 8.5,
+        "tmin": 5.1,
+        "tmax": 8.6,
         "wind": [
           6,
-          9
+          10
         ],
-        "gust_max": 21,
-        "uv_max": 2.9,
+        "gust_max": 22,
+        "uv_max": 2.4,
         "aqi_max": 41,
-        "lake": 15.6,
+        "lake": 15.4,
         "ok_share": 0.0,
         "sun_share": 0.0
-      }
+      },
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-10-27T23:08:31+00:00",
-  "slot": "2026-10-27-evening"
+  "updated": "2026-10-28T04:52:44+00:00",
+  "slot": "2026-10-28-morning"
 }
