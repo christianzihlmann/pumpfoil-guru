@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-10-28T16:52:38+00:00",
+  "slot_done": "2026-10-29T04:52:37+00:00",
   "days": {
     "2026-10-29": {
       "headline": "Erst Nebelsuppe, dann den ganzen Tag Bise",
@@ -48,29 +48,23 @@
       "model": "claude-opus-5-5"
     },
     "2026-10-30": {
-      "headline": "Purée de pois jusqu’à 09:00",
-      "subline": "Bise 7–12 km/h toute la journée : trop de clapot, trop faible pour le wing.",
+      "headline": "La bise lève du clapot",
+      "subline": "6–15 km/h : trop pour pomper propre, trop peu pour le wing. Air 5–10 °C.",
       "source": "model",
       "lang": "fr",
-      "written": "2026-10-28T16:52:38+00:00",
-      "slot": "2026-10-28-evening",
-      "sig": "[\"poor\", [\"FOG\", \"m\", \"m\"], [\"CHOP\", \"m\", \"e\"]]",
+      "written": "2026-10-29T04:52:37+00:00",
+      "slot": "2026-10-29-morning",
+      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
-          "theme": "FOG",
-          "text": "Fog until 09:00, visibility down to 0.8 km.",
-          "from": "07:10",
-          "to": "09:00"
-        },
-        {
           "theme": "CHOP",
-          "text": "Bise (onshore) all day, 7–12 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) all day, 6–15 km/h: choppy. Too much for clean pumping, too little for winging.",
           "from": "07:10",
           "to": "17:19"
         },
         {
           "theme": "TEMP",
-          "text": "Air 5–9 °C. Lake 15 °C.",
+          "text": "Air 5–10 °C. Lake 15 °C.",
           "from": null,
           "to": null
         }
@@ -78,29 +72,29 @@
       "facts": {
         "window": "07:10–17:19",
         "mood": "poor",
-        "tmin": 5.0,
-        "tmax": 9.0,
+        "tmin": 5.1,
+        "tmax": 9.7,
         "wind": [
-          7,
-          12
+          6,
+          15
         ],
-        "gust_max": 26,
-        "uv_max": 2.6,
+        "gust_max": 28,
+        "uv_max": 2.8,
         "aqi_max": 41,
-        "lake": 15.3,
+        "lake": 15.1,
         "ok_share": 0.0,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-10-31": {
-      "headline": "Die Bise macht Wellen.",
-      "subline": "",
-      "source": "placeholder",
+      "headline": "Der Samstag gehört der Bise",
+      "subline": "6–18 km/h: zu viel fürs saubere Pumpen, zu wenig für den Wing. Luft 4–8 °C.",
+      "source": "model",
       "lang": "de",
-      "written": "2026-10-28T23:08:31+00:00",
-      "slot": null,
-      "sig": null,
+      "written": "2026-10-29T04:52:37+00:00",
+      "slot": "2026-10-29-morning",
+      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "CHOP",
@@ -125,14 +119,15 @@
           18
         ],
         "gust_max": 39,
-        "uv_max": 2.9,
+        "uv_max": 2.8,
         "aqi_max": 40,
-        "lake": 15.2,
+        "lake": 15.1,
         "ok_share": 0.0,
         "sun_share": 0.09
-      }
+      },
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-10-28T23:08:31+00:00",
-  "slot": "2026-10-28-evening"
+  "updated": "2026-10-29T04:52:37+00:00",
+  "slot": "2026-10-29-morning"
 }
