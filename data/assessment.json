@@ -1,46 +1,6 @@
 {
   "slot_done": "2026-10-29T16:52:52+00:00",
   "days": {
-    "2026-10-29": {
-      "headline": "Bise bis zum Eindunkeln",
-      "subline": "12–14 km/h bringen Wellen: zu viel zum Pumpen, zu wenig für den Wing.",
-      "source": "model",
-      "lang": "de",
-      "written": "2026-10-29T11:08:35+00:00",
-      "slot": "2026-10-29-midday",
-      "sig": "[\"poor\", [\"CHOP\", \"d\", \"e\"]]",
-      "points": [
-        {
-          "theme": "CHOP",
-          "text": "Bise (onshore) for the rest of the day, 12–14 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "12:08",
-          "to": "17:20"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 9–10 °C. Lake 15 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–17:20",
-        "mood": "poor",
-        "tmin": 8.8,
-        "tmax": 10.3,
-        "wind": [
-          12,
-          14
-        ],
-        "gust_max": 25,
-        "uv_max": 2.7,
-        "aqi_max": 33,
-        "lake": 15.0,
-        "ok_share": 0.0,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-10-30": {
       "headline": "La bise gâche le vendredi",
       "subline": "Bise 5–13 km/h toute la journée : trop de clapot pour pomper, trop peu pour le wing.",
@@ -126,8 +86,59 @@
         "sun_share": 0.18
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-01": {
+      "headline": "Heute zu stürmisch.",
+      "subline": "",
+      "source": "placeholder",
+      "lang": "de",
+      "written": "2026-10-29T23:08:33+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "GALE",
+          "text": "Stormy 16:00–17:00: 26 km/h, gusts to 60.",
+          "from": "16:00",
+          "to": "17:00"
+        },
+        {
+          "theme": "FOG",
+          "text": "Fog 08:00–09:00, visibility down to 0.7 km.",
+          "from": "08:00",
+          "to": "09:00"
+        },
+        {
+          "theme": "CHOP",
+          "text": "Bise (onshore) until 12:00 and from 17:00, 15–25 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "from": "07:13",
+          "to": "17:16"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 3–9 °C. Lake 15 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:13–17:16",
+        "mood": "poor",
+        "tmin": 3.1,
+        "tmax": 8.7,
+        "wind": [
+          15,
+          28
+        ],
+        "gust_max": 60,
+        "uv_max": 2.6,
+        "aqi_max": 40,
+        "lake": 14.9,
+        "ok_share": 0.0,
+        "sun_share": 0.45
+      }
     }
   },
-  "updated": "2026-10-29T16:52:52+00:00",
+  "updated": "2026-10-29T23:08:33+00:00",
   "slot": "2026-10-29-evening"
 }
