@@ -1,41 +1,41 @@
 {
-  "slot_done": "2026-10-30T04:52:31+00:00",
+  "slot_done": "2026-10-30T11:08:45+00:00",
   "days": {
     "2026-10-30": {
-      "headline": "La bise gâche le vendredi",
-      "subline": "Bise 5–13 km/h toute la journée : trop de clapot pour pomper, trop peu pour le wing.",
+      "headline": "Encore la bise jusqu’au soir",
+      "subline": "8–11 km/h jusqu’à 17:19 : trop pour pomper, trop peu pour le wing.",
       "source": "model",
       "lang": "fr",
-      "written": "2026-10-29T16:52:52+00:00",
-      "slot": "2026-10-29-evening",
-      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
+      "written": "2026-10-30T11:08:45+00:00",
+      "slot": "2026-10-30-midday",
+      "sig": "[\"poor\", [\"CHOP\", \"d\", \"e\"]]",
       "points": [
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) all day, 5–13 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "07:10",
+          "text": "Bise (onshore) for the rest of the day, 8–11 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "12:08",
           "to": "17:19"
         },
         {
           "theme": "TEMP",
-          "text": "Air 5–9 °C. Lake 15 °C.",
+          "text": "Air 8–10 °C. Lake 15 °C.",
           "from": null,
           "to": null
         }
       ],
       "facts": {
-        "window": "07:10–17:19",
+        "window": "12:08–17:19",
         "mood": "poor",
-        "tmin": 4.6,
-        "tmax": 9.4,
+        "tmin": 7.8,
+        "tmax": 9.5,
         "wind": [
-          5,
-          13
+          8,
+          11
         ],
-        "gust_max": 24,
-        "uv_max": 2.8,
-        "aqi_max": 41,
-        "lake": 15.1,
+        "gust_max": 21,
+        "uv_max": 2.5,
+        "aqi_max": 40,
+        "lake": 14.8,
         "ok_share": 0.0,
         "sun_share": 0.0
       },
@@ -82,29 +82,23 @@
       "model": "claude-opus-5-5"
     },
     "2026-11-01": {
-      "headline": "Sturm 14:00–16:00, Böen bis 62 km/h",
-      "subline": "Davor und danach Bise mit 12–25 km/h, unruhiges Wasser. Luft 2–9 °C.",
+      "headline": "Bise bläst den ganzen Sonntag",
+      "subline": "13–25 km/h und Wellen: zu viel zum Pumpen, zu wenig zum Wingen.",
       "source": "model",
       "lang": "de",
-      "written": "2026-10-30T04:52:31+00:00",
-      "slot": "2026-10-30-morning",
-      "sig": "[\"poor\", [\"GALE\", \"a\", \"a\"], [\"CHOP\", \"m\", \"e\"]]",
+      "written": "2026-10-30T11:08:45+00:00",
+      "slot": "2026-10-30-midday",
+      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
-          "theme": "GALE",
-          "text": "Stormy 14:00–16:00: 28 km/h, gusts to 62.",
-          "from": "14:00",
-          "to": "16:00"
-        },
-        {
           "theme": "CHOP",
-          "text": "Bise (onshore) until 12:00 and from 16:00, 12–25 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) all day, 13–25 km/h: choppy. Too much for clean pumping, too little for winging.",
           "from": "07:13",
           "to": "17:16"
         },
         {
           "theme": "TEMP",
-          "text": "Air 2–9 °C. Lake 15 °C.",
+          "text": "Air 3–9 °C. Lake 15 °C.",
           "from": null,
           "to": null
         }
@@ -112,22 +106,22 @@
       "facts": {
         "window": "07:13–17:16",
         "mood": "poor",
-        "tmin": 2.5,
-        "tmax": 8.8,
+        "tmin": 2.8,
+        "tmax": 8.7,
         "wind": [
-          12,
-          28
+          13,
+          25
         ],
-        "gust_max": 62,
+        "gust_max": 54,
         "uv_max": 2.8,
         "aqi_max": 40,
-        "lake": 14.9,
+        "lake": 14.8,
         "ok_share": 0.0,
-        "sun_share": 0.64
+        "sun_share": 0.27
       },
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-10-30T04:52:31+00:00",
-  "slot": "2026-10-30-morning"
+  "updated": "2026-10-30T11:08:45+00:00",
+  "slot": "2026-10-30-midday"
 }
