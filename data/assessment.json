@@ -1,46 +1,6 @@
 {
   "slot_done": "2026-10-30T16:52:32+00:00",
   "days": {
-    "2026-10-30": {
-      "headline": "Encore la bise jusqu’au soir",
-      "subline": "8–11 km/h jusqu’à 17:19 : trop pour pomper, trop peu pour le wing.",
-      "source": "model",
-      "lang": "fr",
-      "written": "2026-10-30T11:08:45+00:00",
-      "slot": "2026-10-30-midday",
-      "sig": "[\"poor\", [\"CHOP\", \"d\", \"e\"]]",
-      "points": [
-        {
-          "theme": "CHOP",
-          "text": "Bise (onshore) for the rest of the day, 8–11 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "12:08",
-          "to": "17:19"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 8–10 °C. Lake 15 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–17:19",
-        "mood": "poor",
-        "tmin": 7.8,
-        "tmax": 9.5,
-        "wind": [
-          8,
-          11
-        ],
-        "gust_max": 21,
-        "uv_max": 2.5,
-        "aqi_max": 40,
-        "lake": 14.8,
-        "ok_share": 0.0,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-10-31": {
       "headline": "Bise ohne Pause, unruhiges Wasser",
       "subline": "8–14 km/h: zu viel zum Pumpen, zu wenig zum Wingen. Luft 4–8 °C.",
@@ -126,8 +86,53 @@
         "sun_share": 0.27
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-02": {
+      "headline": "La bise lève du clapot.",
+      "subline": "",
+      "source": "placeholder",
+      "lang": "fr",
+      "written": "2026-10-30T23:08:35+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "CHOP",
+          "text": "Bise (onshore) all day, 11–19 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "from": "07:15",
+          "to": "17:14"
+        },
+        {
+          "theme": "COLD",
+          "text": "Frosty start: 2 °C.",
+          "from": null,
+          "to": null
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 2–5 °C. Lake 15 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:15–17:14",
+        "mood": "poor",
+        "tmin": 1.8,
+        "tmax": 5.3,
+        "wind": [
+          11,
+          19
+        ],
+        "gust_max": 40,
+        "uv_max": 1.7,
+        "aqi_max": 25,
+        "lake": 14.7,
+        "ok_share": 0.0,
+        "sun_share": 0.0
+      }
     }
   },
-  "updated": "2026-10-30T16:52:32+00:00",
+  "updated": "2026-10-30T23:08:35+00:00",
   "slot": "2026-10-30-evening"
 }
