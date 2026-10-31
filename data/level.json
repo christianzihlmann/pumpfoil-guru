@@ -2,13 +2,8 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-10-31T22:52:20+00:00",
+  "fetched": "2026-10-31T23:08:23+00:00",
   "forecast": [
-    {
-      "date": "31.10.2026",
-      "min": 530.6,
-      "max": 530.6
-    },
     {
       "date": "01.11.2026",
       "min": 530.59,
@@ -23,6 +18,11 @@
       "date": "03.11.2026",
       "min": 530.57,
       "max": 530.58
+    },
+    {
+      "date": "04.11.2026",
+      "min": 530.56,
+      "max": 530.65
     }
   ],
   "manual": {
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.71,
-    "time": "2026-10-31T22:40:00+00:00",
+    "time": "2026-10-31T22:55:00+00:00",
     "stats": {
-      "n": 3142,
+      "n": 3143,
       "days": 70.3,
       "enough": true,
       "min": 6.75,
@@ -46,7 +46,7 @@
       "p25": 7.22,
       "median": 7.77,
       "p75": 10.35,
-      "p90": 44.45,
+      "p90": 44.44,
       "max": 153.11
     }
   },
@@ -54,20 +54,20 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 35.0,
-    "wind_model": 15.5,
+    "wind_model": 16.1,
     "gust_model": 29.5,
     "wind_dir_model": 42.0,
-    "wind_measured": 6.1,
-    "gust_measured": 10.1,
-    "wind_dir_measured": 26.0,
-    "temp_measured": 3.7,
-    "radiation_measured": 4.0,
+    "wind_measured": 12.2,
+    "gust_measured": 16.6,
+    "wind_dir_measured": 27.0,
+    "temp_measured": 4.6,
+    "radiation_measured": 3.0,
     "vario_grid": 11.11,
     "vario_total": 23.06,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-10-31T22:52:27+00:00"
+    "time": "2026-10-31T23:08:27+00:00"
   },
   "water": {
     "station": "2467",
@@ -97,7 +97,7 @@
     "height": 531.93,
     "flow": 4.46,
     "stats": {
-      "n": 3141,
+      "n": 3142,
       "days": 69.6,
       "enough": true,
       "min": 4.22,
@@ -105,7 +105,7 @@
       "p25": 4.7,
       "median": 4.95,
       "p75": 5.18,
-      "p90": 58.05,
+      "p90": 58.04,
       "max": 217.43
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
@@ -154,7 +154,7 @@
     ]
   },
   "actual_daily": {
-    "29.10.2026": 530.94,
-    "30.10.2026": 530.68
+    "30.10.2026": 530.68,
+    "31.10.2026": 530.6
   }
 }

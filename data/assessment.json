@@ -1,45 +1,6 @@
 {
   "slot_done": "2026-10-31T16:52:33+00:00",
   "days": {
-    "2026-10-31": {
-      "headline": "Bise again. A bit choppy.",
-      "subline": "Onshore 12–14 km/h until sunset: too much for pumping, too little for winging.",
-      "source": "model",
-      "written": "2026-10-31T12:52:29+00:00",
-      "slot": "2026-10-31-midday",
-      "sig": "[\"poor\", [\"CHOP\", \"d\", \"e\"]]",
-      "points": [
-        {
-          "theme": "CHOP",
-          "text": "Bise (onshore) for the rest of the day, 12–14 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "13:52",
-          "to": "17:17"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 8–9 °C. Lake 15 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "13:52–17:17",
-        "mood": "poor",
-        "tmin": 7.7,
-        "tmax": 8.9,
-        "wind": [
-          12,
-          14
-        ],
-        "gust_max": 29,
-        "uv_max": 2.9,
-        "aqi_max": 38,
-        "lake": 14.6,
-        "ok_share": 0.0,
-        "sun_share": 0.4
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-01": {
       "headline": "Bise builds. Wing from 13:00.",
       "subline": "25–27 km/h, gusts to 51 until 17:00. Choppy 16–24 km/h before that.",
@@ -129,8 +90,46 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-03": {
+      "headline": "Onshore wind. A bit choppy.",
+      "subline": "Air 4–7 °C.",
+      "source": "placeholder",
+      "written": "2026-10-31T23:08:34+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "CHOP",
+          "text": "Bise (onshore) all day, 11–15 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "07:16",
+          "to": "17:13"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 4–7 °C. Lake 15 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:16–17:13",
+        "mood": "poor",
+        "tmin": 3.5,
+        "tmax": 6.8,
+        "wind": [
+          11,
+          15
+        ],
+        "gust_max": 31,
+        "uv_max": 1.9,
+        "aqi_max": 30,
+        "lake": 14.6,
+        "ok_share": 0.0,
+        "sun_share": 0.0
+      }
     }
   },
-  "updated": "2026-10-31T16:52:33+00:00",
+  "updated": "2026-10-31T23:08:34+00:00",
   "slot": "2026-10-31-evening"
 }
