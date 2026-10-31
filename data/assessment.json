@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-10-30T16:52:32+00:00",
+  "slot_done": "2026-10-31T04:52:39+00:00",
   "days": {
     "2026-10-31": {
       "headline": "Bise ohne Pause, unruhiges Wasser",
@@ -88,25 +88,19 @@
       "model": "claude-opus-5-5"
     },
     "2026-11-02": {
-      "headline": "La bise lève du clapot.",
-      "subline": "",
-      "source": "placeholder",
+      "headline": "Lundi sous la bise, clapot partout",
+      "subline": "Bise 11–17 km/h toute la journée, air 2–5 °C, lac 15 °C.",
+      "source": "model",
       "lang": "fr",
-      "written": "2026-10-30T23:08:35+00:00",
-      "slot": null,
-      "sig": null,
+      "written": "2026-10-31T04:52:39+00:00",
+      "slot": "2026-10-31-morning",
+      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) all day, 11–19 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) all day, 11–17 km/h: choppy. Too much for clean pumping, too little for winging.",
           "from": "07:15",
           "to": "17:14"
-        },
-        {
-          "theme": "COLD",
-          "text": "Frosty start: 2 °C.",
-          "from": null,
-          "to": null
         },
         {
           "theme": "TEMP",
@@ -118,21 +112,22 @@
       "facts": {
         "window": "07:15–17:14",
         "mood": "poor",
-        "tmin": 1.8,
-        "tmax": 5.3,
+        "tmin": 2.3,
+        "tmax": 5.4,
         "wind": [
           11,
-          19
+          17
         ],
-        "gust_max": 40,
-        "uv_max": 1.7,
+        "gust_max": 37,
+        "uv_max": 2.4,
         "aqi_max": 25,
         "lake": 14.7,
         "ok_share": 0.0,
         "sun_share": 0.0
-      }
+      },
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-10-30T23:08:35+00:00",
-  "slot": "2026-10-30-evening"
+  "updated": "2026-10-31T04:52:39+00:00",
+  "slot": "2026-10-31-morning"
 }
