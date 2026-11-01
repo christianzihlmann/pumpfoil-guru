@@ -1,51 +1,6 @@
 {
   "slot_done": "2026-11-01T16:52:32+00:00",
   "days": {
-    "2026-11-01": {
-      "headline": "Bise blows. Grab the wing.",
-      "subline": "Wingable 13:00–16:00, 27 km/h, gusts to 53. Choppy before and after.",
-      "source": "model",
-      "written": "2026-11-01T11:08:35+00:00",
-      "slot": "2026-11-01-midday",
-      "sig": "[\"poor\", [\"WING\", \"d\", \"a\"], [\"CHOP\", \"d\", \"e\"]]",
-      "points": [
-        {
-          "theme": "WING",
-          "text": "Wingable Bise wind 13:00–16:00: 27 km/h, gusts to 53.",
-          "from": "13:00",
-          "to": "16:00"
-        },
-        {
-          "theme": "CHOP",
-          "text": "Bise (onshore) until 13:00 and from 16:00, 18–25 km/h: choppy. Too much for clean pumping, too little for winging.",
-          "from": "12:08",
-          "to": "17:16"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 8–9 °C. Lake 14 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–17:16",
-        "mood": "poor",
-        "tmin": 7.5,
-        "tmax": 9.0,
-        "wind": [
-          18,
-          27
-        ],
-        "gust_max": 53,
-        "uv_max": 2.8,
-        "aqi_max": 25,
-        "lake": 14.4,
-        "ok_share": 0.0,
-        "sun_share": 0.33
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-02": {
       "headline": "Onshore Bise all day. Choppy.",
       "subline": "15–20 km/h: too much for pumping, too little for winging. Air 2–6 °C.",
@@ -123,8 +78,64 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-04": {
+      "headline": "Ready for a session in the fog?",
+      "subline": "Bise (onshore) from 10:00, 6–12 km/h: a bit of chop.",
+      "source": "placeholder",
+      "written": "2026-11-01T23:08:35+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "FOG",
+          "text": "Patchy fog possible until 10:00.",
+          "from": "07:18",
+          "to": "10:00"
+        },
+        {
+          "theme": "CHOP",
+          "text": "Bise (onshore) from 10:00, 6–12 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "10:00",
+          "to": "17:11"
+        },
+        {
+          "theme": "FLAT",
+          "text": "Dead flat until 10:00: wind under 5 km/h.",
+          "from": "07:18",
+          "to": "10:00"
+        },
+        {
+          "theme": "COLD",
+          "text": "Frosty start: 2 °C.",
+          "from": null,
+          "to": null
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 2–7 °C. Lake 14 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:18–17:11",
+        "mood": "poor",
+        "tmin": 2.0,
+        "tmax": 7.2,
+        "wind": [
+          2,
+          12
+        ],
+        "gust_max": 27,
+        "uv_max": 2.6,
+        "aqi_max": 41,
+        "lake": 14.2,
+        "ok_share": 0.0,
+        "sun_share": 0.0
+      }
     }
   },
-  "updated": "2026-11-01T16:52:32+00:00",
+  "updated": "2026-11-01T23:08:35+00:00",
   "slot": "2026-11-01-evening"
 }
