@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-01T03:52:18+00:00",
+  "fetched": "2026-11-01T04:08:23+00:00",
   "forecast": [
     {
       "date": "01.11.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.66,
-    "time": "2026-11-01T03:40:00+00:00",
+    "flow": 7.68,
+    "time": "2026-11-01T04:00:00+00:00",
     "stats": {
-      "n": 3153,
+      "n": 3154,
       "days": 70.5,
       "enough": true,
       "min": 6.75,
@@ -46,28 +46,28 @@
       "p25": 7.22,
       "median": 7.77,
       "p75": 10.31,
-      "p90": 44.34,
+      "p90": 44.33,
       "max": 153.11
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
-    "european_aqi": 38.0,
-    "wind_model": 16.3,
+    "european_aqi": 37.0,
+    "wind_model": 16.6,
     "gust_model": 30.6,
-    "wind_dir_model": 47.0,
-    "wind_measured": 15.1,
-    "gust_measured": 25.6,
-    "wind_dir_measured": 36.0,
+    "wind_dir_model": 48.0,
+    "wind_measured": 15.8,
+    "gust_measured": 25.2,
+    "wind_dir_measured": 32.0,
     "temp_measured": 4.9,
     "radiation_measured": 5.0,
-    "vario_grid": 8.39,
-    "vario_total": 20.34,
+    "vario_grid": 8.64,
+    "vario_total": 20.59,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-01T03:52:25+00:00"
+    "time": "2026-11-01T04:08:26+00:00"
   },
   "water": {
     "station": "2467",
@@ -97,7 +97,7 @@
     "height": 531.93,
     "flow": 4.49,
     "stats": {
-      "n": 3152,
+      "n": 3153,
       "days": 69.8,
       "enough": true,
       "min": 4.22,
