@@ -1,48 +1,48 @@
 {
-  "slot_done": "2026-11-01T04:52:30+00:00",
+  "slot_done": "2026-11-01T11:08:35+00:00",
   "days": {
     "2026-11-01": {
-      "headline": "Bise peaks. Wing 13:00–16:00.",
-      "subline": "25–28 km/h, gusts to 53. Choppy Bise before and after. Air 5–9 °C.",
+      "headline": "Bise blows. Grab the wing.",
+      "subline": "Wingable 13:00–16:00, 27 km/h, gusts to 53. Choppy before and after.",
       "source": "model",
-      "written": "2026-11-01T04:52:30+00:00",
-      "slot": "2026-11-01-morning",
-      "sig": "[\"poor\", [\"WING\", \"d\", \"a\"], [\"CHOP\", \"m\", \"e\"]]",
+      "written": "2026-11-01T11:08:35+00:00",
+      "slot": "2026-11-01-midday",
+      "sig": "[\"poor\", [\"WING\", \"d\", \"a\"], [\"CHOP\", \"d\", \"e\"]]",
       "points": [
         {
           "theme": "WING",
-          "text": "Wingable Bise wind 13:00–16:00: 25–28 km/h, gusts to 53.",
+          "text": "Wingable Bise wind 13:00–16:00: 27 km/h, gusts to 53.",
           "from": "13:00",
           "to": "16:00"
         },
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) until 13:00 and from 16:00, 16–25 km/h: choppy. Too much for clean pumping, too little for winging.",
-          "from": "07:13",
+          "text": "Bise (onshore) until 13:00 and from 16:00, 18–25 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "from": "12:08",
           "to": "17:16"
         },
         {
           "theme": "TEMP",
-          "text": "Air 5–9 °C. Lake 14 °C.",
+          "text": "Air 8–9 °C. Lake 14 °C.",
           "from": null,
           "to": null
         }
       ],
       "facts": {
-        "window": "07:13–17:16",
+        "window": "12:08–17:16",
         "mood": "poor",
-        "tmin": 4.8,
-        "tmax": 9.3,
+        "tmin": 7.5,
+        "tmax": 9.0,
         "wind": [
-          16,
-          28
+          18,
+          27
         ],
         "gust_max": 53,
         "uv_max": 2.8,
-        "aqi_max": 34,
-        "lake": 14.5,
+        "aqi_max": 25,
+        "lake": 14.4,
         "ok_share": 0.0,
-        "sun_share": 0.64
+        "sun_share": 0.33
       },
       "model": "claude-opus-5-5"
     },
@@ -125,6 +125,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-01T04:52:30+00:00",
-  "slot": "2026-11-01-morning"
+  "updated": "2026-11-01T11:08:35+00:00",
+  "slot": "2026-11-01-midday"
 }
