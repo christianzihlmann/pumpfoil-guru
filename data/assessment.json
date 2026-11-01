@@ -1,29 +1,29 @@
 {
-  "slot_done": "2026-10-31T16:52:33+00:00",
+  "slot_done": "2026-11-01T04:52:30+00:00",
   "days": {
     "2026-11-01": {
-      "headline": "Bise builds. Wing from 13:00.",
-      "subline": "25–27 km/h, gusts to 51 until 17:00. Choppy 16–24 km/h before that.",
+      "headline": "Bise peaks. Wing 13:00–16:00.",
+      "subline": "25–28 km/h, gusts to 53. Choppy Bise before and after. Air 5–9 °C.",
       "source": "model",
-      "written": "2026-10-31T16:52:33+00:00",
-      "slot": "2026-10-31-evening",
-      "sig": "[\"poor\", [\"WING\", \"d\", \"e\"], [\"CHOP\", \"m\", \"e\"]]",
+      "written": "2026-11-01T04:52:30+00:00",
+      "slot": "2026-11-01-morning",
+      "sig": "[\"poor\", [\"WING\", \"d\", \"a\"], [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "WING",
-          "text": "Wingable Bise wind 13:00–17:00: 25–27 km/h, gusts to 51.",
+          "text": "Wingable Bise wind 13:00–16:00: 25–28 km/h, gusts to 53.",
           "from": "13:00",
-          "to": "17:00"
+          "to": "16:00"
         },
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) until 13:00 and from 17:00, 16–24 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) until 13:00 and from 16:00, 16–25 km/h: choppy. Too much for clean pumping, too little for winging.",
           "from": "07:13",
           "to": "17:16"
         },
         {
           "theme": "TEMP",
-          "text": "Air 3–9 °C. Lake 15 °C.",
+          "text": "Air 5–9 °C. Lake 14 °C.",
           "from": null,
           "to": null
         }
@@ -31,44 +31,38 @@
       "facts": {
         "window": "07:13–17:16",
         "mood": "poor",
-        "tmin": 3.2,
-        "tmax": 8.7,
+        "tmin": 4.8,
+        "tmax": 9.3,
         "wind": [
           16,
-          27
+          28
         ],
-        "gust_max": 51,
+        "gust_max": 53,
         "uv_max": 2.8,
         "aqi_max": 34,
-        "lake": 14.6,
+        "lake": 14.5,
         "ok_share": 0.0,
-        "sun_share": 0.18
+        "sun_share": 0.64
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-02": {
-      "headline": "Bise all day, still choppy.",
-      "subline": "Frosty start at 2 °C, onshore 13–17 km/h. Lake 15 °C, air 2–6 °C.",
+      "headline": "Onshore Bise all day. Choppy.",
+      "subline": "15–20 km/h: too much for pumping, too little for winging. Air 2–6 °C.",
       "source": "model",
-      "written": "2026-10-31T12:52:29+00:00",
-      "slot": "2026-10-31-midday",
-      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"], [\"COLD\", \"\", \"\"]]",
+      "written": "2026-11-01T04:52:30+00:00",
+      "slot": "2026-11-01-morning",
+      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) all day, 13–17 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) all day, 15–20 km/h: choppy. Too much for clean pumping, too little for winging.",
           "from": "07:15",
           "to": "17:14"
         },
         {
-          "theme": "COLD",
-          "text": "Frosty start: 2 °C.",
-          "from": null,
-          "to": null
-        },
-        {
           "theme": "TEMP",
-          "text": "Air 2–6 °C. Lake 15 °C.",
+          "text": "Air 2–6 °C. Lake 14 °C.",
           "from": null,
           "to": null
         }
@@ -76,38 +70,38 @@
       "facts": {
         "window": "07:15–17:14",
         "mood": "poor",
-        "tmin": 2.0,
-        "tmax": 5.6,
+        "tmin": 2.1,
+        "tmax": 6.2,
         "wind": [
-          13,
-          17
+          15,
+          20
         ],
         "gust_max": 37,
-        "uv_max": 1.6,
+        "uv_max": 1.7,
         "aqi_max": 24,
-        "lake": 14.6,
+        "lake": 14.5,
         "ok_share": 0.0,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-03": {
-      "headline": "Onshore wind. A bit choppy.",
-      "subline": "Air 4–7 °C.",
-      "source": "placeholder",
-      "written": "2026-10-31T23:08:34+00:00",
-      "slot": null,
-      "sig": null,
+      "headline": "Still Bise. Still choppy.",
+      "subline": "13–16 km/h all day, not enough to wing. Air 4–7 °C, lake 14 °C.",
+      "source": "model",
+      "written": "2026-11-01T04:52:30+00:00",
+      "slot": "2026-11-01-morning",
+      "sig": "[\"poor\", [\"CHOP\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) all day, 11–15 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) all day, 13–16 km/h: choppy. Too much for clean pumping, too little for winging.",
           "from": "07:16",
           "to": "17:13"
         },
         {
           "theme": "TEMP",
-          "text": "Air 4–7 °C. Lake 15 °C.",
+          "text": "Air 4–7 °C. Lake 14 °C.",
           "from": null,
           "to": null
         }
@@ -115,21 +109,22 @@
       "facts": {
         "window": "07:16–17:13",
         "mood": "poor",
-        "tmin": 3.5,
-        "tmax": 6.8,
+        "tmin": 3.6,
+        "tmax": 6.7,
         "wind": [
-          11,
-          15
+          13,
+          16
         ],
-        "gust_max": 31,
-        "uv_max": 1.9,
+        "gust_max": 34,
+        "uv_max": 1.6,
         "aqi_max": 30,
-        "lake": 14.6,
+        "lake": 14.5,
         "ok_share": 0.0,
         "sun_share": 0.0
-      }
+      },
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-10-31T23:08:34+00:00",
-  "slot": "2026-10-31-evening"
+  "updated": "2026-11-01T04:52:30+00:00",
+  "slot": "2026-11-01-morning"
 }
