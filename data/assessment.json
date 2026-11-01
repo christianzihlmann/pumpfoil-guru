@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-11-01T11:08:35+00:00",
+  "slot_done": "2026-11-01T16:52:32+00:00",
   "days": {
     "2026-11-01": {
       "headline": "Bise blows. Grab the wing.",
@@ -125,6 +125,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-01T11:08:35+00:00",
-  "slot": "2026-11-01-midday"
+  "updated": "2026-11-01T16:52:32+00:00",
+  "slot": "2026-11-01-evening"
 }
