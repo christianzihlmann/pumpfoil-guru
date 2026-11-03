@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-11-02T16:52:29+00:00",
+  "slot_done": "2026-11-03T04:52:34+00:00",
   "days": {
     "2026-11-03": {
       "headline": "Still Bise. Still choppy.",
@@ -86,12 +86,12 @@
       "model": "claude-opus-5-5"
     },
     "2026-11-05": {
-      "headline": "Ready for a session in the fog?",
-      "subline": "Best window from 12:00.",
-      "source": "placeholder",
-      "written": "2026-11-02T23:08:32+00:00",
-      "slot": null,
-      "sig": null,
+      "headline": "Thick fog first, then glassy",
+      "subline": "Fog until 12:00, then dead flat from 12:00. Air 2–8 °C, lake 14 °C.",
+      "source": "model",
+      "written": "2026-11-03T04:52:34+00:00",
+      "slot": "2026-11-03-morning",
+      "sig": "[\"mixed\", [\"FOG\", \"m\", \"d\"], [\"BEST\", \"d\", \"e\"], [\"FLAT\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "FOG",
@@ -112,12 +112,6 @@
           "to": "17:10"
         },
         {
-          "theme": "COLD",
-          "text": "Frosty start: 2 °C.",
-          "from": null,
-          "to": null
-        },
-        {
           "theme": "TEMP",
           "text": "Air 2–8 °C. Lake 14 °C.",
           "from": null,
@@ -127,21 +121,22 @@
       "facts": {
         "window": "07:19–17:10",
         "mood": "mixed",
-        "tmin": 2.0,
-        "tmax": 7.8,
+        "tmin": 2.2,
+        "tmax": 8.0,
         "wind": [
-          2,
+          3,
           4
         ],
-        "gust_max": 10,
-        "uv_max": 2.6,
+        "gust_max": 12,
+        "uv_max": 2.5,
         "aqi_max": 39,
         "lake": 14.0,
         "ok_share": 0.55,
-        "sun_share": 0.18
-      }
+        "sun_share": 0.0
+      },
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-02T23:08:32+00:00",
-  "slot": "2026-11-02-evening"
+  "updated": "2026-11-03T04:52:34+00:00",
+  "slot": "2026-11-03-morning"
 }
