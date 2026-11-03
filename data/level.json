@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-03T06:45:54+00:00",
+  "fetched": "2026-11-03T06:52:19+00:00",
   "forecast": [
     {
       "date": "03.11.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.51,
-    "time": "2026-11-03T06:30:00+00:00",
+    "flow": 7.54,
+    "time": "2026-11-03T06:40:00+00:00",
     "stats": {
-      "n": 3250,
+      "n": 3251,
       "days": 72.7,
       "enough": true,
       "min": 6.75,
@@ -46,7 +46,7 @@
       "p25": 7.25,
       "median": 7.74,
       "p75": 10.27,
-      "p90": 43.37,
+      "p90": 43.36,
       "max": 153.11
     }
   },
@@ -55,7 +55,7 @@
     "uv_index": 0.05,
     "european_aqi": 31.0,
     "wind_model": 15.1,
-    "gust_model": 27.0,
+    "gust_model": 28.8,
     "wind_dir_model": 50.0,
     "wind_measured": 18.7,
     "gust_measured": 28.8,
@@ -67,12 +67,12 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-03T06:46:02+00:00"
+    "time": "2026-11-03T06:52:23+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 11.05,
+    "temperature": 11.04,
     "height": 470.3,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -97,8 +97,8 @@
     "height": 531.93,
     "flow": 4.41,
     "stats": {
-      "n": 3249,
-      "days": 71.9,
+      "n": 3250,
+      "days": 72.0,
       "enough": true,
       "min": 4.22,
       "p10": 4.49,
