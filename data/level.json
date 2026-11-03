@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-03T23:08:27+00:00",
+  "fetched": "2026-11-03T23:52:31+00:00",
   "forecast": [
     {
       "date": "04.11.2026",
@@ -29,78 +29,52 @@
     "rowing_competition": false,
     "dock4_installed": false
   },
-  "warning_checked": "2026-11-03T22:52:20+00:00",
+  "warning_checked": "2026-11-03T23:52:31+00:00",
   "hydro": {
     "source": "BAFU / FOEN Hydrologie via api.existenz.ch",
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.63,
-    "time": "2026-11-03T22:40:00+00:00",
+    "flow": 7.51,
+    "time": "2026-11-03T23:40:00+00:00",
     "stats": {
-      "n": 3284,
-      "days": 73.3,
+      "n": 3285,
+      "days": 73.4,
       "enough": true,
       "min": 6.75,
       "p10": 7.08,
       "p25": 7.25,
       "median": 7.74,
       "p75": 10.35,
-      "p90": 42.74,
+      "p90": 42.73,
       "max": 153.11
     }
-  },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 531.94,
-    "flow": 4.57,
-    "stats": {
-      "n": 3283,
-      "days": 72.6,
-      "enough": true,
-      "min": 4.22,
-      "p10": 4.49,
-      "p25": 4.67,
-      "median": 4.92,
-      "p75": 5.18,
-      "p90": 57.89,
-      "max": 217.43
-    },
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 12.2,
-    "height": 470.34,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 37.0,
-    "wind_model": 8.3,
-    "gust_model": 15.1,
-    "wind_dir_model": 34.0,
+    "wind_model": 8.7,
+    "gust_model": 16.2,
+    "wind_dir_model": 45.0,
     "wind_measured": 9.0,
-    "gust_measured": 13.3,
-    "wind_dir_measured": 28.0,
+    "gust_measured": 14.0,
+    "wind_dir_measured": 41.0,
     "temp_measured": 3.5,
     "radiation_measured": 5.0,
-    "vario_grid": 8.19,
-    "vario_total": 20.14,
+    "vario_grid": 10.0,
+    "vario_total": 21.95,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-03T22:52:28+00:00"
+    "time": "2026-11-03T23:52:39+00:00"
   },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 1.77,
-    "temperature": 7.24,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 11.79,
+    "height": 470.31,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
@@ -110,9 +84,31 @@
     "battery_v": 3.66,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
-  "hydro_error": {
-    "time": "2026-11-03T23:08:27+00:00",
-    "error": "weder 2215 noch 2119 lieferten Werte"
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 1.77,
+    "temperature": 7.23,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 531.94,
+    "flow": 4.59,
+    "stats": {
+      "n": 3284,
+      "days": 72.7,
+      "enough": true,
+      "min": 4.22,
+      "p10": 4.49,
+      "p25": 4.67,
+      "median": 4.92,
+      "p75": 5.18,
+      "p90": 57.88,
+      "max": 217.43
+    },
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
@@ -160,9 +156,5 @@
   "actual_daily": {
     "02.11.2026": 530.56,
     "03.11.2026": 530.42
-  },
-  "rain_error": {
-    "time": "2026-11-03T23:08:31+00:00",
-    "error": "415 Client Error: Unsupported Media Type for url: https://api.existenz.ch/apiv1/smn/daterange?locations=GRA&parameters=rr&startdate=2026-11-03T19:30:00Z&enddate=2026-11-03T23:08:30Z&app=pumpfoil.guru&version=1.0"
   }
 }
