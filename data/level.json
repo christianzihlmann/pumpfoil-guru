@@ -2,17 +2,17 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-04T05:52:19+00:00",
+  "fetched": "2026-11-04T06:08:23+00:00",
   "forecast": [
     {
       "date": "04.11.2026",
       "min": 530.33,
-      "max": 530.33
+      "max": 530.34
     },
     {
       "date": "05.11.2026",
       "min": 530.33,
-      "max": 530.45
+      "max": 530.46
     },
     {
       "date": "06.11.2026",
@@ -21,7 +21,7 @@
     },
     {
       "date": "07.11.2026",
-      "min": 530.57,
+      "min": 530.58,
       "max": 530.75
     }
   ],
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.48,
-    "time": "2026-11-04T05:40:00+00:00",
+    "flow": 7.45,
+    "time": "2026-11-04T06:00:00+00:00",
     "stats": {
-      "n": 3296,
+      "n": 3297,
       "days": 73.6,
       "enough": true,
       "min": 6.75,
@@ -46,7 +46,7 @@
       "p25": 7.25,
       "median": 7.74,
       "p75": 10.31,
-      "p90": 42.62,
+      "p90": 42.61,
       "max": 153.11
     }
   },
@@ -54,20 +54,20 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 40.0,
-    "wind_model": 5.5,
+    "wind_model": 5.6,
     "gust_model": 9.7,
-    "wind_dir_model": 23.0,
-    "wind_measured": 3.2,
-    "gust_measured": 5.4,
+    "wind_dir_model": 27.0,
+    "wind_measured": 5.8,
+    "gust_measured": 8.6,
     "wind_dir_measured": 32.0,
     "temp_measured": 3.4,
     "radiation_measured": 5.0,
-    "vario_grid": 16.1,
-    "vario_total": 28.05,
+    "vario_grid": 17.16,
+    "vario_total": 33.81,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-04T05:52:27+00:00"
+    "time": "2026-11-04T06:08:27+00:00"
   },
   "water": {
     "station": "2467",
@@ -97,7 +97,7 @@
     "height": 531.94,
     "flow": 4.57,
     "stats": {
-      "n": 3295,
+      "n": 3296,
       "days": 72.9,
       "enough": true,
       "min": 4.22,
