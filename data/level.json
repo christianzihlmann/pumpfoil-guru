@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-04T00:52:20+00:00",
+  "fetched": "2026-11-04T00:54:45+00:00",
   "forecast": [
     {
       "date": "04.11.2026",
@@ -67,7 +67,7 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-04T00:52:28+00:00"
+    "time": "2026-11-04T00:54:49+00:00"
   },
   "water": {
     "station": "2467",
@@ -80,8 +80,8 @@
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
     "source_url": "https://www.schiffenen.guru",
     "temperature": 13.8,
-    "time": "2026-11-03T20:53:35.802Z",
-    "battery_v": 3.66,
+    "time": "2026-11-04T00:53:36.553Z",
+    "battery_v": 3.666,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
   "sense": {
