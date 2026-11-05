@@ -1,51 +1,6 @@
 {
   "slot_done": "2026-11-05T16:51:24+00:00",
   "days": {
-    "2026-11-05": {
-      "headline": "Flat now, Bise sneaks in late",
-      "subline": "Dead flat until 16:00, a bit of chop, then flat again from 17:00.",
-      "source": "model",
-      "written": "2026-11-05T11:08:30+00:00",
-      "slot": "2026-11-05-midday",
-      "sig": "[\"good\", [\"CHOP\", \"a\", \"e\"], [\"FLAT\", \"d\", \"e\"]]",
-      "points": [
-        {
-          "theme": "CHOP",
-          "text": "Bise (onshore) from 16:00, 6 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "16:00",
-          "to": "17:00"
-        },
-        {
-          "theme": "FLAT",
-          "text": "Dead flat until 16:00 and from 17:00: wind under 5 km/h.",
-          "from": "12:08",
-          "to": "17:10"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 6–8 °C. Lake 14 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–17:10",
-        "mood": "good",
-        "tmin": 6.1,
-        "tmax": 7.9,
-        "wind": [
-          2,
-          6
-        ],
-        "gust_max": 11,
-        "uv_max": 2.6,
-        "aqi_max": 37,
-        "lake": 13.5,
-        "ok_share": 0.83,
-        "sun_share": 0.5
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-06": {
       "headline": "Flat water, wet all day",
       "subline": "Rain most of the day, wind under 5 km/h. Air 5–8 °C, lake 14 °C.",
@@ -141,8 +96,46 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-08": {
+      "headline": "Dead Flat Water. Go Pumping!",
+      "subline": "Air 3–10 °C.",
+      "source": "placeholder",
+      "written": "2026-11-05T23:08:40+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "FLAT",
+          "text": "Dead flat all day: wind under 5 km/h.",
+          "from": "07:23",
+          "to": "17:06"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 3–10 °C. Lake 14 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:23–17:06",
+        "mood": "good",
+        "tmin": 3.2,
+        "tmax": 10.4,
+        "wind": [
+          1,
+          5
+        ],
+        "gust_max": 9,
+        "uv_max": 2.5,
+        "aqi_max": 35,
+        "lake": 13.5,
+        "ok_share": 1.0,
+        "sun_share": 0.0
+      }
     }
   },
-  "updated": "2026-11-05T16:51:24+00:00",
+  "updated": "2026-11-05T23:08:40+00:00",
   "slot": "2026-11-05-evening"
 }
