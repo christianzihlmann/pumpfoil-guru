@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-06T05:52:19+00:00",
+  "fetched": "2026-11-06T06:08:39+00:00",
   "forecast": [
     {
       "date": "06.11.2026",
@@ -12,17 +12,17 @@
     {
       "date": "07.11.2026",
       "min": 530.55,
-      "max": 530.82
+      "max": 530.81
     },
     {
       "date": "08.11.2026",
-      "min": 530.78,
-      "max": 531.06
+      "min": 530.77,
+      "max": 531.05
     },
     {
       "date": "09.11.2026",
-      "min": 530.96,
-      "max": 531.11
+      "min": 530.95,
+      "max": 531.09
     }
   ],
   "manual": {
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.39,
-    "time": "2026-11-06T05:40:00+00:00",
+    "time": "2026-11-06T06:00:00+00:00",
     "stats": {
-      "n": 3391,
+      "n": 3392,
       "days": 75.6,
       "enough": true,
       "min": 6.75,
@@ -46,7 +46,7 @@
       "p25": 7.25,
       "median": 7.74,
       "p75": 10.27,
-      "p90": 42.18,
+      "p90": 42.17,
       "max": 153.11
     }
   },
@@ -54,20 +54,20 @@
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 41.0,
-    "wind_model": 2.6,
+    "wind_model": 3.1,
     "gust_model": 7.6,
-    "wind_dir_model": 326.0,
-    "wind_measured": 2.5,
-    "gust_measured": 5.0,
-    "wind_dir_measured": 277.0,
-    "temp_measured": 4.4,
+    "wind_dir_model": 339.0,
+    "wind_measured": 0.7,
+    "gust_measured": 2.5,
+    "wind_dir_measured": 194.0,
+    "temp_measured": 4.5,
     "radiation_measured": 5.0,
-    "vario_grid": 12.58,
-    "vario_total": 24.53,
+    "vario_grid": 13.31,
+    "vario_total": 29.96,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-06T05:52:26+00:00"
+    "time": "2026-11-06T06:08:42+00:00"
   },
   "water": {
     "station": "2467",
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 4.9,
     "stats": {
-      "n": 3390,
+      "n": 3391,
       "days": 74.9,
       "enough": true,
       "min": 4.22,
