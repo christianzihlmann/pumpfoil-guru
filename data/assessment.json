@@ -1,19 +1,19 @@
 {
-  "slot_done": "2026-11-05T16:51:24+00:00",
+  "slot_done": "2026-11-06T04:52:31+00:00",
   "days": {
     "2026-11-06": {
-      "headline": "Flat water, wet all day",
-      "subline": "Rain most of the day, wind under 5 km/h. Air 5–8 °C, lake 14 °C.",
+      "headline": "Foggy, flat and showery",
+      "subline": "Fog until 10:00 and again 12:00–13:00, showers from 12:00.",
       "source": "model",
-      "written": "2026-11-05T16:51:24+00:00",
-      "slot": "2026-11-05-evening",
-      "sig": "[\"poor\", [\"RAIN\", \"m\", \"e\"], [\"FLAT\", \"m\", \"e\"]]",
+      "written": "2026-11-06T04:52:31+00:00",
+      "slot": "2026-11-06-morning",
+      "sig": "[\"poor\", [\"FOG\", \"m\", \"d\"], [\"FLAT\", \"m\", \"e\"], [\"RAIN\", \"m\", \"e\"]]",
       "points": [
         {
-          "theme": "RAIN",
-          "text": "Rain most of the day.",
+          "theme": "FOG",
+          "text": "Fog until 10:00 and 12:00–13:00, visibility down to 1.2 km.",
           "from": "07:20",
-          "to": "17:08"
+          "to": "13:00"
         },
         {
           "theme": "FLAT",
@@ -22,8 +22,14 @@
           "to": "17:08"
         },
         {
+          "theme": "RAIN",
+          "text": "Changeable: showers 09:00–10:00 and from 12:00, dry in between.",
+          "from": "09:00",
+          "to": "17:08"
+        },
+        {
           "theme": "TEMP",
-          "text": "Air 5–8 °C. Lake 14 °C.",
+          "text": "Air 5–7 °C. Lake 13 °C.",
           "from": null,
           "to": null
         }
@@ -31,50 +37,50 @@
       "facts": {
         "window": "07:20–17:08",
         "mood": "poor",
-        "tmin": 5.3,
-        "tmax": 7.6,
+        "tmin": 4.6,
+        "tmax": 7.0,
         "wind": [
           0,
-          3
+          5
         ],
-        "gust_max": 5,
-        "uv_max": 0.4,
+        "gust_max": 9,
+        "uv_max": 0.3,
         "aqi_max": 42,
-        "lake": 13.6,
+        "lake": 13.3,
         "ok_share": 0.18,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-07": {
-      "headline": "Glassy morning, Bise after lunch",
-      "subline": "Best until 13:00. Light chop 13:00–16:00, flat again from 16:00.",
+      "headline": "Patchy fog, then flat water",
+      "subline": "Best window from 10:00, 1–5 km/h and no chop at the dock.",
       "source": "model",
-      "written": "2026-11-05T16:51:24+00:00",
-      "slot": "2026-11-05-evening",
-      "sig": "[\"mixed\", [\"CHOP\", \"d\", \"a\"], [\"BEST\", \"m\", \"d\"], [\"FLAT\", \"m\", \"e\"]]",
+      "written": "2026-11-06T04:52:31+00:00",
+      "slot": "2026-11-06-morning",
+      "sig": "[\"mixed\", [\"FOG\", \"m\", \"m\"], [\"BEST\", \"m\", \"e\"], [\"FLAT\", \"m\", \"e\"]]",
       "points": [
         {
-          "theme": "CHOP",
-          "text": "Bise (onshore) 13:00–16:00, 6 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "13:00",
-          "to": "16:00"
+          "theme": "FOG",
+          "text": "Patchy fog possible until 10:00.",
+          "from": "07:22",
+          "to": "10:00"
         },
         {
           "theme": "BEST",
-          "text": "Best window until 13:00.",
-          "from": "07:22",
-          "to": "13:00"
+          "text": "Best window from 10:00.",
+          "from": "10:00",
+          "to": "17:07"
         },
         {
           "theme": "FLAT",
-          "text": "Dead flat until 13:00 and from 16:00: wind under 5 km/h.",
+          "text": "Flat water all day: 1–5 km/h, no chop at the dock.",
           "from": "07:22",
           "to": "17:07"
         },
         {
           "theme": "TEMP",
-          "text": "Air 7–10 °C. Lake 14 °C.",
+          "text": "Air 6–10 °C. Lake 13 °C.",
           "from": null,
           "to": null
         }
@@ -82,38 +88,38 @@
       "facts": {
         "window": "07:22–17:07",
         "mood": "mixed",
-        "tmin": 7.1,
+        "tmin": 5.5,
         "tmax": 10.3,
         "wind": [
-          0,
-          6
+          1,
+          5
         ],
-        "gust_max": 13,
-        "uv_max": 2.0,
+        "gust_max": 11,
+        "uv_max": 2.4,
         "aqi_max": 27,
-        "lake": 13.6,
+        "lake": 13.3,
         "ok_share": 0.73,
-        "sun_share": 0.0
+        "sun_share": 0.18
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-08": {
-      "headline": "Dead Flat Water. Go Pumping!",
-      "subline": "Air 3–10 °C.",
-      "source": "placeholder",
-      "written": "2026-11-05T23:08:40+00:00",
-      "slot": null,
-      "sig": null,
+      "headline": "Another day in paradise.",
+      "subline": "Flat water all day, 0–5 km/h. Air 3–10 °C, lake 13 °C.",
+      "source": "model",
+      "written": "2026-11-06T04:52:31+00:00",
+      "slot": "2026-11-06-morning",
+      "sig": "[\"good\", [\"FLAT\", \"m\", \"e\"]]",
       "points": [
         {
           "theme": "FLAT",
-          "text": "Dead flat all day: wind under 5 km/h.",
+          "text": "Flat water all day: 0–5 km/h, no chop at the dock.",
           "from": "07:23",
           "to": "17:06"
         },
         {
           "theme": "TEMP",
-          "text": "Air 3–10 °C. Lake 14 °C.",
+          "text": "Air 3–10 °C. Lake 13 °C.",
           "from": null,
           "to": null
         }
@@ -121,21 +127,22 @@
       "facts": {
         "window": "07:23–17:06",
         "mood": "good",
-        "tmin": 3.2,
-        "tmax": 10.4,
+        "tmin": 2.6,
+        "tmax": 10.0,
         "wind": [
-          1,
+          0,
           5
         ],
-        "gust_max": 9,
+        "gust_max": 12,
         "uv_max": 2.5,
         "aqi_max": 35,
-        "lake": 13.5,
+        "lake": 13.3,
         "ok_share": 1.0,
-        "sun_share": 0.0
-      }
+        "sun_share": 0.45
+      },
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-05T23:08:40+00:00",
-  "slot": "2026-11-05-evening"
+  "updated": "2026-11-06T04:52:31+00:00",
+  "slot": "2026-11-06-morning"
 }
