@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-06T04:52:21+00:00",
+  "fetched": "2026-11-06T05:08:22+00:00",
   "forecast": [
     {
       "date": "06.11.2026",
@@ -12,17 +12,17 @@
     {
       "date": "07.11.2026",
       "min": 530.55,
-      "max": 530.83
+      "max": 530.82
     },
     {
       "date": "08.11.2026",
       "min": 530.78,
-      "max": 531.07
+      "max": 531.06
     },
     {
       "date": "09.11.2026",
-      "min": 530.97,
-      "max": 531.12
+      "min": 530.96,
+      "max": 531.11
     }
   ],
   "manual": {
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.39,
-    "time": "2026-11-06T04:40:00+00:00",
+    "time": "2026-11-06T05:00:00+00:00",
     "stats": {
-      "n": 3389,
+      "n": 3390,
       "days": 75.6,
       "enough": true,
       "min": 6.75,
@@ -46,28 +46,28 @@
       "p25": 7.25,
       "median": 7.74,
       "p75": 10.27,
-      "p90": 42.22,
+      "p90": 42.2,
       "max": 153.11
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
-    "european_aqi": 38.0,
-    "wind_model": 1.5,
-    "gust_model": 3.2,
-    "wind_dir_model": 315.0,
-    "wind_measured": 3.2,
-    "gust_measured": 4.7,
-    "wind_dir_measured": 225.0,
+    "european_aqi": 41.0,
+    "wind_model": 1.8,
+    "gust_model": 2.5,
+    "wind_dir_model": 233.0,
+    "wind_measured": 1.4,
+    "gust_measured": 2.5,
+    "wind_dir_measured": 275.0,
     "temp_measured": 4.5,
     "radiation_measured": 5.0,
-    "vario_grid": 7.07,
-    "vario_total": 19.02,
+    "vario_grid": 8.88,
+    "vario_total": 20.83,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-06T04:52:27+00:00"
+    "time": "2026-11-06T05:08:25+00:00"
   },
   "water": {
     "station": "2467",
@@ -80,7 +80,7 @@
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
     "source_url": "https://www.schiffenen.guru",
     "temperature": 13.3,
-    "time": "2026-11-06T00:52:59.236Z",
+    "time": "2026-11-06T04:52:57.270Z",
     "battery_v": 3.666,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 4.9,
     "stats": {
-      "n": 3388,
+      "n": 3389,
       "days": 74.9,
       "enough": true,
       "min": 4.22,
