@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-07T22:52:18+00:00",
+  "fetched": "2026-11-07T23:01:46+00:00",
   "forecast": [
     {
       "date": "07.11.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 7.63,
-    "time": "2026-11-07T22:40:00+00:00",
+    "flow": 7.6,
+    "time": "2026-11-07T22:50:00+00:00",
     "stats": {
-      "n": 3473,
+      "n": 3474,
       "days": 77.3,
       "enough": true,
       "min": 6.75,
@@ -46,33 +46,33 @@
       "p25": 7.28,
       "median": 7.68,
       "p75": 10.24,
-      "p90": 41.39,
+      "p90": 41.38,
       "max": 153.11
     }
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
-    "european_aqi": 40.0,
+    "european_aqi": 37.0,
     "wind_model": 3.6,
     "gust_model": 5.8,
     "wind_dir_model": 186.0,
-    "wind_measured": 2.5,
+    "wind_measured": 1.8,
     "gust_measured": 2.9,
-    "wind_dir_measured": 31.0,
+    "wind_dir_measured": 18.0,
     "temp_measured": 5.3,
-    "radiation_measured": 6.0,
+    "radiation_measured": 5.0,
     "vario_grid": 11.23,
     "vario_total": 23.18,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-07T22:52:23+00:00"
+    "time": "2026-11-07T23:01:48+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 11.09,
+    "temperature": 11.07,
     "height": 470.31,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -88,7 +88,7 @@
     "station": "2179",
     "name": "Sense – Thörishaus",
     "flow": 1.89,
-    "temperature": 8.66,
+    "temperature": 8.63,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 4.95,
     "stats": {
-      "n": 3472,
+      "n": 3473,
       "days": 76.6,
       "enough": true,
       "min": 4.22,
@@ -105,7 +105,7 @@
       "p25": 4.67,
       "median": 4.92,
       "p75": 5.18,
-      "p90": 53.43,
+      "p90": 53.37,
       "max": 217.43
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"

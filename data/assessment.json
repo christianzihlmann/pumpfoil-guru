@@ -1,45 +1,6 @@
 {
   "slot_done": "2026-11-07T16:52:28+00:00",
   "days": {
-    "2026-11-07": {
-      "headline": "Flat calm till sunset. Go pump!",
-      "subline": "Just 1–5 km/h, no chop at the dock. Air 9–10 °C, lake 13 °C.",
-      "source": "model",
-      "written": "2026-11-07T11:08:35+00:00",
-      "slot": "2026-11-07-midday",
-      "sig": "[\"good\", [\"FLAT\", \"d\", \"e\"]]",
-      "points": [
-        {
-          "theme": "FLAT",
-          "text": "Flat water for the rest of the day: 1–5 km/h, no chop at the dock.",
-          "from": "12:08",
-          "to": "17:07"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 9–10 °C. Lake 13 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–17:07",
-        "mood": "good",
-        "tmin": 8.9,
-        "tmax": 9.9,
-        "wind": [
-          1,
-          5
-        ],
-        "gust_max": 10,
-        "uv_max": 2.2,
-        "aqi_max": 38,
-        "lake": 13.2,
-        "ok_share": 1.0,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-08": {
       "headline": "Foggy start, flat all day",
       "subline": "Fog until 10:00, then best window from 10:00 on glassy water.",
@@ -135,8 +96,52 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-10": {
+      "headline": "Ready for a session in the fog?",
+      "subline": "Dead flat all day: wind under 5 km/h.",
+      "source": "placeholder",
+      "written": "2026-11-07T23:01:54+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "FOG",
+          "text": "Patchy fog possible until 08:00.",
+          "from": "07:26",
+          "to": "08:00"
+        },
+        {
+          "theme": "FLAT",
+          "text": "Dead flat all day: wind under 5 km/h.",
+          "from": "07:26",
+          "to": "17:03"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 9–14 °C. Lake 13 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:26–17:03",
+        "mood": "good",
+        "tmin": 8.6,
+        "tmax": 14.1,
+        "wind": [
+          1,
+          3
+        ],
+        "gust_max": 9,
+        "uv_max": 0.6,
+        "aqi_max": 21,
+        "lake": 13.1,
+        "ok_share": 0.91,
+        "sun_share": 0.0
+      }
     }
   },
-  "updated": "2026-11-07T16:52:28+00:00",
+  "updated": "2026-11-07T23:01:54+00:00",
   "slot": "2026-11-07-evening"
 }
