@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-11-07T11:08:35+00:00",
+  "slot_done": "2026-11-07T16:52:28+00:00",
   "days": {
     "2026-11-07": {
       "headline": "Flat calm till sunset. Go pump!",
@@ -92,12 +92,12 @@
       "model": "claude-opus-5-5"
     },
     "2026-11-09": {
-      "headline": "Dead flat, showers after lunch",
-      "subline": "Best until 13:00. Showers 13:00–14:00 and from 16:00, dry in between.",
+      "headline": "Dead Flat Water. Go Pumping!",
+      "subline": "Wind under 5 km/h all day, rain arrives from 16:00. Lake 13 °C.",
       "source": "model",
-      "written": "2026-11-07T11:08:35+00:00",
-      "slot": "2026-11-07-midday",
-      "sig": "[\"mixed\", [\"FLAT\", \"m\", \"e\"], [\"BEST\", \"m\", \"d\"], [\"RAIN\", \"d\", \"e\"]]",
+      "written": "2026-11-07T16:52:28+00:00",
+      "slot": "2026-11-07-evening",
+      "sig": "[\"good\", [\"FLAT\", \"m\", \"e\"], [\"RAIN\", \"a\", \"e\"]]",
       "points": [
         {
           "theme": "FLAT",
@@ -106,43 +106,37 @@
           "to": "17:04"
         },
         {
-          "theme": "BEST",
-          "text": "Best window until 13:00.",
-          "from": "07:25",
-          "to": "13:00"
-        },
-        {
           "theme": "RAIN",
-          "text": "Changeable: showers 13:00–14:00 and from 16:00, dry in between.",
-          "from": "13:00",
+          "text": "Rain from 16:00.",
+          "from": "16:00",
           "to": "17:04"
         },
         {
           "theme": "TEMP",
-          "text": "Air 7–10 °C. Lake 13 °C.",
+          "text": "Air 6–11 °C. Lake 13 °C.",
           "from": null,
           "to": null
         }
       ],
       "facts": {
         "window": "07:25–17:04",
-        "mood": "mixed",
-        "tmin": 7.0,
-        "tmax": 10.1,
+        "mood": "good",
+        "tmin": 6.4,
+        "tmax": 10.7,
         "wind": [
           0,
-          3
+          2
         ],
-        "gust_max": 7,
+        "gust_max": 5,
         "uv_max": 2.0,
-        "aqi_max": 31,
+        "aqi_max": 30,
         "lake": 13.2,
-        "ok_share": 0.73,
+        "ok_share": 0.82,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-07T11:08:35+00:00",
-  "slot": "2026-11-07-midday"
+  "updated": "2026-11-07T16:52:28+00:00",
+  "slot": "2026-11-07-evening"
 }
