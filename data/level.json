@@ -2,13 +2,8 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-09T22:52:20+00:00",
+  "fetched": "2026-11-09T23:08:24+00:00",
   "forecast": [
-    {
-      "date": "09.11.2026",
-      "min": 530.69,
-      "max": 530.83
-    },
     {
       "date": "10.11.2026",
       "min": 530.62,
@@ -23,6 +18,11 @@
       "date": "12.11.2026",
       "min": 530.69,
       "max": 530.87
+    },
+    {
+      "date": "13.11.2026",
+      "min": 530.75,
+      "max": 531.22
     }
   ],
   "manual": {
@@ -36,9 +36,9 @@
     "name": "Saane – Laupen",
     "unit": "m3/s",
     "flow": 7.68,
-    "time": "2026-11-09T22:40:00+00:00",
+    "time": "2026-11-09T22:55:00+00:00",
     "stats": {
-      "n": 3569,
+      "n": 3570,
       "days": 79.3,
       "enough": true,
       "min": 6.75,
@@ -53,13 +53,13 @@
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
-    "european_aqi": 23.0,
-    "wind_model": 1.4,
+    "european_aqi": 20.0,
+    "wind_model": 1.1,
     "gust_model": 7.6,
-    "wind_dir_model": 360.0,
-    "wind_measured": 1.1,
+    "wind_dir_model": 18.0,
+    "wind_measured": 2.2,
     "gust_measured": 2.9,
-    "wind_dir_measured": 342.0,
+    "wind_dir_measured": 197.0,
     "temp_measured": 7.8,
     "radiation_measured": 5.0,
     "vario_grid": 6.67,
@@ -67,12 +67,12 @@
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-09T22:52:26+00:00"
+    "time": "2026-11-09T23:08:26+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 11.42,
+    "temperature": 11.4,
     "height": 470.31,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 4.95,
     "stats": {
-      "n": 3568,
+      "n": 3569,
       "days": 78.6,
       "enough": true,
       "min": 4.22,
@@ -154,7 +154,7 @@
     ]
   },
   "actual_daily": {
-    "07.11.2026": 530.55,
-    "08.11.2026": 530.7
+    "08.11.2026": 530.7,
+    "09.11.2026": 530.79
   }
 }
