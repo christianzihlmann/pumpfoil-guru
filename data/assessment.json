@@ -1,80 +1,74 @@
 {
-  "slot_done": "2026-11-09T04:52:28+00:00",
+  "slot_done": "2026-11-09T11:08:50+00:00",
   "days": {
     "2026-11-09": {
-      "headline": "Fog till nine, then glass",
-      "subline": "Patchy fog possible until 09:00, then dead flat all day. Air 6–10 °C.",
+      "headline": "Glass all afternoon. Go pump!",
+      "subline": "Wind under 5 km/h till sunset. Air 9 °C, lake 13 °C.",
       "source": "model",
-      "written": "2026-11-09T04:52:28+00:00",
-      "slot": "2026-11-09-morning",
-      "sig": "[\"good\", [\"FOG\", \"m\", \"m\"], [\"FLAT\", \"m\", \"e\"]]",
+      "written": "2026-11-09T11:08:50+00:00",
+      "slot": "2026-11-09-midday",
+      "sig": "[\"good\", [\"FLAT\", \"d\", \"e\"]]",
       "points": [
         {
-          "theme": "FOG",
-          "text": "Patchy fog possible until 09:00.",
-          "from": "07:25",
-          "to": "09:00"
-        },
-        {
           "theme": "FLAT",
-          "text": "Dead flat all day: wind under 5 km/h.",
-          "from": "07:25",
+          "text": "Dead flat for the rest of the day: wind under 5 km/h.",
+          "from": "12:08",
           "to": "17:04"
         },
         {
           "theme": "TEMP",
-          "text": "Air 6–10 °C. Lake 13 °C.",
+          "text": "Air 9 °C. Lake 13 °C.",
           "from": null,
           "to": null
         }
       ],
       "facts": {
-        "window": "07:25–17:04",
+        "window": "12:08–17:04",
         "mood": "good",
-        "tmin": 6.3,
-        "tmax": 9.8,
+        "tmin": 8.6,
+        "tmax": 9.3,
         "wind": [
-          1,
+          2,
           4
         ],
         "gust_max": 8,
         "uv_max": 1.4,
         "aqi_max": 35,
-        "lake": 13.0,
-        "ok_share": 0.82,
+        "lake": 12.9,
+        "ok_share": 1.0,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-10": {
-      "headline": "Dead calm, damp morning",
-      "subline": "Showers until 13:00, best window from 13:00 on flat water.",
+      "headline": "Wet start, flat finish",
+      "subline": "Rain until 10:00, then the best window. Flat all day, 1–6 km/h.",
       "source": "model",
-      "written": "2026-11-09T04:52:28+00:00",
-      "slot": "2026-11-09-morning",
-      "sig": "[\"mixed\", [\"FLAT\", \"m\", \"e\"], [\"BEST\", \"d\", \"e\"], [\"RAIN\", \"m\", \"d\"]]",
+      "written": "2026-11-09T11:08:50+00:00",
+      "slot": "2026-11-09-midday",
+      "sig": "[\"mixed\", [\"FLAT\", \"m\", \"e\"], [\"BEST\", \"m\", \"e\"], [\"RAIN\", \"m\", \"m\"]]",
       "points": [
         {
           "theme": "FLAT",
-          "text": "Dead flat all day: wind under 5 km/h.",
+          "text": "Flat water all day: 1–6 km/h, no chop at the dock.",
           "from": "07:26",
           "to": "17:03"
         },
         {
           "theme": "BEST",
-          "text": "Best window from 13:00.",
-          "from": "13:00",
+          "text": "Best window from 10:00.",
+          "from": "10:00",
           "to": "17:03"
         },
         {
           "theme": "RAIN",
-          "text": "Changeable: showers until 08:00 and 09:00–13:00, dry in between.",
+          "text": "Rain until 10:00.",
           "from": "07:26",
-          "to": "13:00"
+          "to": "10:00"
         },
         {
           "theme": "TEMP",
-          "text": "Air 9–13 °C. Lake 13 °C.",
+          "text": "Air 9–15 °C. Lake 13 °C.",
           "from": null,
           "to": null
         }
@@ -82,17 +76,17 @@
       "facts": {
         "window": "07:26–17:03",
         "mood": "mixed",
-        "tmin": 8.6,
-        "tmax": 13.0,
+        "tmin": 8.8,
+        "tmax": 14.6,
         "wind": [
-          0,
-          2
+          1,
+          6
         ],
-        "gust_max": 5,
+        "gust_max": 12,
         "uv_max": 2.1,
         "aqi_max": 18,
-        "lake": 13.0,
-        "ok_share": 0.55,
+        "lake": 12.9,
+        "ok_share": 0.73,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
@@ -149,6 +143,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-09T04:52:28+00:00",
-  "slot": "2026-11-09-morning"
+  "updated": "2026-11-09T11:08:50+00:00",
+  "slot": "2026-11-09-midday"
 }
