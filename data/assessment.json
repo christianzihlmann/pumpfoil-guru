@@ -1,51 +1,6 @@
 {
   "slot_done": "2026-11-10T16:52:31+00:00",
   "days": {
-    "2026-11-10": {
-      "headline": "Dead flat now, fog at 17:00",
-      "subline": "Wind under 5 km/h for the rest of the day. Go pumping!",
-      "source": "model",
-      "written": "2026-11-10T11:08:35+00:00",
-      "slot": "2026-11-10-midday",
-      "sig": "[\"good\", [\"FOG\", \"e\", \"e\"], [\"FLAT\", \"d\", \"e\"]]",
-      "points": [
-        {
-          "theme": "FOG",
-          "text": "Patchy fog possible from 17:00.",
-          "from": "17:00",
-          "to": "17:03"
-        },
-        {
-          "theme": "FLAT",
-          "text": "Dead flat for the rest of the day: wind under 5 km/h.",
-          "from": "12:08",
-          "to": "17:03"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 11–14 °C. Lake 13 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–17:03",
-        "mood": "good",
-        "tmin": 11.1,
-        "tmax": 13.8,
-        "wind": [
-          0,
-          4
-        ],
-        "gust_max": 9,
-        "uv_max": 2.5,
-        "aqi_max": 19,
-        "lake": 12.8,
-        "ok_share": 0.83,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-11": {
       "headline": "Flat water between the showers",
       "subline": "Best window 12:00–15:00 while it's dry; showers return from 15:00.",
@@ -165,8 +120,46 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-13": {
+      "headline": "Onshore wind. A bit choppy.",
+      "subline": "Air 4–5 °C.",
+      "source": "placeholder",
+      "written": "2026-11-10T23:08:34+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "CHOP",
+          "text": "Bise (onshore) all day, 24 km/h: choppy. Too much for clean pumping, too little for winging.",
+          "from": "07:31",
+          "to": "16:59"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 4–5 °C. Lake 13 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:31–16:59",
+        "mood": "poor",
+        "tmin": 3.7,
+        "tmax": 5.4,
+        "wind": [
+          23,
+          24
+        ],
+        "gust_max": 51,
+        "uv_max": 1.8,
+        "aqi_max": 23,
+        "lake": 12.9,
+        "ok_share": 0.0,
+        "sun_share": 0.0
+      }
     }
   },
-  "updated": "2026-11-10T16:52:31+00:00",
+  "updated": "2026-11-10T23:08:34+00:00",
   "slot": "2026-11-10-evening"
 }
