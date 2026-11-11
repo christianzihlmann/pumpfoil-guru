@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-11T01:08:22+00:00",
+  "fetched": "2026-11-11T01:29:07+00:00",
   "forecast": [
     {
       "date": "11.11.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 15.08,
-    "time": "2026-11-11T01:00:00+00:00",
+    "flow": 14.9,
+    "time": "2026-11-11T01:20:00+00:00",
     "stats": {
-      "n": 3625,
+      "n": 3626,
       "days": 80.4,
       "enough": true,
       "min": 6.75,
@@ -55,19 +55,19 @@
     "uv_index": 0.0,
     "european_aqi": 18.0,
     "wind_model": 1.8,
-    "gust_model": 5.0,
+    "gust_model": 7.2,
     "wind_dir_model": 127.0,
-    "wind_measured": 1.1,
-    "gust_measured": 2.9,
-    "wind_dir_measured": 153.0,
-    "temp_measured": 9.9,
+    "wind_measured": 2.2,
+    "gust_measured": 3.6,
+    "wind_dir_measured": 90.0,
+    "temp_measured": 9.8,
     "radiation_measured": 5.0,
-    "vario_grid": 4.02,
-    "vario_total": 15.97,
+    "vario_grid": 3.12,
+    "vario_total": 15.07,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-11T01:08:25+00:00"
+    "time": "2026-11-11T01:29:21+00:00"
   },
   "water": {
     "station": "2467",
@@ -87,8 +87,8 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 8.53,
-    "temperature": 9.59,
+    "flow": 8.35,
+    "temperature": 9.58,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 4.95,
     "stats": {
-      "n": 3624,
+      "n": 3625,
       "days": 79.7,
       "enough": true,
       "min": 4.22,
