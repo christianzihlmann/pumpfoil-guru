@@ -2,17 +2,12 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-11T23:04:26+00:00",
+  "fetched": "2026-11-11T23:08:22+00:00",
   "forecast": [
     {
-      "date": "11.11.2026",
-      "min": 530.69,
-      "max": 530.75
-    },
-    {
       "date": "12.11.2026",
-      "min": 530.75,
-      "max": 530.81
+      "min": 530.74,
+      "max": 530.8
     },
     {
       "date": "13.11.2026",
@@ -21,8 +16,13 @@
     },
     {
       "date": "14.11.2026",
-      "min": 530.79,
+      "min": 530.78,
       "max": 531.12
+    },
+    {
+      "date": "15.11.2026",
+      "min": 530.74,
+      "max": 531.07
     }
   ],
   "manual": {
@@ -58,22 +58,22 @@
     "gust_model": 6.8,
     "wind_dir_model": 180.0,
     "wind_measured": 1.1,
-    "gust_measured": 2.2,
-    "wind_dir_measured": 2.0,
-    "temp_measured": 7.9,
+    "gust_measured": 2.9,
+    "wind_dir_measured": 33.0,
+    "temp_measured": 7.5,
     "radiation_measured": 5.0,
     "vario_grid": 8.05,
     "vario_total": 20.0,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-11T23:04:30+00:00"
+    "time": "2026-11-11T23:08:25+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
     "temperature": 10.97,
-    "height": 470.41,
+    "height": 470.4,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
@@ -87,7 +87,7 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 4.64,
+    "flow": 4.62,
     "temperature": 9.46,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
@@ -154,7 +154,7 @@
     ]
   },
   "actual_daily": {
-    "09.11.2026": 530.79,
-    "10.11.2026": 530.72
+    "10.11.2026": 530.72,
+    "11.11.2026": 530.72
   }
 }
