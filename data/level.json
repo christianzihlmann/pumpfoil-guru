@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-15T17:08:22+00:00",
+  "fetched": "2026-11-15T17:52:19+00:00",
   "forecast": [
     {
       "date": "15.11.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 74.31,
-    "time": "2026-11-15T16:40:00+00:00",
+    "flow": 115.47,
+    "time": "2026-11-15T17:40:00+00:00",
     "stats": {
-      "n": 3857,
+      "n": 3858,
       "days": 85.1,
       "enough": true,
       "min": 6.75,
@@ -46,17 +46,58 @@
       "p25": 7.33,
       "median": 7.8,
       "p75": 10.82,
-      "p90": 42.08,
+      "p90": 42.11,
       "max": 153.11
     }
+  },
+  "air": {
+    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
+    "uv_index": 0.0,
+    "european_aqi": 17.0,
+    "wind_model": 16.1,
+    "gust_model": 29.5,
+    "wind_dir_model": 222.0,
+    "wind_measured": 31.0,
+    "gust_measured": 46.8,
+    "wind_dir_measured": 224.0,
+    "temp_measured": 10.3,
+    "radiation_measured": 4.0,
+    "vario_grid": 14.22,
+    "vario_total": 30.87,
+    "vario_unit": "Rp/kWh",
+    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
+    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
+    "time": "2026-11-15T17:52:22+00:00"
+  },
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 11.97,
+    "height": 471.49,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
+  },
+  "lake": {
+    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
+    "source_url": "https://www.schiffenen.guru",
+    "temperature": 12.2,
+    "time": "2026-11-15T16:50:38.111Z",
+    "battery_v": 3.66,
+    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
+  },
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 4.64,
+    "temperature": 7.88,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
     "station": "2119",
     "name": "Sarine – Fribourg",
-    "height": 532.26,
-    "flow": 24.41,
+    "height": 532.37,
+    "flow": 36.31,
     "stats": {
-      "n": 3856,
+      "n": 3857,
       "days": 84.4,
       "enough": true,
       "min": 4.22,
@@ -68,51 +109,6 @@
       "max": 217.43
     },
     "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 11.78,
-    "height": 471.04,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
-  },
-  "air": {
-    "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
-    "uv_index": 0.0,
-    "european_aqi": 19.0,
-    "wind_model": 13.2,
-    "gust_model": 26.6,
-    "wind_dir_model": 227.0,
-    "wind_measured": 13.3,
-    "gust_measured": 22.0,
-    "wind_dir_measured": 207.0,
-    "temp_measured": 9.8,
-    "radiation_measured": 5.0,
-    "vario_grid": 15.53,
-    "vario_total": 32.18,
-    "vario_unit": "Rp/kWh",
-    "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
-    "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-15T16:52:23+00:00"
-  },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 4.6,
-    "temperature": 8.0,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
-  },
-  "lake": {
-    "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
-    "source_url": "https://www.schiffenen.guru",
-    "temperature": 12.2,
-    "time": "2026-11-15T16:50:38.111Z",
-    "battery_v": 3.66,
-    "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
-  },
-  "hydro_error": {
-    "time": "2026-11-15T17:08:44+00:00",
-    "error": "403 Client Error: Forbidden for url: https://api.existenz.ch/apiv1/hydro/latest?locations=2119,2215,2467,2179&parameters=height,flow,temperature&app=pumpfoil.guru&version=1.0"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
@@ -160,9 +156,5 @@
   "actual_daily": {
     "13.11.2026": 530.9,
     "14.11.2026": 530.88
-  },
-  "rain_error": {
-    "time": "2026-11-15T17:08:47+00:00",
-    "error": "Expecting value: line 1 column 1 (char 0)"
   }
 }
