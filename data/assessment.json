@@ -1,88 +1,76 @@
 {
-  "slot_done": "2026-11-16T04:52:31+00:00",
+  "slot_done": "2026-11-16T11:08:44+00:00",
   "days": {
     "2026-11-16": {
-      "headline": "Wing the offshore, 09:00 to 12:00",
-      "subline": "Best window 11:00–15:00, lighter offshore from 13:00. Showers return from 15:00.",
+      "headline": "Offshore wind, gusty lunch hour",
+      "subline": "Gusts to 46 from 13:00 to 14:00, otherwise easy 17–22 km/h. Flat!",
       "source": "model",
-      "written": "2026-11-16T04:52:31+00:00",
-      "slot": "2026-11-16-morning",
-      "sig": "[\"mixed\", [\"WING\", \"m\", \"d\"], [\"BEST\", \"d\", \"a\"], [\"OFFSHORE\", \"m\", \"d\"], [\"OFFSHORE\", \"d\", \"a\"], [\"RAIN\", \"m\", \"a\"]]",
+      "written": "2026-11-16T11:08:44+00:00",
+      "slot": "2026-11-16-midday",
+      "sig": "[\"good\", [\"OFFSHORE\", \"d\", \"a\"], [\"OFFSHORE\", \"d\", \"a\"]]",
       "points": [
         {
-          "theme": "WING",
-          "text": "Wingable offshore wind 09:00–12:00: 25–28 km/h, gusts to 50. Flat at the dock, tough pumping back.",
-          "from": "09:00",
-          "to": "12:00"
-        },
-        {
-          "theme": "BEST",
-          "text": "Best window 11:00–15:00.",
-          "from": "11:00",
-          "to": "15:00"
-        },
-        {
           "theme": "OFFSHORE",
-          "text": "Strong offshore wind until 09:00 and 12:00–13:00, 24 km/h, gusts to 49: flat at the dock, tough pumping back.",
-          "from": "07:35",
-          "to": "13:00"
-        },
-        {
-          "theme": "OFFSHORE",
-          "text": "Light offshore breeze from 13:00, 21 km/h: flat at the dock.",
+          "text": "Strong offshore wind 13:00–14:00, 24 km/h, gusts to 46: flat at the dock, tough pumping back.",
           "from": "13:00",
-          "to": "16:56"
+          "to": "14:00"
         },
         {
-          "theme": "RAIN",
-          "text": "Changeable: showers 08:00–11:00 and from 15:00, dry in between.",
-          "from": "08:00",
+          "theme": "OFFSHORE",
+          "text": "Light offshore breeze until 13:00 and from 14:00, 17–22 km/h: flat at the dock.",
+          "from": "12:08",
           "to": "16:56"
         },
         {
           "theme": "TEMP",
-          "text": "Air 8–10 °C. Lake 12 °C.",
+          "text": "Air 10–11 °C. Lake 12 °C.",
           "from": null,
           "to": null
         }
       ],
       "facts": {
-        "window": "07:35–16:56",
-        "mood": "mixed",
-        "tmin": 8.4,
-        "tmax": 10.5,
+        "window": "12:08–16:56",
+        "mood": "good",
+        "tmin": 10.2,
+        "tmax": 11.0,
         "wind": [
-          20,
-          28
+          17,
+          24
         ],
-        "gust_max": 50,
-        "uv_max": 1.9,
+        "gust_max": 55,
+        "uv_max": 1.6,
         "aqi_max": 23,
-        "lake": 12.1,
-        "ok_share": 0.5,
+        "lake": 12.0,
+        "ok_share": 1.0,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-17": {
-      "headline": "Stormy from 11:00, gusts to 74",
-      "subline": "Rain until 13:00. Air 11–15 °C, lake 12 °C.",
+      "headline": "Stormy Tuesday, gusts to 76",
+      "subline": "Rain 08:00–12:00, then stormy 12:00–16:00 at 30–38 km/h.",
       "source": "model",
-      "written": "2026-11-16T04:52:31+00:00",
-      "slot": "2026-11-16-morning",
-      "sig": "[\"poor\", [\"GALE\", \"d\", \"a\"], [\"RAIN\", \"m\", \"d\"]]",
+      "written": "2026-11-16T11:08:44+00:00",
+      "slot": "2026-11-16-midday",
+      "sig": "[\"poor\", [\"GALE\", \"d\", \"a\"], [\"OFFSHORE\", \"m\", \"m\"], [\"RAIN\", \"m\", \"d\"]]",
       "points": [
         {
           "theme": "GALE",
-          "text": "Stormy from 11:00: 31–38 km/h, gusts to 74.",
-          "from": "11:00",
-          "to": "16:55"
+          "text": "Stormy 12:00–16:00: 30–38 km/h, gusts to 76.",
+          "from": "12:00",
+          "to": "16:00"
+        },
+        {
+          "theme": "OFFSHORE",
+          "text": "Light offshore breeze until 09:00, 21 km/h: flat at the dock.",
+          "from": "07:37",
+          "to": "09:00"
         },
         {
           "theme": "RAIN",
-          "text": "Rain until 13:00.",
-          "from": "07:37",
-          "to": "13:00"
+          "text": "Rain 08:00–12:00.",
+          "from": "08:00",
+          "to": "12:00"
         },
         {
           "theme": "TEMP",
@@ -94,50 +82,56 @@
       "facts": {
         "window": "07:37–16:55",
         "mood": "poor",
-        "tmin": 10.8,
+        "tmin": 11.2,
         "tmax": 14.9,
         "wind": [
-          25,
+          20,
           38
         ],
-        "gust_max": 74,
-        "uv_max": 0.7,
+        "gust_max": 76,
+        "uv_max": 0.4,
         "aqi_max": 26,
-        "lake": 12.1,
-        "ok_share": 0.0,
-        "sun_share": 0.1
+        "lake": 12.0,
+        "ok_share": 0.2,
+        "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-18": {
-      "headline": "Stormy Wednesday, gusts to 67",
-      "subline": "Stormy until 09:00 and 11:00–16:00, with rain most of the day.",
+      "headline": "Thunderstorms possible 11:00–15:00",
+      "subline": "Stormy 11:00–16:00 with gusts to 63, rain 10:00–16:00.",
       "source": "model",
-      "written": "2026-11-16T04:52:31+00:00",
-      "slot": "2026-11-16-morning",
-      "sig": "[\"poor\", [\"GALE\", \"m\", \"a\"], [\"RAIN\", \"m\", \"a\"], [\"OFFSHORE\", \"m\", \"m\"]]",
+      "written": "2026-11-16T11:08:44+00:00",
+      "slot": "2026-11-16-midday",
+      "sig": "[\"poor\", [\"STORM\", \"d\", \"a\"], [\"GALE\", \"d\", \"a\"], [\"OFFSHORE\", \"m\", \"a\"], [\"RAIN\", \"m\", \"a\"]]",
       "points": [
         {
-          "theme": "GALE",
-          "text": "Stormy until 09:00 and 11:00–16:00: 26–30 km/h, gusts to 67.",
-          "from": "07:38",
-          "to": "16:00"
+          "theme": "STORM",
+          "text": "Thunderstorms possible 11:00–15:00.",
+          "from": "11:00",
+          "to": "15:00"
         },
         {
-          "theme": "RAIN",
-          "text": "Rain most of the day.",
-          "from": "07:38",
+          "theme": "GALE",
+          "text": "Stormy 11:00–16:00: 26–29 km/h, gusts to 63.",
+          "from": "11:00",
           "to": "16:00"
         },
         {
           "theme": "OFFSHORE",
-          "text": "Strong offshore wind 09:00–10:00, 25 km/h, gusts to 55: flat at the dock, tough pumping back.",
-          "from": "09:00",
-          "to": "10:00"
+          "text": "Strong offshore wind 08:00–10:00 and from 16:00, 24 km/h, gusts to 56: flat at the dock, tough pumping back.",
+          "from": "08:00",
+          "to": "16:54"
+        },
+        {
+          "theme": "RAIN",
+          "text": "Rain 10:00–16:00.",
+          "from": "10:00",
+          "to": "16:00"
         },
         {
           "theme": "TEMP",
-          "text": "Air 10–11 °C. Lake 12 °C.",
+          "text": "Air 10 °C. Lake 12 °C.",
           "from": null,
           "to": null
         }
@@ -145,22 +139,22 @@
       "facts": {
         "window": "07:38–16:54",
         "mood": "poor",
-        "tmin": 9.5,
-        "tmax": 10.8,
+        "tmin": 9.6,
+        "tmax": 10.3,
         "wind": [
-          25,
-          30
+          24,
+          29
         ],
-        "gust_max": 67,
-        "uv_max": 2.1,
+        "gust_max": 63,
+        "uv_max": 1.8,
         "aqi_max": 25,
-        "lake": 12.1,
-        "ok_share": 0.2,
-        "sun_share": 0.0
+        "lake": 12.0,
+        "ok_share": 0.4,
+        "sun_share": 0.2
       },
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-16T04:52:31+00:00",
-  "slot": "2026-11-16-morning"
+  "updated": "2026-11-16T11:08:44+00:00",
+  "slot": "2026-11-16-midday"
 }
