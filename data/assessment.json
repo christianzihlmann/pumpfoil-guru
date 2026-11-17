@@ -1,57 +1,6 @@
 {
   "slot_done": "2026-11-17T16:52:27+00:00",
   "days": {
-    "2026-11-17": {
-      "headline": "Stormy until 16:00, gusts to 78",
-      "subline": "Rain 14:00–15:00, then strong offshore from 16:00 with gusts to 55.",
-      "source": "model",
-      "written": "2026-11-17T11:08:56+00:00",
-      "slot": "2026-11-17-midday",
-      "sig": "[\"poor\", [\"GALE\", \"d\", \"a\"], [\"OFFSHORE\", \"a\", \"a\"], [\"RAIN\", \"a\", \"a\"]]",
-      "points": [
-        {
-          "theme": "GALE",
-          "text": "Stormy until 16:00: 29–38 km/h, gusts to 78.",
-          "from": "12:08",
-          "to": "16:00"
-        },
-        {
-          "theme": "OFFSHORE",
-          "text": "Strong offshore wind from 16:00, 25 km/h, gusts to 55: flat at the dock, tough pumping back.",
-          "from": "16:00",
-          "to": "16:55"
-        },
-        {
-          "theme": "RAIN",
-          "text": "Rain 14:00–15:00.",
-          "from": "14:00",
-          "to": "15:00"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 13–14 °C. Lake 12 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–16:55",
-        "mood": "poor",
-        "tmin": 12.7,
-        "tmax": 13.9,
-        "wind": [
-          25,
-          38
-        ],
-        "gust_max": 78,
-        "uv_max": 1.1,
-        "aqi_max": 24,
-        "lake": 12.0,
-        "ok_share": 0.2,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-18": {
       "headline": "Offshore wind, flat at the dock",
       "subline": "Light breeze 08:00–13:00 and from 14:00; showers 08:00–09:00 and 12:00–13:00.",
@@ -159,12 +108,58 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-20": {
+      "headline": "Too windy today.",
+      "subline": "Strong offshore wind until 08:00 and 09:00–10:00, 24 km/h, gusts to 53: flat at the dock, tough pumping back.",
+      "source": "placeholder",
+      "written": "2026-11-17T23:52:30+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "GALE",
+          "text": "Stormy 13:00–15:00: 30 km/h, gusts to 61.",
+          "from": "13:00",
+          "to": "15:00"
+        },
+        {
+          "theme": "OFFSHORE",
+          "text": "Strong offshore wind until 08:00 and 09:00–10:00, 24 km/h, gusts to 53: flat at the dock, tough pumping back.",
+          "from": "07:41",
+          "to": "10:00"
+        },
+        {
+          "theme": "RAIN",
+          "text": "Changeable: showers until 10:00 and 11:00–13:00, dry in between.",
+          "from": "07:41",
+          "to": "13:00"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 7–9 °C. Lake 12 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:41–16:52",
+        "mood": "poor",
+        "tmin": 7.3,
+        "tmax": 8.9,
+        "wind": [
+          24,
+          30
+        ],
+        "gust_max": 61,
+        "uv_max": 1.5,
+        "aqi_max": 25,
+        "lake": 12.0,
+        "ok_share": 0.3,
+        "sun_share": 0.1
+      }
     }
   },
-  "updated": "2026-11-17T22:52:27+00:00",
-  "slot": "2026-11-17-evening",
-  "fetch_error": {
-    "time": "2026-11-17T23:09:32+00:00",
-    "error": "Prognose nicht geholt: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
-  }
+  "updated": "2026-11-17T23:52:30+00:00",
+  "slot": "2026-11-17-evening"
 }
