@@ -1,63 +1,6 @@
 {
   "slot_done": "2026-11-18T16:53:03+00:00",
   "days": {
-    "2026-11-18": {
-      "headline": "Go winging instead until 16:00!",
-      "subline": "Best window until 14:00, rain 14:00–16:00. Tough pumping back.",
-      "source": "model",
-      "written": "2026-11-18T11:09:00+00:00",
-      "slot": "2026-11-18-midday",
-      "sig": "[\"mixed\", [\"WING\", \"d\", \"a\"], [\"BEST\", \"d\", \"a\"], [\"OFFSHORE\", \"a\", \"a\"], [\"RAIN\", \"a\", \"a\"]]",
-      "points": [
-        {
-          "theme": "WING",
-          "text": "Wingable offshore wind until 16:00: 26–29 km/h, gusts to 59. Flat at the dock, tough pumping back.",
-          "from": "12:09",
-          "to": "16:00"
-        },
-        {
-          "theme": "BEST",
-          "text": "Best window until 14:00.",
-          "from": "12:09",
-          "to": "14:00"
-        },
-        {
-          "theme": "OFFSHORE",
-          "text": "Strong offshore wind from 16:00, 23 km/h, gusts to 54: flat at the dock, tough pumping back.",
-          "from": "16:00",
-          "to": "16:54"
-        },
-        {
-          "theme": "RAIN",
-          "text": "Rain 14:00–16:00.",
-          "from": "14:00",
-          "to": "16:00"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 10–12 °C. Lake 12 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:09–16:54",
-        "mood": "mixed",
-        "tmin": 10.4,
-        "tmax": 11.7,
-        "wind": [
-          23,
-          29
-        ],
-        "gust_max": 59,
-        "uv_max": 1.6,
-        "aqi_max": 23,
-        "lake": 11.8,
-        "ok_share": 0.6,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-19": {
       "headline": "Wet and wingable offshore Thursday",
       "subline": "Best window 12:00–15:00, gusts to 56, rain most of the day.",
@@ -183,8 +126,58 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-21": {
+      "headline": "Dead Flat Water. Go Pumping!",
+      "subline": "Light offshore breeze until 09:00 and 11:00–15:00, 13–17 km/h: flat at the dock.",
+      "source": "placeholder",
+      "written": "2026-11-18T23:08:55+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "FLAT",
+          "text": "Flat water 09:00–11:00 and from 15:00: 4–12 km/h, no chop at the dock.",
+          "from": "09:00",
+          "to": "16:51"
+        },
+        {
+          "theme": "OFFSHORE",
+          "text": "Light offshore breeze until 09:00 and 11:00–15:00, 13–17 km/h: flat at the dock.",
+          "from": "07:42",
+          "to": "15:00"
+        },
+        {
+          "theme": "RAIN",
+          "text": "Rain until 08:00.",
+          "from": "07:42",
+          "to": "08:00"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 6–10 °C. Lake 12 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:42–16:51",
+        "mood": "good",
+        "tmin": 6.4,
+        "tmax": 10.0,
+        "wind": [
+          4,
+          17
+        ],
+        "gust_max": 35,
+        "uv_max": 1.4,
+        "aqi_max": 23,
+        "lake": 11.8,
+        "ok_share": 0.9,
+        "sun_share": 0.1
+      }
     }
   },
-  "updated": "2026-11-18T17:34:08+00:00",
+  "updated": "2026-11-18T23:08:55+00:00",
   "slot": "2026-11-18-evening"
 }
