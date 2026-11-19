@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-19T22:08:37+00:00",
+  "fetched": "2026-11-19T22:52:22+00:00",
   "forecast": [
     {
       "date": "19.11.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 122.29,
-    "time": "2026-11-19T21:40:00+00:00",
+    "flow": 79.1,
+    "time": "2026-11-19T22:40:00+00:00",
     "stats": {
-      "n": 4049,
+      "n": 4050,
       "days": 89.3,
       "enough": true,
       "min": 6.75,
@@ -46,61 +46,35 @@
       "p25": 7.36,
       "median": 7.89,
       "p75": 12.1,
-      "p90": 56.26,
+      "p90": 56.82,
       "max": 153.11
     }
-  },
-  "sarine": {
-    "station": "2119",
-    "name": "Sarine – Fribourg",
-    "height": 532.44,
-    "flow": 45.02,
-    "stats": {
-      "n": 4048,
-      "days": 88.6,
-      "enough": true,
-      "min": 4.22,
-      "p10": 4.54,
-      "p25": 4.7,
-      "median": 4.96,
-      "p75": 5.7,
-      "p90": 46.83,
-      "max": 217.43
-    },
-    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
-  },
-  "water": {
-    "station": "2467",
-    "name": "Saane – Gümmenen",
-    "temperature": 11.6,
-    "height": 471.64,
-    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "air": {
     "source": "Open-Meteo (Modell) + MeteoSchweiz GRA (Messung)",
     "uv_index": 0.0,
     "european_aqi": 23.0,
-    "wind_model": 27.0,
-    "gust_model": 52.2,
+    "wind_model": 24.2,
+    "gust_model": 46.8,
     "wind_dir_model": 224.0,
-    "wind_measured": 36.7,
-    "gust_measured": 58.3,
-    "wind_dir_measured": 228.0,
+    "wind_measured": 37.1,
+    "gust_measured": 55.1,
+    "wind_dir_measured": 226.0,
     "temp_measured": 7.8,
-    "radiation_measured": 4.0,
-    "vario_grid": 3.71,
-    "vario_total": 20.36,
+    "radiation_measured": 5.0,
+    "vario_grid": 7.18,
+    "vario_total": 19.13,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-19T21:52:42+00:00"
+    "time": "2026-11-19T22:52:24+00:00"
   },
-  "sense": {
-    "station": "2179",
-    "name": "Sense – Thörishaus",
-    "flow": 17.28,
-    "temperature": 7.68,
-    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  "water": {
+    "station": "2467",
+    "name": "Saane – Gümmenen",
+    "temperature": 11.5,
+    "height": 471.32,
+    "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
   "lake": {
     "source": "schiffenen.guru (appery.ch) — eigener Sensor am See",
@@ -110,9 +84,31 @@
     "battery_v": 3.66,
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
-  "hydro_error": {
-    "time": "2026-11-19T22:09:40+00:00",
-    "error": "403 Client Error: Forbidden for url: https://api.existenz.ch/apiv1/hydro/latest?locations=2119,2215,2467,2179&parameters=height,flow,temperature&app=pumpfoil.guru&version=1.0"
+  "sense": {
+    "station": "2179",
+    "name": "Sense – Thörishaus",
+    "flow": 16.33,
+    "temperature": 7.67,
+    "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
+  },
+  "sarine": {
+    "station": "2119",
+    "name": "Sarine – Fribourg",
+    "height": 532.44,
+    "flow": 44.9,
+    "stats": {
+      "n": 4049,
+      "days": 88.6,
+      "enough": true,
+      "min": 4.22,
+      "p10": 4.54,
+      "p25": 4.7,
+      "median": 4.98,
+      "p75": 5.7,
+      "p90": 46.83,
+      "max": 217.43
+    },
+    "note": "oberhalb des Sees; Pegel in m ü. M., noch nicht kalibriert"
   },
   "rowing": {
     "source": "https://aviron-vevey.ch/calendrier-competition/",
@@ -160,9 +156,5 @@
   "actual_daily": {
     "17.11.2026": 530.43,
     "18.11.2026": 530.38
-  },
-  "rain_error": {
-    "time": "2026-11-19T22:09:44+00:00",
-    "error": "Expecting value: line 1 column 1 (char 0)"
   }
 }
