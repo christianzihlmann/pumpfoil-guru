@@ -180,5 +180,9 @@
     }
   },
   "updated": "2026-11-19T12:52:31+00:00",
-  "slot": "2026-11-19-midday"
+  "slot": "2026-11-19-midday",
+  "fetch_error": {
+    "time": "2026-11-19T16:09:32+00:00",
+    "error": "Prognose nicht geholt: 429 Client Error: Too Many Requests for url: https://api.open-meteo.com/v1/forecast?latitude=46.8261&longitude=7.1256&hourly=temperature_2m,weather_code,visibility,precipitation,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index&daily=sunrise,sunset&timezone=Europe/Zuri"
+  }
 }
