@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-11-19T11:09:01+00:00",
+  "slot_done": "2026-11-19T16:52:31+00:00",
   "days": {
     "2026-11-19": {
       "headline": "Strong offshore, flat but tough",
@@ -59,42 +59,36 @@
       "model": "claude-opus-5-5"
     },
     "2026-11-20": {
-      "headline": "Wingable offshore 13:00–15:00, gusts 55",
-      "subline": "Best pumping 09:00–13:00, dry between the morning and afternoon showers.",
+      "headline": "Wing the offshore 12:00–16:00",
+      "subline": "Light offshore and flat until 11:00, rain clears by 08:00. Lake 12 °C.",
       "source": "model",
-      "written": "2026-11-19T11:09:01+00:00",
-      "slot": "2026-11-19-midday",
-      "sig": "[\"mixed\", [\"WING\", \"d\", \"a\"], [\"BEST\", \"m\", \"d\"], [\"OFFSHORE\", \"d\", \"a\"], [\"OFFSHORE\", \"m\", \"a\"], [\"RAIN\", \"m\", \"a\"]]",
+      "written": "2026-11-19T16:52:31+00:00",
+      "slot": "2026-11-19-evening",
+      "sig": "[\"good\", [\"WING\", \"d\", \"a\"], [\"OFFSHORE\", \"d\", \"d\"], [\"OFFSHORE\", \"m\", \"a\"], [\"RAIN\", \"m\", \"m\"]]",
       "points": [
         {
           "theme": "WING",
-          "text": "Wingable offshore wind 13:00–15:00: 26 km/h, gusts to 55. Flat at the dock, tough pumping back.",
-          "from": "13:00",
-          "to": "15:00"
-        },
-        {
-          "theme": "BEST",
-          "text": "Best window 09:00–13:00.",
-          "from": "09:00",
-          "to": "13:00"
-        },
-        {
-          "theme": "OFFSHORE",
-          "text": "Strong offshore wind 11:00–13:00 and 15:00–16:00, 23–25 km/h, gusts to 50: flat at the dock, tough pumping back.",
-          "from": "11:00",
+          "text": "Wingable offshore wind 12:00–16:00: 27 km/h, gusts to 55. Flat at the dock, tough pumping back.",
+          "from": "12:00",
           "to": "16:00"
         },
         {
           "theme": "OFFSHORE",
-          "text": "Light offshore breeze until 11:00 and from 16:00, 19–22 km/h: flat at the dock.",
+          "text": "Strong offshore wind 11:00–12:00, 24 km/h, gusts to 48: flat at the dock, tough pumping back.",
+          "from": "11:00",
+          "to": "12:00"
+        },
+        {
+          "theme": "OFFSHORE",
+          "text": "Light offshore breeze until 11:00 and from 16:00, 20 km/h: flat at the dock.",
           "from": "07:41",
           "to": "16:52"
         },
         {
           "theme": "RAIN",
-          "text": "Changeable: showers until 09:00 and from 13:00, dry in between.",
+          "text": "Rain until 08:00.",
           "from": "07:41",
-          "to": "16:52"
+          "to": "08:00"
         },
         {
           "theme": "TEMP",
@@ -105,18 +99,18 @@
       ],
       "facts": {
         "window": "07:41–16:52",
-        "mood": "mixed",
-        "tmin": 7.1,
-        "tmax": 9.3,
+        "mood": "good",
+        "tmin": 7.0,
+        "tmax": 9.1,
         "wind": [
           19,
-          26
+          27
         ],
         "gust_max": 55,
-        "uv_max": 0.9,
-        "aqi_max": 28,
+        "uv_max": 1.6,
+        "aqi_max": 25,
         "lake": 11.7,
-        "ok_share": 0.4,
+        "ok_share": 0.9,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
@@ -179,10 +173,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-19T12:52:31+00:00",
-  "slot": "2026-11-19-midday",
-  "fetch_error": {
-    "time": "2026-11-19T16:09:32+00:00",
-    "error": "Prognose nicht geholt: 429 Client Error: Too Many Requests for url: https://api.open-meteo.com/v1/forecast?latitude=46.8261&longitude=7.1256&hourly=temperature_2m,weather_code,visibility,precipitation,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index&daily=sunrise,sunset&timezone=Europe/Zuri"
-  }
+  "updated": "2026-11-19T16:52:31+00:00",
+  "slot": "2026-11-19-evening"
 }
