@@ -161,10 +161,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-20T16:52:29+00:00",
-  "slot": "2026-11-20-evening",
-  "fetch_error": {
-    "time": "2026-11-20T19:16:05+00:00",
-    "error": "Prognose nicht geholt: 503 Server Error: Service Unavailable for url: https://api.open-meteo.com/v1/forecast?latitude=46.8261&longitude=7.1256&hourly=temperature_2m,weather_code,visibility,precipitation,wind_speed_10m,wind_direction_10m,wind_gusts_10m,uv_index&daily=sunrise,sunset&timezone=Europe/Zu"
-  }
+  "updated": "2026-11-20T19:52:30+00:00",
+  "slot": "2026-11-20-evening"
 }
