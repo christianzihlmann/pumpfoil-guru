@@ -155,10 +155,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-23T08:08:40+00:00",
-  "slot": "2026-11-23-morning",
-  "fetch_error": {
-    "time": "2026-11-23T09:54:06+00:00",
-    "error": "Prognose nicht geholt: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
-  }
+  "updated": "2026-11-23T10:08:35+00:00",
+  "slot": "2026-11-23-morning"
 }
