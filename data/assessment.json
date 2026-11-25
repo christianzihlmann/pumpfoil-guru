@@ -1,25 +1,25 @@
 {
-  "slot_done": "2026-11-24T16:53:30+00:00",
+  "slot_done": "2026-11-25T04:53:34+00:00",
   "days": {
     "2026-11-25": {
-      "headline": "Foggy Wednesday morning, flat after",
-      "subline": "Fog and rain until 11:00, then dead flat water. Best window from 11:00.",
+      "headline": "Morning fog, then dead flat",
+      "subline": "Best window 11:00–15:00, wind under 5 km/h. Showers come and go.",
       "source": "model",
-      "written": "2026-11-24T16:53:30+00:00",
-      "slot": "2026-11-24-evening",
-      "sig": "[\"mixed\", [\"FOG\", \"m\", \"d\"], [\"BEST\", \"d\", \"a\"], [\"FLAT\", \"m\", \"a\"], [\"RAIN\", \"m\", \"d\"], [\"COLD\", \"\", \"\"]]",
+      "written": "2026-11-25T04:53:34+00:00",
+      "slot": "2026-11-25-morning",
+      "sig": "[\"mixed\", [\"FOG\", \"m\", \"m\"], [\"BEST\", \"d\", \"a\"], [\"FLAT\", \"m\", \"a\"], [\"RAIN\", \"m\", \"a\"], [\"COLD\", \"\", \"\"]]",
       "points": [
         {
           "theme": "FOG",
-          "text": "Fog until 11:00, visibility down to 0.9 km.",
-          "from": "08:00",
-          "to": "11:00"
+          "text": "Fog 09:00–10:00, visibility down to 0.9 km.",
+          "from": "09:00",
+          "to": "10:00"
         },
         {
           "theme": "BEST",
-          "text": "Best window from 11:00.",
+          "text": "Best window 11:00–15:00.",
           "from": "11:00",
-          "to": "16:48"
+          "to": "15:00"
         },
         {
           "theme": "FLAT",
@@ -29,9 +29,9 @@
         },
         {
           "theme": "RAIN",
-          "text": "Rain until 11:00.",
+          "text": "Changeable: showers until 09:00 and 10:00–11:00 and 15:00–16:00, dry in between.",
           "from": "07:48",
-          "to": "11:00"
+          "to": "16:00"
         },
         {
           "theme": "COLD",
@@ -41,7 +41,7 @@
         },
         {
           "theme": "TEMP",
-          "text": "Air 2–6 °C. Lake 11 °C.",
+          "text": "Air 2–5 °C. Lake 10 °C.",
           "from": null,
           "to": null
         }
@@ -50,49 +50,61 @@
         "window": "07:48–16:48",
         "mood": "mixed",
         "tmin": 1.5,
-        "tmax": 5.5,
+        "tmax": 5.2,
         "wind": [
           0,
-          5
+          3
         ],
-        "gust_max": 12,
+        "gust_max": 8,
         "uv_max": 1.6,
         "aqi_max": 33,
-        "lake": 10.6,
-        "ok_share": 0.6,
+        "lake": 10.5,
+        "ok_share": 0.5,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-26": {
-      "headline": "Snowy Thursday with Bise chop",
-      "subline": "Snow until 11:00, Bise 7–11 km/h all day. Air 0–2 °C.",
+      "headline": "Fog, snow and Bise chop",
+      "subline": "Fog 09:00–11:00, snow 10:00–11:00, Bise 6–10 km/h all day.",
       "source": "model",
-      "written": "2026-11-24T16:53:30+00:00",
-      "slot": "2026-11-24-evening",
-      "sig": "[\"poor\", [\"SNOW\", \"m\", \"d\"], [\"CHOP\", \"m\", \"a\"], [\"COLD\", \"\", \"\"]]",
+      "written": "2026-11-25T04:53:34+00:00",
+      "slot": "2026-11-25-morning",
+      "sig": "[\"poor\", [\"FOG\", \"m\", \"d\"], [\"SNOW\", \"m\", \"d\"], [\"CHOP\", \"m\", \"a\"], [\"RAIN\", \"m\", \"d\"], [\"COLD\", \"\", \"\"]]",
       "points": [
         {
+          "theme": "FOG",
+          "text": "Fog 09:00–11:00, visibility down to 0.6 km.",
+          "from": "09:00",
+          "to": "11:00"
+        },
+        {
           "theme": "SNOW",
-          "text": "Snow until 11:00.",
-          "from": "08:00",
+          "text": "Snow 10:00–11:00.",
+          "from": "10:00",
           "to": "11:00"
         },
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) all day, 7–11 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "text": "Bise (onshore) all day, 6–10 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
           "from": "07:49",
           "to": "16:47"
         },
         {
+          "theme": "RAIN",
+          "text": "Changeable: showers until 10:00 and 11:00–12:00, dry in between.",
+          "from": "07:49",
+          "to": "12:00"
+        },
+        {
           "theme": "COLD",
-          "text": "Frosty start: 0 °C.",
+          "text": "Frosty start: 1 °C.",
           "from": null,
           "to": null
         },
         {
           "theme": "TEMP",
-          "text": "Air 0–2 °C. Lake 11 °C.",
+          "text": "Air 1–3 °C. Lake 10 °C.",
           "from": null,
           "to": null
         }
@@ -100,56 +112,56 @@
       "facts": {
         "window": "07:49–16:47",
         "mood": "poor",
-        "tmin": 0.5,
-        "tmax": 2.5,
+        "tmin": 0.9,
+        "tmax": 3.1,
         "wind": [
-          7,
-          11
+          6,
+          10
         ],
-        "gust_max": 21,
-        "uv_max": 1.6,
+        "gust_max": 18,
+        "uv_max": 0.9,
         "aqi_max": 40,
-        "lake": 10.6,
+        "lake": 10.5,
         "ok_share": 0.0,
-        "sun_share": 0.3
+        "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
     },
     "2026-11-27": {
-      "headline": "Ice, ice baby.",
-      "subline": "Patchy fog possible until 10:00.",
-      "source": "placeholder",
-      "written": "2026-11-24T23:08:37+00:00",
-      "slot": null,
-      "sig": null,
+      "headline": "Frosty Friday, 2 °C at most",
+      "subline": "Patchy fog until 11:00, dead flat until 15:00, then Bise chop.",
+      "source": "model",
+      "written": "2026-11-25T04:53:34+00:00",
+      "slot": "2026-11-25-morning",
+      "sig": "[\"poor\", [\"ICE\", \"\", \"\"], [\"FOG\", \"m\", \"d\"], [\"CHOP\", \"a\", \"a\"], [\"FLAT\", \"m\", \"a\"]]",
       "points": [
         {
           "theme": "ICE",
-          "text": "Freezing: 1 °C at most.",
+          "text": "Freezing: 2 °C at most.",
           "from": null,
           "to": null
         },
         {
           "theme": "FOG",
-          "text": "Patchy fog possible until 10:00.",
-          "from": "08:00",
-          "to": "10:00"
+          "text": "Patchy fog possible until 11:00.",
+          "from": "07:50",
+          "to": "11:00"
         },
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) from 16:00, 5 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "16:00",
+          "text": "Bise (onshore) from 15:00, 5 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "15:00",
           "to": "16:47"
         },
         {
           "theme": "FLAT",
-          "text": "Dead flat until 16:00: wind under 5 km/h.",
+          "text": "Dead flat until 15:00: wind under 5 km/h.",
           "from": "07:50",
-          "to": "16:00"
+          "to": "15:00"
         },
         {
           "theme": "TEMP",
-          "text": "Air -1–1 °C. Lake 11 °C.",
+          "text": "Air -1–2 °C. Lake 10 °C.",
           "from": null,
           "to": null
         }
@@ -158,7 +170,7 @@
         "window": "07:50–16:47",
         "mood": "poor",
         "tmin": -0.6,
-        "tmax": 1.4,
+        "tmax": 1.9,
         "wind": [
           2,
           5
@@ -166,12 +178,13 @@
         "gust_max": 12,
         "uv_max": 1.9,
         "aqi_max": 42,
-        "lake": 10.6,
-        "ok_share": 0.7,
+        "lake": 10.5,
+        "ok_share": 0.4,
         "sun_share": 0.0
-      }
+      },
+      "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-24T23:08:37+00:00",
-  "slot": "2026-11-24-evening"
+  "updated": "2026-11-25T04:53:34+00:00",
+  "slot": "2026-11-25-morning"
 }
