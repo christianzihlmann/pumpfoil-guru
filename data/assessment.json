@@ -186,5 +186,9 @@
     }
   },
   "updated": "2026-11-25T08:52:59+00:00",
-  "slot": "2026-11-25-morning"
+  "slot": "2026-11-25-morning",
+  "fetch_error": {
+    "time": "2026-11-25T10:30:40+00:00",
+    "error": "Prognose nicht geholt: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
+  }
 }
