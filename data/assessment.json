@@ -1,5 +1,5 @@
 {
-  "slot_done": "2026-11-26T11:53:01+00:00",
+  "slot_done": "2026-11-26T16:52:57+00:00",
   "days": {
     "2026-11-26": {
       "headline": "Fog fades, Bise chop stays",
@@ -59,40 +59,40 @@
       "model": "claude-opus-5-5"
     },
     "2026-11-27": {
-      "headline": "Foggy dawn, flat Friday after",
-      "subline": "Fog until 10:00, best window from 10:00 on flat water. Air 1–4 °C.",
+      "headline": "Fog first, then flat Friday",
+      "subline": "Fog until 11:00, then dead flat water. Air 0–3 °C, lake 10 °C.",
       "source": "model",
-      "written": "2026-11-26T11:53:01+00:00",
-      "slot": "2026-11-26-midday",
-      "sig": "[\"mixed\", [\"FOG\", \"m\", \"m\"], [\"BEST\", \"m\", \"a\"], [\"FLAT\", \"m\", \"a\"], [\"COLD\", \"\", \"\"]]",
+      "written": "2026-11-26T16:52:57+00:00",
+      "slot": "2026-11-26-evening",
+      "sig": "[\"mixed\", [\"FOG\", \"m\", \"d\"], [\"BEST\", \"d\", \"a\"], [\"FLAT\", \"m\", \"a\"], [\"COLD\", \"\", \"\"]]",
       "points": [
         {
           "theme": "FOG",
-          "text": "Fog until 10:00, visibility down to 1.4 km.",
+          "text": "Fog until 11:00, visibility down to 1.0 km.",
           "from": "07:50",
-          "to": "10:00"
+          "to": "11:00"
         },
         {
           "theme": "BEST",
-          "text": "Best window from 10:00.",
-          "from": "10:00",
+          "text": "Best window from 11:00.",
+          "from": "11:00",
           "to": "16:47"
         },
         {
           "theme": "FLAT",
-          "text": "Flat water all day: 2–5 km/h, no chop at the dock.",
+          "text": "Flat water all day: 0–7 km/h, no chop at the dock.",
           "from": "07:50",
           "to": "16:47"
         },
         {
           "theme": "COLD",
-          "text": "Frosty start: 1 °C.",
+          "text": "Frosty start: 0 °C.",
           "from": null,
           "to": null
         },
         {
           "theme": "TEMP",
-          "text": "Air 1–4 °C. Lake 10 °C.",
+          "text": "Air 0–3 °C. Lake 10 °C.",
           "from": null,
           "to": null
         }
@@ -100,17 +100,17 @@
       "facts": {
         "window": "07:50–16:47",
         "mood": "mixed",
-        "tmin": 0.6,
-        "tmax": 3.5,
+        "tmin": 0.5,
+        "tmax": 3.4,
         "wind": [
-          2,
-          5
+          0,
+          7
         ],
-        "gust_max": 10,
+        "gust_max": 13,
         "uv_max": 1.9,
         "aqi_max": 43,
-        "lake": 10.2,
-        "ok_share": 0.7,
+        "lake": 10.0,
+        "ok_share": 0.6,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
@@ -167,6 +167,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-26T14:53:39+00:00",
-  "slot": "2026-11-26-midday"
+  "updated": "2026-11-26T16:52:57+00:00",
+  "slot": "2026-11-26-evening"
 }
