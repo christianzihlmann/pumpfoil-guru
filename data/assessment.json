@@ -1,37 +1,31 @@
 {
-  "slot_done": "2026-11-26T04:53:03+00:00",
+  "slot_done": "2026-11-26T11:53:01+00:00",
   "days": {
     "2026-11-26": {
-      "headline": "Fog at midday, Bise around it",
-      "subline": "Bise chop until 11:00 and from 12:00, showers 10:00–12:00 and 13:00–14:00.",
+      "headline": "Fog fades, Bise chop stays",
+      "subline": "Fog and rain until 13:00, then light Bise at 5–8 km/h. Air 1–2 °C.",
       "source": "model",
-      "written": "2026-11-26T04:53:03+00:00",
-      "slot": "2026-11-26-morning",
-      "sig": "[\"poor\", [\"FOG\", \"d\", \"d\"], [\"CHOP\", \"m\", \"a\"], [\"FLAT\", \"d\", \"d\"], [\"RAIN\", \"m\", \"a\"], [\"COLD\", \"\", \"\"]]",
+      "written": "2026-11-26T11:53:01+00:00",
+      "slot": "2026-11-26-midday",
+      "sig": "[\"poor\", [\"FOG\", \"d\", \"d\"], [\"CHOP\", \"d\", \"a\"], [\"RAIN\", \"d\", \"d\"], [\"COLD\", \"\", \"\"]]",
       "points": [
         {
           "theme": "FOG",
-          "text": "Fog 11:00–12:00, visibility down to 0.5 km.",
-          "from": "11:00",
-          "to": "12:00"
+          "text": "Fog until 13:00, visibility down to 0.6 km.",
+          "from": "12:53",
+          "to": "13:00"
         },
         {
           "theme": "CHOP",
-          "text": "Bise (onshore) until 11:00 and from 12:00, 5–11 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "07:49",
+          "text": "Bise (onshore) for the rest of the day, 5–8 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "12:53",
           "to": "16:47"
         },
         {
-          "theme": "FLAT",
-          "text": "Dead flat 11:00–12:00: wind under 5 km/h.",
-          "from": "11:00",
-          "to": "12:00"
-        },
-        {
           "theme": "RAIN",
-          "text": "Changeable: showers 10:00–12:00 and 13:00–14:00, dry in between.",
-          "from": "10:00",
-          "to": "14:00"
+          "text": "Rain until 13:00.",
+          "from": "12:53",
+          "to": "13:00"
         },
         {
           "theme": "COLD",
@@ -41,23 +35,23 @@
         },
         {
           "theme": "TEMP",
-          "text": "Air 1–3 °C. Lake 10 °C.",
+          "text": "Air 1–2 °C. Lake 10 °C.",
           "from": null,
           "to": null
         }
       ],
       "facts": {
-        "window": "07:49–16:47",
+        "window": "12:53–16:47",
         "mood": "poor",
-        "tmin": 0.7,
-        "tmax": 2.7,
+        "tmin": 1.1,
+        "tmax": 2.3,
         "wind": [
           5,
-          11
+          8
         ],
-        "gust_max": 19,
-        "uv_max": 0.9,
-        "aqi_max": 37,
+        "gust_max": 15,
+        "uv_max": 0.8,
+        "aqi_max": 36,
         "lake": 10.2,
         "ok_share": 0.0,
         "sun_share": 0.0
@@ -65,28 +59,28 @@
       "model": "claude-opus-5-5"
     },
     "2026-11-27": {
-      "headline": "Ready for a session in the fog?",
-      "subline": "Fog until 11:00, best window from 11:00. Flat water all day.",
+      "headline": "Foggy dawn, flat Friday after",
+      "subline": "Fog until 10:00, best window from 10:00 on flat water. Air 1–4 °C.",
       "source": "model",
-      "written": "2026-11-26T04:53:03+00:00",
-      "slot": "2026-11-26-morning",
-      "sig": "[\"mixed\", [\"FOG\", \"m\", \"d\"], [\"BEST\", \"d\", \"a\"], [\"FLAT\", \"m\", \"a\"], [\"COLD\", \"\", \"\"]]",
+      "written": "2026-11-26T11:53:01+00:00",
+      "slot": "2026-11-26-midday",
+      "sig": "[\"mixed\", [\"FOG\", \"m\", \"m\"], [\"BEST\", \"m\", \"a\"], [\"FLAT\", \"m\", \"a\"], [\"COLD\", \"\", \"\"]]",
       "points": [
         {
           "theme": "FOG",
-          "text": "Fog until 11:00, visibility down to 1.9 km.",
+          "text": "Fog until 10:00, visibility down to 1.4 km.",
           "from": "07:50",
-          "to": "11:00"
+          "to": "10:00"
         },
         {
           "theme": "BEST",
-          "text": "Best window from 11:00.",
-          "from": "11:00",
+          "text": "Best window from 10:00.",
+          "from": "10:00",
           "to": "16:47"
         },
         {
           "theme": "FLAT",
-          "text": "Flat water all day: 1–7 km/h, no chop at the dock.",
+          "text": "Flat water all day: 2–5 km/h, no chop at the dock.",
           "from": "07:50",
           "to": "16:47"
         },
@@ -98,7 +92,7 @@
         },
         {
           "theme": "TEMP",
-          "text": "Air 1–3 °C. Lake 10 °C.",
+          "text": "Air 1–4 °C. Lake 10 °C.",
           "from": null,
           "to": null
         }
@@ -106,17 +100,17 @@
       "facts": {
         "window": "07:50–16:47",
         "mood": "mixed",
-        "tmin": 0.8,
-        "tmax": 3.1,
+        "tmin": 0.6,
+        "tmax": 3.5,
         "wind": [
-          1,
-          7
+          2,
+          5
         ],
-        "gust_max": 13,
+        "gust_max": 10,
         "uv_max": 1.9,
-        "aqi_max": 42,
+        "aqi_max": 43,
         "lake": 10.2,
-        "ok_share": 0.6,
+        "ok_share": 0.7,
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
@@ -173,10 +167,6 @@
       "model": "claude-opus-5-5"
     }
   },
-  "updated": "2026-11-26T07:52:56+00:00",
-  "slot": "2026-11-26-morning",
-  "fetch_error": {
-    "time": "2026-11-26T11:09:11+00:00",
-    "error": "Prognose nicht geholt: HTTPSConnectionPool(host='api.open-meteo.com', port=443): Read timed out. (read timeout=30)"
-  }
+  "updated": "2026-11-26T11:53:01+00:00",
+  "slot": "2026-11-26-midday"
 }
