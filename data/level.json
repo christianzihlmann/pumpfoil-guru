@@ -2,16 +2,16 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-27T01:52:19+00:00",
+  "fetched": "2026-11-27T02:08:23+00:00",
   "forecast": [
     {
       "date": "27.11.2026",
-      "min": 529.99,
+      "min": 529.98,
       "max": 530.35
     },
     {
       "date": "28.11.2026",
-      "min": 530.06,
+      "min": 530.05,
       "max": 530.73
     },
     {
@@ -22,7 +22,7 @@
     {
       "date": "30.11.2026",
       "min": 530.8,
-      "max": 531.27
+      "max": 531.26
     }
   ],
   "manual": {
@@ -111,7 +111,7 @@
     "note": "Oberflaechentemperatur des Sees, mit Erlaubnis von appery.ch"
   },
   "hydro_error": {
-    "time": "2026-11-27T01:52:58+00:00",
+    "time": "2026-11-27T02:08:45+00:00",
     "error": "403 Client Error: Forbidden for url: https://api.existenz.ch/apiv1/hydro/latest?locations=2119,2215,2467,2179&parameters=height,flow,temperature&app=pumpfoil.guru&version=1.0"
   },
   "rowing": {
@@ -162,7 +162,7 @@
     "26.11.2026": 530.3
   },
   "rain_error": {
-    "time": "2026-11-27T01:52:59+00:00",
+    "time": "2026-11-27T02:08:49+00:00",
     "error": "Expecting value: line 1 column 1 (char 0)"
   }
 }
