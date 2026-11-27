@@ -1,51 +1,6 @@
 {
   "slot_done": "2026-11-27T16:52:55+00:00",
   "days": {
-    "2026-11-27": {
-      "headline": "Flat Friday, Bise creeps in late",
-      "subline": "Flat water until 16:00, then onshore Bise at 7 km/h brings chop.",
-      "source": "model",
-      "written": "2026-11-27T11:08:33+00:00",
-      "slot": "2026-11-27-midday",
-      "sig": "[\"good\", [\"CHOP\", \"a\", \"a\"], [\"FLAT\", \"d\", \"a\"]]",
-      "points": [
-        {
-          "theme": "CHOP",
-          "text": "Bise (onshore) from 16:00, 7 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
-          "from": "16:00",
-          "to": "16:47"
-        },
-        {
-          "theme": "FLAT",
-          "text": "Flat water until 16:00: 4–8 km/h, no chop at the dock.",
-          "from": "12:08",
-          "to": "16:00"
-        },
-        {
-          "theme": "TEMP",
-          "text": "Air 3–4 °C. Lake 10 °C.",
-          "from": null,
-          "to": null
-        }
-      ],
-      "facts": {
-        "window": "12:08–16:47",
-        "mood": "good",
-        "tmin": 2.7,
-        "tmax": 3.7,
-        "wind": [
-          4,
-          8
-        ],
-        "gust_max": 16,
-        "uv_max": 1.9,
-        "aqi_max": 42,
-        "lake": 9.8,
-        "ok_share": 0.8,
-        "sun_share": 0.0
-      },
-      "model": "claude-opus-5-5"
-    },
     "2026-11-28": {
       "headline": "Icy Saturday, 1 °C at most",
       "subline": "Fog until 11:00, Bise chop until 15:00, then dead flat.",
@@ -159,8 +114,52 @@
         "sun_share": 0.0
       },
       "model": "claude-opus-5-5"
+    },
+    "2026-11-30": {
+      "headline": "Onshore wind. A bit choppy.",
+      "subline": "Dead flat until 10:00: wind under 5 km/h.",
+      "source": "placeholder",
+      "written": "2026-11-27T23:09:07+00:00",
+      "slot": null,
+      "sig": null,
+      "points": [
+        {
+          "theme": "CHOP",
+          "text": "Bise (onshore) from 10:00, 5–15 km/h: a bit of chop. Too much for clean pumping, too little for winging.",
+          "from": "10:00",
+          "to": "16:45"
+        },
+        {
+          "theme": "FLAT",
+          "text": "Dead flat until 10:00: wind under 5 km/h.",
+          "from": "07:54",
+          "to": "10:00"
+        },
+        {
+          "theme": "TEMP",
+          "text": "Air 3–6 °C. Lake 10 °C.",
+          "from": null,
+          "to": null
+        }
+      ],
+      "facts": {
+        "window": "07:54–16:45",
+        "mood": "mixed",
+        "tmin": 3.0,
+        "tmax": 5.7,
+        "wind": [
+          3,
+          15
+        ],
+        "gust_max": 31,
+        "uv_max": 1.1,
+        "aqi_max": 25,
+        "lake": 9.8,
+        "ok_share": 0.3,
+        "sun_share": 0.2
+      }
     }
   },
-  "updated": "2026-11-27T16:52:55+00:00",
+  "updated": "2026-11-27T23:09:07+00:00",
   "slot": "2026-11-27-evening"
 }
