@@ -2,7 +2,7 @@
   "source": "Groupe E — Seepegel-Prognose Schiffenensee",
   "source_url": "https://www.groupe-e.ch/de/ueber-groupe-e/wasserstand-seen/schiffenen",
   "kind": "forecast_band",
-  "fetched": "2026-11-28T12:52:19+00:00",
+  "fetched": "2026-11-28T12:59:36+00:00",
   "forecast": [
     {
       "date": "28.11.2026",
@@ -35,10 +35,10 @@
     "station": "2215",
     "name": "Saane – Laupen",
     "unit": "m3/s",
-    "flow": 11.58,
-    "time": "2026-11-28T12:40:00+00:00",
+    "flow": 11.55,
+    "time": "2026-11-28T12:50:00+00:00",
     "stats": {
-      "n": 4430,
+      "n": 4431,
       "days": 97.9,
       "enough": true,
       "min": 6.75,
@@ -46,7 +46,7 @@
       "p25": 7.39,
       "median": 8.17,
       "p75": 16.47,
-      "p90": 100.02,
+      "p90": 100.01,
       "max": 156.22
     }
   },
@@ -57,22 +57,22 @@
     "wind_model": 6.6,
     "gust_model": 15.1,
     "wind_dir_model": 61.0,
-    "wind_measured": 6.5,
-    "gust_measured": 9.7,
-    "wind_dir_measured": 52.0,
-    "temp_measured": -0.4,
-    "radiation_measured": 178.0,
+    "wind_measured": 4.0,
+    "gust_measured": 7.2,
+    "wind_dir_measured": 44.0,
+    "temp_measured": -0.1,
+    "radiation_measured": 343.0,
     "vario_grid": 4.95,
     "vario_total": 16.9,
     "vario_unit": "Rp/kWh",
     "vario_source": "Groupe E VARIO, dynamischer Tarif, viertelstuendlich, Vortag publiziert",
     "measured_station": "GRA Fribourg/Grangeneuve, 8.7 km",
-    "time": "2026-11-28T12:52:34+00:00"
+    "time": "2026-11-28T12:59:39+00:00"
   },
   "water": {
     "station": "2467",
     "name": "Saane – Gümmenen",
-    "temperature": 7.03,
+    "temperature": 7.06,
     "height": 470.43,
     "note": "Flusstemperatur unterhalb der Staumauer, nicht die Seetemperatur"
   },
@@ -87,8 +87,8 @@
   "sense": {
     "station": "2179",
     "name": "Sense – Thörishaus",
-    "flow": 5.35,
-    "temperature": 4.96,
+    "flow": 5.33,
+    "temperature": 4.98,
     "note": "mündet unterhalb der Staumauer, aber oberhalb von Laupen — in q2215 enthalten, war nie im See"
   },
   "sarine": {
@@ -97,7 +97,7 @@
     "height": 531.95,
     "flow": 5.01,
     "stats": {
-      "n": 4429,
+      "n": 4430,
       "days": 97.2,
       "enough": true,
       "min": 4.22,
